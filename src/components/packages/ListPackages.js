@@ -7,7 +7,7 @@ import { deletePackageOne, selectedPackageOne, startCreateOrder } from "../../ac
 import ChannelsList from "../channels/ChannelsList";
 import { OperatorContext } from "../profile/operatorContext";
 
-const ListPackages = (props) => {
+const ListPackages = () => {
   const [editId, setEditId] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const [modal, setModal] = useState(false);
@@ -21,9 +21,9 @@ const ListPackages = (props) => {
     return state.package.data.filter((ele) => ele.isDeleted === false);
   });
 
-  const { packages: pack, channels } = useSelector((state) => {
-    return state.order || {};
-  });
+  // const { packages: pack, channels } = useSelector((state) => {
+  //   return state.order || {};
+  // });
 
   useEffect(() => {
     dispatch(startGetPackage());
@@ -55,13 +55,17 @@ const ListPackages = (props) => {
 
   const handleAdd = (id) => {
     const selectedPackage = packages.find((ele) => ele._id === id);
+    console.log(selectedPackage, "ccc")
     const newPackages = {
       packageId: selectedPackage._id,
       packagePrice: selectedPackage.packagePrice,
+      packageName: selectedPackage.packageName,
+      selectedChannels: selectedPackage.selectedChannels
     };
     dispatch(selectedPackageOne(newPackages));
-    setSelectedItems((previousItems) => [...previousItems, newPackages]);
+    // setSelectedItems((previousItems) => [...previousItems, newPackages]);
   };
+  // console.log(selectedItems, "yyyyy")
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -82,14 +86,14 @@ const ListPackages = (props) => {
     dispatch(deletePackageOne(removeItem));
   };
 
-  const handleOrder = () => {
-    const formData = {
-      packages: pack,
-      channels: channels,
-      orderDate: new Date(),
-    };
-    dispatch(startCreateOrder(formData));
-  };
+  // const handleOrder = () => {
+  //   const formData = {
+  //     packages: pack,
+  //     channels: channels,
+  //     orderDate: new Date(),
+  //   };
+  //   dispatch(startCreateOrder(formData));
+  // };
 
   return (
     <div className="row g-3 d-flex-wrap" style={{ gap: "1rem", justifyContent: "center", alignItems: "center" }}>
@@ -164,7 +168,7 @@ const ListPackages = (props) => {
         </ModalBody>
       </Modal>
 
-      <h2 className="mt-3">Cart</h2>
+      {/* <h2 className="mt-3">Cart</h2>
       <ul className="list-group" style={{ height: "500px", overflowY: "auto" }}>
         {selectedItems.map((item, index) => (
           <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
@@ -181,16 +185,17 @@ const ListPackages = (props) => {
             </button>
           </li>
         ))}
-      </ul>
+      </ul> */}
+      {/* <Cart selectedItems={selectedItems} handleAdd={handleAdd} handleRemove={handleRemove} /> */}
 
-      <button
+      {/* <button
         onClick={() => {
           handleOrder();
         }}
         className="btn btn-success mt-3"
       >
         Order
-      </button>
+      </button> */}
     </div>
   );
 };

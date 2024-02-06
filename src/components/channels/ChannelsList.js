@@ -49,6 +49,7 @@ const ChannelsList = () => {
     const newChannels = {
       channelId: selectedChannel._id,
       channelPrice: selectedChannel.channelPrice,
+      channelName: selectedChannel.channelName
     };
     setSelectedItems((previousItems) => [...previousItems, newChannels])
     dispatch(selectedChannelOne(newChannels))
@@ -141,7 +142,7 @@ const ChannelsList = () => {
         </ModalBody>
       </Modal>
 
-      <h2 className="mt-3">Cart</h2>
+      {/* <h2 className="mt-3">Cart</h2>
       <ul className="list-group" style={{ height: "500px", overflowY: "auto" }}>
         {selectedItems.map((item, index) => (
           <li
@@ -153,7 +154,7 @@ const ChannelsList = () => {
             </div>
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 };
