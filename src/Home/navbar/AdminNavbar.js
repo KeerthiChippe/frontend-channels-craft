@@ -1,10 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function AdminNavbar() {
+    const navigate = useNavigate()
 
     const handleLogout = ()=>{
         localStorage.clear('')
+        window.location.reload()
     }
 
     return (
@@ -48,7 +50,7 @@ export default function AdminNavbar() {
                     <Link className="nav-link" to="/dashboard">Dashboard</Link>
                 </li>
                 <li className="nav-item">
-                    <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
+                    <Link className="nav-link" to="/login" onClick={handleLogout}>Logout</Link>
                 </li>
                 </div>
             </ul>
