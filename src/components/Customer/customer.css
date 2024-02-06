@@ -1,0 +1,11 @@
+.hekking {
+    background-image: url('../../../public/');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width:60%;
+   
+}
