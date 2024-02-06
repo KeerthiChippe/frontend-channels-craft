@@ -1,22 +1,21 @@
 .container-custom {
-    max-width: 600px; 
+    max-width: 800px; 
     margin: auto;
     padding: 0px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   }
-  
-  
-  label-custom {
+
+  .label-custom {
     font-weight: bold;
     margin-bottom: 5px;
     display: block;
   }
   
-  
-  input-custom {
+
+  .input-custom {
     width: 100%;
-    padding: 8px;
+    padding:8px;
     margin-bottom: 10px;
     box-sizing: border-box;
     border: 1px solid #ced4da; 
@@ -26,11 +25,12 @@
   
   span{
     color: red;
-    font-size: 0.9rem;
+    font-size: 1rem;
+    font-weight: bold;
   }
   
   
-  button{
+  .button{
     background-color: #007bff; 
     color: #fff; 
     padding: 10px 15px;
@@ -41,25 +41,25 @@
   }
   
   
-  .checkbox-label-custom {
-    display: flex;
-    align-items: center;
-  }
+ .chan{
+  font-weight: bold;
+  text-align: center;
+  margin-right: 50px;
+ }
   
  
 
-.body-custom {
-    margin: 30%;
-    padding: 10%;
+.baby-custom {
+   
     font-family: 'Arial', sans-serif;
     height: 100vh; 
-     display: flex; 
+    display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(to right, #00cc99, #0066cc);
+    background: linear-gradient(to right, #00cc99, #466d95);
   }
   
  
-  
+ 
   
   
