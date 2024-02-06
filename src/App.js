@@ -40,12 +40,15 @@ import { startGetUser } from "./actions/user-action";
 import Failure from "./Payment/Failure";
 import Success from "./Payment/Success";
 import Payment from "./Payment/Pay";
+import Cart from "./components/orders/Cart";
 
 
 
 function App(props) {
   const dispatch = useDispatch()
-  const [userState, userDispatch] = useReducer(userReducer, {userDetails: {}, operator: {}, customer: {}})
+  const [userState, userDispatch] = useReducer(userReducer, {
+    userDetails: {}, operator: {}, customer: {}, cart:[]
+  })
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   console.log(userState.userDetails.role, "oyy")
@@ -134,6 +137,7 @@ function App(props) {
           <Route path='/customerProfile' element={<CustomerProfile />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/order' element={<CreateOrder />} />
+          <Route path='/cart' element={<Cart />} />
           <Route path='/failure' element={<Failure />} />
           <Route path='/success' element={<Success />} />
           <Route path='/pay' element={<Payment />} />

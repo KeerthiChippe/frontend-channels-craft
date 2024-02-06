@@ -85,6 +85,7 @@ const AddChannel = ()=>{
 
     
     return(
+
         <div className=" mt-5 baby-custom container-custom">
             <form onSubmit={handleSubmit}>
               <h3 className="chan">ADD CHANNEL</h3>
@@ -93,13 +94,14 @@ const AddChannel = ()=>{
                     setChannelName(e.target.value)
                 }} />
                 {formErrors.channelName && <span>{formErrors.channelName}</span>}<br />
-                
+            
                 <label className="label-custom" htmlFor="channelPrice">Channel Price</label>
                 <input className="input-custom" type='number' value={channelPrice} placeholder="channel price.." id="channelPrice" onChange={(e)=>{
                     setChannelPrice(e.target.value)
                 }} />
                 {formErrors.channelPrice && <span>{formErrors.channelPrice}</span>}<br />
 
+            
                 <label className="label-custom" htmlFor="channelNumber">Channel Number</label>
                 <input className="input-custom" type="number" value={channelNumber} placeholder="channel number.." id="channelNumber" onChange={(e)=>{
                     setChannelNumber(e.target.value)
@@ -109,17 +111,21 @@ const AddChannel = ()=>{
 
                 <label className="label-custom" htmlFor="language">Language</label>
                 <input className="input-custom" type='text' value={language} placeholder="language.." id="language" onChange={(e)=>{
+
                     setLanguage(e.target.value)
                 }} />
                 {formErrors.language && <span>{formErrors.language}</span>} <br />
                 <br/>
                 <div>
+
+
                     <input className="label-custom" type='file' onChange={(e) =>{
                         setImage(e.target.files[0])
                     }}/>
                 </div><br/>
 
                 <input className="button" type='submit' />
+                  
                 {/* {/* {serverErrors.map((ele, index)=>(
                  <div key={index}>{ele.msg}</div> */}
              
