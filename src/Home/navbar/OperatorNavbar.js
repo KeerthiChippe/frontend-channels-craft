@@ -1,11 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function OperatorNavbar() {
+    const navigate = useNavigate()
 
     const handleLogout = ()=>{
-        localStorage.clear('')   
+        localStorage.clear('')
+        window.location.reload()
     }
 
     return (
@@ -37,15 +39,12 @@ export default function OperatorNavbar() {
                     <Link className="nav-link" to="/order">order</Link>
                 </li>
                 <li className="nav-item">
-                    <Link className="nav-link" to="/packcha">Packages & Channels</Link>
-                </li>
-                <li className="nav-item">
                     <Link className="nav-link" to="/profile">
                     <i className="bi bi-person-circle"></i>
                     </Link>
                 </li>
                 <li className="nav-item">
-                    <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
+                    <Link className="nav-link" to="/login" onClick={handleLogout}>Logout</Link>
                 </li>
                 </div>
             </ul>
