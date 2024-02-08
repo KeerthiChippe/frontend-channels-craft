@@ -141,11 +141,12 @@ const Navbar = () =>{
     return (
         <div>
             {isEmpty(localStorage.getItem('token')) ? (
-                <>
+                 <>
+               
                     <Link to='/'>Home</Link>
                     <Link to='/login'>Login</Link>
-                    <Link to='/register'>Register</Link>
-                </>
+                    <Link to='/register'>Register</Link> 
+                 </>
             ) : (
                 <>
                     {navbarCondition()}
