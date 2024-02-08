@@ -1,9 +1,13 @@
-const ordersInitialState = {cart: [], packages: [], channels: []}
+const ordersInitialState = {cart: [], packages: [], channels: [], paid: {}}
 
 export const orderReducer = (state = ordersInitialState, action) =>{
     switch (action.type){
         case 'CREATE_ORDER': {
+            console.log(action.payload, "cart api")
             return {...state, cart: [...state.cart, action.payload]}
+        }
+        case 'SET_ORDER': {
+            return {...state, paid: {...state.paid, ...action.payload}}
         }
         case 'SELECTED_PACKAGE_ONE': {
             return {...state, packages: [...state.packages, {...action.payload}]}

@@ -19,16 +19,19 @@ const CustomerList =(props) =>{
     const customer = useSelector((state) =>{
         return state.customer.data
     })
+    console.log(customer, 'aaa')
+    // console.log(operatorId, 'bb')
 
     useEffect (() =>{
         dispatch(StartGetCustomer())
         // dispatch(startEditCustomer())
     } ,[dispatch])
 
-    const handleDelete = (id) =>{
+    const handleDelete = (id, operatorId) =>{
+        // console.log(id,operatorId, 'gggg')
         const confirm = window.confirm('Are you sure ??')
         if(confirm) {
-            dispatch (startRemoveCustomer(id))
+            dispatch(startRemoveCustomer(id, operatorId))
         }
     }
 
@@ -37,15 +40,15 @@ const CustomerList =(props) =>{
     //     setMobile('')
     // }
 
-    const handleSubmit = (e) =>{
-        e.preventDefault()
-        const formData = {
-            mobile :mobile
-        }
-        // dispatch(startEditCustomer(editId ,formData))
-        dispatch(startUpdateUser(userId, formData))
-        // setEditId('')
-    }
+    // const handleSubmit = (e) =>{
+    //     e.preventDefault()
+    //     const formData = {
+    //         mobile :mobile
+    //     }
+    //     // dispatch(startEditCustomer(editId ,formData))
+    //     dispatch(startUpdateUser(userId, formData))
+    //     // setEditId('')
+    // }
 
     return(
         <div>
@@ -66,7 +69,7 @@ const CustomerList =(props) =>{
                 }}>edit</button>  */}
                 <td>
                 <button onClick ={() =>{
-                    handleDelete(customer._id)
+                    handleDelete(customer._id, customer.operatorId)
                 }}>Delete</button> </td>  </tr>
                 
              } )}

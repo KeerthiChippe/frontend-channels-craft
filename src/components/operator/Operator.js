@@ -9,7 +9,8 @@ import { Row , Col} from "reactstrap"
 import './operator.css'
 
 
-const Operator = () => {
+const Operator = (props) => {
+    // const {addOperator} = props
     const dispatch = useDispatch()
 
     const user = useSelector((state) => {
@@ -60,6 +61,7 @@ const Operator = () => {
                 userId: userId,
             }
             dispatch(startAddOperator(operatorData))
+            // addOperator()
         } else {
             setFormErrors(errors)
         }
