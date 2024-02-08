@@ -40,10 +40,8 @@ import { startGetUser } from "./actions/user-action";
 import Failure from "./Payment/Failure";
 import Success from "./Payment/Success";
 import Payment from "./Payment/Pay";
-//import Cart from "./components/orders/Cart";
+import Cart from "./components/orders/Cart";
 import OrderPayment from "./components/orders/OrderPayment";
-
-
 
 function App(props) {
   const dispatch = useDispatch()
