@@ -1,4 +1,5 @@
 import *as yup from 'yup'
+import { useState } from 'react'
 import { useFormik } from 'formik'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from './config/axios'
@@ -13,6 +14,7 @@ const loginValidationSchema = yup.object({
 export default function Login(props) {
     const navigate = useNavigate()
     const { handleLogin, loginToast } = props
+    const [serverErrors, setServerErrors] = useState([])
     const formik = useFormik({
         initialValues: {
             mobile: '',
@@ -33,8 +35,14 @@ export default function Login(props) {
                 handleLogin(userData)
                 loginToast()
                 navigate('/')
-            } catch (e) {
-                console.log(e)
+            } catch (error) {
+                if (error.response && error.response.data) {
+                    const serverErrors = error.response.data.errors || []
+                    setServerErrors(error)
+                    console.log(error)
+                  } else {
+                    console.error("Unexpected error:", error)
+                  }
             }
         }
     })
@@ -72,9 +80,17 @@ export default function Login(props) {
                         {formik.errors.password}
                         </div>
                     </div>
+                    {serverErrors.length > 0 && (
+                        <div className="alert alert-danger" role="alert">
+                            {serverErrors.map((error, index) => (
+                                <p key={index}>{error.msg}</p>
+                            ))}
+                        </div>
+                    )}
                     <button type="submit" className='btn btn-success block mt-2' value={'login'} >
                         Login
                     </button>
+                   
                 </form>
                 <div style={{ textAlign: 'right' }}>
                 <Link to='/forgot-password' >Forgot Password ?</Link>

@@ -4,6 +4,9 @@ import { useState, useEffect, useContext } from "react";
 import { startUpdateUser } from "../../actions/user-action";
 import { startEditCustomer } from "../../actions/customer-action";
 import { StartGetCustomer } from "../../actions/customer-action"
+import _ from "lodash"
+import axios from "../../config/axios";
+// import './customerProfile.css'
 
 const CustomerProfile = () => {
   const dispatch = useDispatch();
@@ -32,11 +35,12 @@ const CustomerProfile = () => {
     oldPassword: '',
     newPassword: ''
   });
-  console.log(formData, "address check")
+  const [profile , setProfile] =useState(null)
+  const [img , setImg] = useState({})
 
   const userId = userState.userDetails._id;
   const customerId = userState.customer._id;
-  console.log(customerId, "priya")
+  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -82,9 +86,48 @@ const CustomerProfile = () => {
     });
   }, [userState]);
 
+  const handleUpload = (e) =>{
+    e.preventDefault()
+    console.log(profile , "profile")
+
+
+    if(profile){
+      const formData = new FormData()
+      formData.append('file' , profile)
+
+      axios.put(`/api/customer/${customerId}/profile` ,formData , {
+        headers :{
+          Authorization :localStorage.getItem('token')
+        }
+      })
+
+      .then(res =>{
+        //  console.log(res.data,"img result")
+        setImg({...img , ...res.data})
+      })
+      .catch(err => console.log(err))
+    }
+  }
+
 
   return (
-    <div>
+    <div className=" d-flex justify-content-center align-items-center">
+
+      {!_.isEmpty(img) &&
+      <img  className="rounded-circle mb-3 profile"
+      src ={`http://localhost:3034/Images/${img.image}`} alt='avatar'
+      width="100px"
+      height="100px"
+      />}
+
+      <form onSubmit ={handleUpload} style={{marginBottom:"400px", marginLeft:"100px"}}>
+        <input type = "file" onChange = {(e) =>{
+          setProfile(e.target.files[0])
+        }}/>
+
+        <input type ="submit" value="Upload"/>
+      </form>
+    
       {userState.userDetails.role === 'customer' && (
         <div>
           <form onSubmit={handleSubmit}>
