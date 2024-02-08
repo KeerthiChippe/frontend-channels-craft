@@ -7,7 +7,7 @@ export default function CustomerNavbar() {
 
     const handleLogout = ()=>{
         localStorage.clear('') 
-        window.location.reload()
+        // window.location.reload()
     }
 
     return (

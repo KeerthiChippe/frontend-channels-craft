@@ -62,7 +62,7 @@ function Example(args) {
         key={item.src}
       >
   
-        <img src={item.src} alt={item.altText}/>
+        <img  style ={{ height: "400px", width: "1000px"}} src={item.src} alt={item.altText}/>
 
         <CarouselCaption
           captionText={item.caption}

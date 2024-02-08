@@ -146,7 +146,31 @@ const AddCustomer = () => {
                 setMobile(selectedUserDetails.mobile || '');
             }
         }
-    }, [selectedUser, user]);
+    }, [selectedUser, user])
+
+    const fetchCityStateFromPincode = async () => {
+        try {
+            const response = await fetch(`https://api.postalpincode.in/pincode/${address.pincode}`);
+            const data = await response.json();
+
+            if (Array.isArray(data) && data.length > 0 && data[0]?.PostOffice?.length > 0) {
+                const postOffice = data[0].PostOffice[0];
+                setAddress({
+                    ...address,
+                    city: postOffice.District,
+                    state: postOffice.State
+                });
+            }
+        } catch (error) {
+            console.error("Error fetching city and state:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (address.pincode) {
+            fetchCityStateFromPincode();
+        }
+    }, [address.pincode])
 
     return (
 
@@ -238,6 +262,17 @@ const AddCustomer = () => {
                             /><br />
                             {formErrors.street && formErrors.street}
                         </div>
+                        <div class="col-md-4">
+                            <label htmlFor="Pincode">pincode</label><br />
+                            <input type="text"
+                                value={address.pincode}
+                                class="form-control"
+                                placeholder="pincode"
+                                id="Pincode"
+                                name='pincode'
+                                onChange={handleChange} />
+                            {formErrors.pincode && formErrors.pincode}
+                        </div>
 
                         <div class="col-md-4">
                             <label htmlFor="city">city</label><br />
@@ -261,17 +296,7 @@ const AddCustomer = () => {
                                 onChange={handleChange} /><br />
                             {formErrors.state && formErrors.state}<br />
                         </div>
-                        <div class="col-md-4">
-                            <label htmlFor="Pincode">pincode</label><br />
-                            <input type="text"
-                                value={address.pincode}
-                                class="form-control"
-                                placeholder="pincode"
-                                id="Pincode"
-                                name='pincode'
-                                onChange={handleChange} />
-                            {formErrors.pincode && formErrors.pincode}
-                        </div>
+                        
                         <div class="col-12">
                             <input type='submit' />
                         </div>

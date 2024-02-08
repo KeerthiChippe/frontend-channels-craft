@@ -8,6 +8,7 @@ export const startCreateOrder = (formData)=>{
                     Authorization: localStorage.getItem('token')
                 }
             })
+            console.log(response.data, "order created")
             dispatch(createOrder(response.data))
         }catch(e){
             console.log(e)
@@ -18,6 +19,29 @@ export const startCreateOrder = (formData)=>{
 const createOrder = (data) =>{
     return {
         type: 'CREATE_ORDER',
+        payload: data
+    }
+}
+
+export const startGetOrder = ()=>{
+    return async (dispatch)=>{
+        try{
+            const response = await axios.get('/api/orders', {
+                headers: {
+                    Authorization: localStorage.getItem('token')
+                }
+            }) 
+            dispatch(getOrder(response.data))
+            console.log(response.data, "listorders")
+        }catch(e){
+            console.log(e)
+        }
+    }
+}
+
+const getOrder = (data)=>{
+    return {
+        type: 'SET_ORDER',
         payload: data
     }
 }

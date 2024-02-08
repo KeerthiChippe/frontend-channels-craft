@@ -1,8 +1,12 @@
 import { useSelector, useDispatch } from "react-redux"
 import { startCreateOrder } from "../../actions/order-action"
+import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 
 const Cart = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+
     const cart = useSelector((state) => {
         return state
     })
@@ -36,7 +40,17 @@ const Cart = () => {
         dispatch(startCreateOrder(formData));
     };
 
+    useEffect(()=>{
+        if(cart.order.cart.length > 0){
+            const price = calculateTotalPriceForPackages()
+            navigate('/orderpay', {state: cart.order.cart})
+            // console.log(cart.order.cart, "cart")
+        }
+    }, [cart.order.cart])
+
     console.log(cart.order.packages, "tttt")
+
+
     return (
         <div>
             <h2 className="mt-3">Cart</h2>

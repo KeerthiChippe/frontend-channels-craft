@@ -41,17 +41,18 @@ import Failure from "./Payment/Failure";
 import Success from "./Payment/Success";
 import Payment from "./Payment/Pay";
 import Cart from "./components/orders/Cart";
-
-
+import OrderPayment from "./components/orders/OrderPayment";
 
 function App(props) {
   const dispatch = useDispatch()
   const [userState, userDispatch] = useReducer(userReducer, {
-    userDetails: {}, operator: {}, customer: {}, cart:[]
+    userDetails: {},
+    operator: {},
+    customer: {}, 
+    cart:[]
   })
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-  console.log(userState.userDetails.role, "oyy")
   const registerToast = ()=>{
     toast('registerd successfully')
   }
@@ -63,6 +64,18 @@ function App(props) {
 
   const resetPassword = ()=>{
     toast('password updated successfully')
+  }
+
+  const addOperator = ()=>{
+    toast('added operator')
+  }
+
+  const addPackage = ()=>{
+    toast('Successfully added package')
+  }
+
+  const addChannel = ()=>{
+    toast('Successfully added channel')
   }
 
   const handleLogin = ()=>{
@@ -125,12 +138,10 @@ function App(props) {
           <Route path='/login' element={<Login loginToast = {loginToast}  handleLogin = {handleLogin}/>}/>
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path='/reset-password/:id/:token' element={<ResetPassword resetPassword={resetPassword} />} />
-          {/* <Route path='/addoperator' element={<Operator />} />
-          <Route path='/operatorlist' element={<OperatorList/>} /> */}
-          <Route path='/operatorcontainer' element={<OperatorContainer />} />
-          <Route path='/packages' element={<AddPackage />} />
+          <Route path='/operatorcontainer' element={<OperatorContainer addOperator={addOperator} />} />
+          <Route path='/packages' element={<AddPackage addPackage={addPackage} />} />
           <Route path='/packcha' element={<PackagesContainer />} />
-          <Route path='/channels' element = {<AddChannel />} />
+          <Route path='/channels' element = {<AddChannel addChannel={addChannel} />} />
           <Route path='/deletedPackages' element={<DeletedPackage />} />
           <Route path = '/customercontainer' element={<CustomerContainer />} />
           <Route path='/profile' element={<OperatorProfile />} />
@@ -141,6 +152,7 @@ function App(props) {
           <Route path='/failure' element={<Failure />} />
           <Route path='/success' element={<Success />} />
           <Route path='/pay' element={<Payment />} />
+          <Route path='/orderpay' element={<OrderPayment />} />
         </Routes>
        
       </div>

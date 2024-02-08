@@ -3,6 +3,8 @@ import { OperatorContext } from "./operatorContext";
 import { useDispatch } from "react-redux";
 import { startUpdateUser } from "../../actions/user-action";
 import { startEditOperator, startGetOperator } from "../../actions/operator-action";
+import _ from "lodash"
+import axios from "../../config/axios";
 
 export default function OperatorProfile(){
     const dispatch = useDispatch()
@@ -16,6 +18,9 @@ export default function OperatorProfile(){
         oldPassword: '',
         newPassword: ''
     })
+
+    const [profile, setProfile] = useState(null)
+    const [img, setImg] = useState({})
 
     useEffect(()=>{
         dispatch(startGetOperator())
@@ -63,12 +68,46 @@ export default function OperatorProfile(){
         });
     }, [userState])
 
+    const handleUpload = (e)=>{
+        e.preventDefault()
+        console.log(profile, "profile")
+
+        const formData= new FormData()
+        formData.append('file', profile)
+    
+        if(profile){
+            axios.put(`/api/operator/${operatorId}/profile`, formData, {
+                headers: {
+                    Authorization: localStorage.getItem('token')
+                }
+            })
+                .then(res => {
+                    console.log(res.data, "img result")
+                    setImg({...img, ...res.data})
+                })
+                .catch(err => console.log(err))  
+        }
+    }
+
     return(
         <div>
             {/* <h2>Account Details</h2>
             <p>username - {userState.userDetails.username}</p>
             <p>email - {userState.userDetails.email}</p>
             <p>mobile- {userState.userDetails.mobile}</p> */}
+
+            {!_.isEmpty(img) &&  
+            <img 
+            src={`http://localhost:3034/Images/${img.image}`} alt ='image'
+            />}
+
+            <form onSubmit={handleUpload}>
+                <input type='file' onChange={(e) =>{
+                    setProfile(e.target.files[0])
+                }}/>
+
+                <input type="submit" value="Upload" />
+            </form>
 
             {userState.userDetails.role === 'operator' && (
                 <div>
