@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { isEmpty } from "lodash";
 
 export default function AdminNavbar() {
     const navigate = useNavigate()
@@ -25,14 +26,14 @@ export default function AdminNavbar() {
                 <li className="nav-item">
                     <Link className="nav-link active" aria-current="page" to="/register">Create Account</Link>
                 </li>
-                <li className="nav-item">
-                    <Link className="nav-link" to="/login">Login</Link>
-                </li>
+                {isEmpty(localStorage.getItem('token')) && (
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/login">Login</Link>
+                    </li>
+                )}
+                
                 <li className="nav-item">
                     <Link className="nav-link" to="/operatorcontainer">Operator</Link>
-                </li>
-                <li className="nav-item">
-                    <Link className="nav-link" to="/customercontainer">Customer</Link>
                 </li>
                 <li className="nav-item">
                     <Link className="nav-link" to="/packages">Packages</Link>
@@ -49,9 +50,12 @@ export default function AdminNavbar() {
                 <li className="nav-item">
                     <Link className="nav-link" to="/dashboard">Dashboard</Link>
                 </li>
-                <li className="nav-item">
-                    <Link className="nav-link" to="/login" onClick={handleLogout}>Logout</Link>
-                </li>
+                {!isEmpty(localStorage.getItem('token')) && (
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/login" onClick={handleLogout}>Logout</Link>
+                    </li>
+                )}
+                
                 </div>
             </ul>
             
