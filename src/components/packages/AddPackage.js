@@ -6,7 +6,8 @@ import { startGetChannel } from "../../actions/channel-action"
 import './packcha.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-const AddPackage = () => {
+const AddPackage = (props) => {
+    const {addPackage} = props
     const dispatch = useDispatch()
 
     const channels = useSelector((state) => {
@@ -61,6 +62,7 @@ const AddPackage = () => {
             }
             console.log(formData)
             dispatch(startAddPackage(formData, resetForm))
+            addPackage()
         } else {
             setFormErrors(errors)
         }

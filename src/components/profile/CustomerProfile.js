@@ -4,9 +4,11 @@ import { useState, useEffect, useContext } from "react";
 import { startUpdateUser } from "../../actions/user-action";
 import { startEditCustomer } from "../../actions/customer-action";
 import { StartGetCustomer } from "../../actions/customer-action"
+import { startGetOrder } from "../../actions/order-action";
 import _ from "lodash"
 import axios from "../../config/axios";
 // import './customerProfile.css'
+
 
 const CustomerProfile = () => {
   const dispatch = useDispatch();
@@ -15,8 +17,17 @@ const CustomerProfile = () => {
     return state.customer.data
   })
 
+  const order = useSelector((state)=>{
+    return state.order
+  })
+  console.log(order.paid, "current order")
+  console.log(order.packages, "kkk")
+  // console.log(order.packages[0].packageName, "current packages")
+  // console.log(order.channels[0].channelName, "current channels")
+
   useEffect(() => {
     dispatch(StartGetCustomer())
+    dispatch(startGetOrder())
   }, [dispatch])
 
   const { userState } = useContext(OperatorContext);
@@ -236,6 +247,49 @@ const CustomerProfile = () => {
             />
             <br />
 
+            {Object.keys(order.paid).length > 0 ? (
+              <div>
+                {
+                  order.paid.packages.map(ele => (
+                    <>
+                      <label>Current Packages</label>
+                      <input 
+                        type='text'
+                        value={ele.packageId.packageName}
+                        name='currentPackages'
+                        onChange={handleChange}
+                        disabled
+                      />
+                      <br />
+                    </>
+                  ))
+                }
+              </div>
+             ) : (
+              <p>No packages available</p> 
+             )} 
+
+            {Object.keys(order.paid).length > 0 ? (
+              <div>
+                {
+                  order.paid.channels.map(ele => (
+                    <>
+                      <label>Current Channels</label>
+                      <input 
+                        type='text'
+                        value={ele.channelId.channelName}
+                        name='currentChannels'
+                        onChange={handleChange}
+                      />
+                      <br />
+                    </>
+                  ))
+                }
+              </div>
+            ): ( 
+               <p>No channels available</p> 
+             )} 
+
             <label>Old Password</label>
             <input
               type="password"
@@ -256,6 +310,7 @@ const CustomerProfile = () => {
 
             <input type="submit" />
           </form>
+         
         </div>
       )}
     </div>

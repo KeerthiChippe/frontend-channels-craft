@@ -9,6 +9,7 @@ const customerReducer =(state = CustomerInitialState ,action ) =>{
             return { ...state , data:action.payload}
         }
         case 'REMOVE_CUSTOMER' :{
+            console.log(action.payload, 'dddd')
             const newData = state.data.filter(customer => customer._id !== action.payload)
             console.log(newData)
             return{ ...state , data:newData}

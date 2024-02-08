@@ -7,8 +7,11 @@ import './channel.css'
 
 
 
-const AddChannel = ()=>{
+const AddChannel = (props)=>{
+    const {addChannel} = props
+
     const dispatch = useDispatch()
+
     const [channelName, setChannelName] = useState('')
     const [channelPrice, setChannelPrice] = useState('')
     const [isHD, setIsHD] = useState(false)
@@ -63,20 +66,21 @@ const AddChannel = ()=>{
                formData.append("file", image)
 
             dispatch(startAddChannel(formData))
-            .then(()=>{
-                setChannelName('')
-                setChannelPrice('')
-                setChannelName('')
-                setLanguage('')
-                setIsHD('')
-            }).catch((error) =>{
-                if (error.response && error.response.data) {
-                    dispatch(serverErrors(error.response.data.errors || []));
-                    console.log(error.response.data.errors, "kkkkk")
-                }else {
-                    console.error("Unexpected error:", error);
-                }
-            })
+            addChannel()
+            // .then(()=>{
+            //     setChannelName('')
+            //     setChannelPrice('')
+            //     setChannelName('')
+            //     setLanguage('')
+            //     setIsHD('')
+            // }).catch((error) =>{
+            //     if (error.response && error.response.data) {
+            //         dispatch(serverErrors(error.response.data.errors || []));
+            //         console.log(error.response.data.errors, "kkkkk")
+            //     }else {
+            //         console.error("Unexpected error:", error);
+            //     }
+            // })
         }else{
             setFormErrors(errors)
         }

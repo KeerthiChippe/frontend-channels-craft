@@ -53,11 +53,12 @@ const setCustomer = (list) => {
     }
 }
 
-export const startRemoveCustomer = (id) => {
+export const startRemoveCustomer = (id, operatorId) => {
     return async (dispatch) => {
         if (!id) {
-            console.log("customer Id is missing for Deletion")
-        } try {
+            console.log("customer Id is missing for Deletion", id)
+        }
+         try {
             const response = await axios.delete(`/api/customer/${id}`, {
                 headers: {
                     Authorization: localStorage.getItem('token')
