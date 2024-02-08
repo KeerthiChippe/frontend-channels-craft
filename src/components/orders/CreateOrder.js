@@ -4,6 +4,7 @@ import { StartGetCustomer } from "../../actions/customer-action"
 import { startGetPackage } from "../../actions/package-action"
 import { startGetChannel } from "../../actions/channel-action"
 import { startCreateOrder } from "../../actions/order-action"
+import './createOrder.css'
 
 const CreateOrder = ()=>{
     const dispatch = useDispatch()
@@ -49,52 +50,53 @@ const CreateOrder = ()=>{
     }
 
     return(
-        <div>
+        <div className = "order" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh'}}>
             <form>
             <label className="dropdown">Select Customer</label>
                 <br />
-                <select value={selectCustomer} onChange={handleChange}>
-                <option value="" >Select a customer...</option>
+                <select  className="dropdown" value={selectCustomer} onChange={handleChange}>
+                <option className="dropdown" value="" >Select a customer...</option>
                 {customers.map((customer) => (
                   <option key={customer.id} value={customer._id}>
                     {customer.customerName}
                   </option>
                 ))}
               </select><br/>
-
+              <br/>
               <label className="dropdown">Select Package</label>
                 <br />
-                <select value={selectPackage} onChange={(e)=>{
+                <select className="dropdown" value={selectPackage} onChange={(e)=>{
                     setSelectPackage(e.target.value)
                 }}>
-                <option value="" >Select a package...</option>
+                <option className="dropdown" value="" >Select a package...</option>
                 {packages.map((ele) => (
                   <option key={ele.id} value={ele._id}>
                     {ele.packageName}-{ele.packagePrice}
                   </option>
                 ))}
               </select><br/>
-
+              <br/>
               <label className="dropdown">Select Channels</label>
                 <br />
-                <select value={selectChannel} onChange={(e)=>{
+                <select className="dropdown" value={selectChannel} onChange={(e)=>{
                     setSelectChannel(e.target.value)
                 }}>
-                <option value="" >Select a channel...</option>
+                <option className="dropdown" value="" >Select a channel...</option>
                 {channels.map((ele) => (
                   <option key={ele.id} value={ele._id}>
                     {ele.channelName}
                   </option>
                 ))}
               </select><br/>
-
+              <br/>
               {/* <label>Order Date</label><br />
               <input type='date' value={orderDate} onChange={(e)=>{
                 setOrderDate(e.target.value)
               }} /><br /> */}
-
+              <br/>
+                   <button className="dropdown" onClick={handleOrder}>order</button>
             </form>
-            <button onClick={handleOrder}>order</button>
+         
         </div>
     )
 }

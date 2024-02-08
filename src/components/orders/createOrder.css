@@ -1,11 +1,15 @@
-.adding {
-    background-color: beige;
+.order {
+    background-image: url('../../../public/order.jpg');
     background-size: cover;
     background-position: center;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    width:100%;
    
+}
+
+.dropdown {
+    color: grey;
+    font-weight: bold;
 }
