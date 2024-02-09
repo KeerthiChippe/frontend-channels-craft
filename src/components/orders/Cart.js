@@ -10,7 +10,7 @@ const Cart = () => {
     const cart = useSelector((state) => {
         return state
     })
-    console.log(cart.order.channels, "ii")
+    // console.log(cart.order.channels, "ii")
 
     const { packages: pack, channels } = useSelector((state) => {
         return state.order || {};
@@ -35,7 +35,7 @@ const Cart = () => {
         const formData = {
             packages: pack,
             channels: channels,
-            orderDate: new Date(),
+            // orderDate: new Date(),
         };
         dispatch(startCreateOrder(formData));
     };
@@ -48,7 +48,7 @@ const Cart = () => {
         }
     }, [cart.order.cart])
 
-    console.log(cart.order.packages, "tttt")
+    // console.log(cart.order.packages, "tttt")
 
 
     return (
