@@ -33,7 +33,7 @@ const Cart = () => {
         const formData = {
             packages: pack,
             channels: channels,
-            orderDate: new Date(),
+            // orderDate: new Date(),
         };
         dispatch(startCreateOrder(formData));
     };
@@ -43,7 +43,10 @@ const Cart = () => {
             const price = calculateTotalPriceForPackages();
             navigate('/orderpay', { state: cart.order.cart });
         }
-    }, [cart.order.cart]);
+    }, [cart.order.cart])
+
+
+
 
     return (
         <Container>

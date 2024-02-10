@@ -8,8 +8,10 @@ const OrderDetails = ()=>{
     const cart = useSelector((state) => {
         return state.order
     })
+    console.log(cart, 'cart items')
 
-    // console.log(location.state[0]._id, "location")
+    console.log(location.state[0], "location")
+    
     const handlePay = async ()=>{
         const amount = location.state[0].totalPrice
         const orderId = location.state[0]._id

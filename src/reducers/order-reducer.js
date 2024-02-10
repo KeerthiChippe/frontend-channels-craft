@@ -7,6 +7,7 @@ export const orderReducer = (state = ordersInitialState, action) =>{
             return {...state, cart: [...state.cart, action.payload]}
         }
         case 'SET_ORDER': {
+            console.log(action.payload, "payload date")
             return {...state, paid: {...state.paid, ...action.payload}}
         }
         case 'SELECTED_PACKAGE_ONE': {

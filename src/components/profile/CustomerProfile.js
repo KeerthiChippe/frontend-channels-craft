@@ -8,7 +8,12 @@ import { StartGetCustomer } from "../../actions/customer-action"
 import { startGetOrder } from "../../actions/order-action"
 import axios from "../../config/axios"
 import { Row, Col } from "reactstrap"
+// import {addDays} from 'date-fns'
+import addDays from 'date-fns/addDays'
+import {format} from 'date-fns'
 // import './customerProfile.css'
+import Calendar from "./Calendar";
+
 
 
 const CustomerProfile = () => {
@@ -22,10 +27,17 @@ const CustomerProfile = () => {
   const order = useSelector((state) => {
     return state.order
   })
-  console.log(order.paid, "current order")
-  console.log(order.packages, "kkk")
+  // console.log(order, "current order")
+  // console.log(order.packages, "kkk")
+  console.log(order.paid.orderDate, "date of order")
   // console.log(order.packages[0].packageName, "current packages")
   // console.log(order.channels[0].channelName, "current channels")
+
+  const orderDate = order.paid.orderDate
+  const expiryDate = addDays(orderDate, 30)
+  console.log(expiryDate, "expiry date")
+  // const formattedExpiryDate = format(expiryDate, 'yyyy mm dd')
+  // console.log(formattedExpiryDate, 'format date')
 
   useEffect(() => {
     dispatch(StartGetCustomer())
@@ -157,8 +169,7 @@ const CustomerProfile = () => {
               />
             </>
           )}
-        </Col>
-        <Col>
+          
           <form onSubmit={handleUpload} style={{ marginBottom: "400px", marginLeft: "100px" }}>
             <input type="file" onChange={(e) => {
               setProfile(e.target.files[0])
@@ -166,6 +177,35 @@ const CustomerProfile = () => {
 
             <input type="submit" value="Upload" />
           </form>
+
+{Object.keys(order.paid).length > 0 ? (
+        <div>
+          <h4>Current packages</h4>
+          <ul>
+            {order.paid.packages.map((ele)=>{
+              return <li key={ele.id}>{ele.packageId.packageName}</li>
+            })}
+          </ul>
+        </div>
+      ): (
+        <p>No packages available</p>
+      )}  
+      <br />
+
+{Object.keys(order.paid).length > 0 ? (
+        <div>
+          <h4>Current channels</h4>
+          <ul>
+            {order.paid.channels.map((ele)=>{
+              return <li key={ele.id}>{ele.channelId.channelName}</li>
+            })}
+          </ul>
+        </div>
+      ): (
+        <p>No channels available</p>
+      )}
+        </Col>
+      
 
           {role === 'customer' && (
             <div>
@@ -275,57 +315,62 @@ const CustomerProfile = () => {
                 />
                 <br />
 
-                {Object.keys(order.paid).length > 0 ? (
-                  <div>
-                    {
-                      order.paid.packages.map(ele => (
-                        <>
-                          <label>Current Packages</label>
-                          <input
-                            type='text'
-                            value={ele.packageId.packageName}
-                            name='currentPackages'
-                            onChange={handleChange}
-                            disabled
-                          />
-                          <br />
-                        </>
-                      ))
-                    }
-                  </div>
-                ) : (
-                  <p>No packages available</p>
-                )}
+            {/* {Object.keys(order.paid).length > 0 ? (
+              <div>
+                {
+                  order.paid.packages.map(ele => (
+                    <>
+                      <label>Current Packages</label>
+                      <input 
+                        type='text'
+                        value={ele.packageId.packageName}
+                        name='currentPackages'
+                        onChange={handleChange}
+                        disabled
+                      />
+                      <br />
+                    </>
+                  ))
+                }
+              </div>
+             ) : (
+              <p>No packages available</p> 
+             )} 
 
-                {Object.keys(order.paid).length > 0 ? (
-                  <div>
-                    {
-                      order.paid.channels.map(ele => (
-                        <>
-                          <label>Current Channels</label>
-                          <input
-                            type='text'
-                            value={ele.channelId.channelName}
-                            name='currentChannels'
-                            onChange={handleChange}
-                          />
-                          <br />
-                        </>
-                      ))
-                    }
-                  </div>
-                ) : (
-                  <p>No channels available</p>
-                )}
+            {Object.keys(order.paid).length > 0 ? (
+              <div>
+                {
+                  order.paid.channels.map(ele => (
+                    <>
+                      <label>Current Channels</label>
+                      <input 
+                        type='text'
+                        value={ele.channelId.channelName}
+                        name='currentChannels'
+                        onChange={handleChange}
+                      />
+                      <br />
+                    </>
+                  ))
+                }
+              </div>
+            ): ( 
+               <p>No channels available</p> 
+             )}  */}
 
-                <label>Old Password</label>
-                <input
-                  type="password"
-                  name="oldPassword"
-                  value={formData.oldPassword}
-                  onChange={handleChange}
-                />
-                <br />
+             {order.paid.orderDate && (
+                <p>Expiry Date - {expiryDate.toString()} </p>
+             )}
+
+            
+            <label>Old Password</label>
+            <input
+              type="password"
+              name="oldPassword"
+              value={formData.oldPassword}
+              onChange={handleChange}
+            />
+            <br />
 
                 <label>New Password</label>
                 <input
@@ -335,13 +380,15 @@ const CustomerProfile = () => {
                   onChange={handleChange}
                 />
                 <br />
+                
+            <input type="submit" />
+          </form>
 
-                <input type="submit" />
-              </form>
-
-            </div>
-          )}
-        </Col>
+          
+          <Calendar expiryDate={expiryDate}/>
+         
+        </div>
+      )}
       </Row>
     </div>
   );
