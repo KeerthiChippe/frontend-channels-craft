@@ -49,14 +49,13 @@ function App(props) {
     userDetails: {},
     operator: {},
     customer: {}, 
-    cart:[]
+    cart:[],
+    isLoggedIn: false
   })
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   const registerToast = ()=>{
     toast('registerd successfully')
   }
-  // console.log(registerToast())
 
   const loginToast =() =>{
     toast('logged in succesfully')
@@ -77,14 +76,20 @@ function App(props) {
   const addChannel = ()=>{
     toast('Successfully added channel')
   }
-
-  const handleLogin = ()=>{
-    setIsLoggedIn(!isLoggedIn)
-  }
   
   useEffect(()=>{
     dispatch(startGetUser())
   }, [dispatch])
+
+  useEffect(()=>{
+    if(localStorage.length > 0){
+      userDispatch({
+        type: "SIGN_IN_TOGGLE",
+        payload: true
+    })
+    }
+  }, [dispatch, userState.isLoggedIn])
+
   
   useEffect(()=>{
     const fetchUserData = async ()=>{
@@ -135,7 +140,7 @@ function App(props) {
         <Routes>
           <Route path='/' element={<Home/> }/>
           <Route path='/register' element={<UserContainer registerToast={registerToast}/>} />
-          <Route path='/login' element={<Login loginToast = {loginToast}  handleLogin = {handleLogin}/>}/>
+          <Route path='/login' element={<Login loginToast = {loginToast} />}/>
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path='/reset-password/:id/:token' element={<ResetPassword resetPassword={resetPassword} />} />
           <Route path='/operatorcontainer' element={<OperatorContainer addOperator={addOperator} />} />

@@ -137,10 +137,10 @@ const Navbar = () =>{
         // }
         // return null; // Return null if userState or userDetails are not defined
     }
-
+    console.log(userState.isLoggedIn, "logged")
     return (
         <div>
-            {isEmpty(localStorage.getItem('token')) ? (
+            {!userState.isLoggedIn ? (
                  <>
                
                     <Link to='/'>Home</Link>

@@ -6,10 +6,10 @@ import { startEditOperator, startGetOperator } from "../../actions/operator-acti
 import _ from "lodash"
 import axios from "../../config/axios";
 
-export default function OperatorProfile(){
+export default function OperatorProfile() {
     const dispatch = useDispatch()
 
-    const {userState, userDispatch} = useContext(OperatorContext)
+    const { userState, userDispatch } = useContext(OperatorContext)
     const [formData, setFormData] = useState({
         operatorName: userState.userDetails.username,
         mobile: userState.userDetails.mobile,
@@ -21,11 +21,17 @@ export default function OperatorProfile(){
 
     const [profile, setProfile] = useState(null)
     const [img, setImg] = useState({})
-
-    useEffect(()=>{
+   // const [role , setRole] = useState("")
+    useEffect(() => {
         dispatch(startGetOperator())
 
     }, [dispatch])
+
+    useEffect(()=>{
+        if(localStorage.getItem('token').length > 0){
+            setProfile(userState.userDetails.role)
+        }
+    }, [userState.userDetails.role])
 
     const userId = userState.userDetails._id
     const operatorId = userState.operator._id
@@ -34,12 +40,20 @@ export default function OperatorProfile(){
     const [formErrors, setFormErrors] = useState([]);
 
     const handleChange = (e) => {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = async (e) =>{
+    // useEffect(()=>{
+    //     if(localStorage.getItem('token').length > 0){
+    //       setImg(userState.operator.image)
+    //     }
+    //     console.log(userState.operator.image)
+    //   }, [])
+      
+
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        try{
+        try {
             dispatch(startUpdateUser(userId, {
                 "oldPassword": formData.oldPassword,
                 "newPassword": formData.newPassword
@@ -51,8 +65,8 @@ export default function OperatorProfile(){
                 ...formData,
                 oldPassword: "",
                 newPassword: "",
-              });
-        }catch(e){
+            });
+        } catch (e) {
             console.log(e)
         }
     }
@@ -64,18 +78,20 @@ export default function OperatorProfile(){
             state: userState.operator.state,
             city: userState.operator.city,
             oldPassword: '',
-            newPassword: ''
+            newPassword: '', 
+            img: userState.operator.image
         });
     }, [userState])
 
-    const handleUpload = (e)=>{
+    const handleUpload = (e) => {
         e.preventDefault()
         console.log(profile, "profile")
 
-        const formData= new FormData()
-        formData.append('file', profile)
-    
-        if(profile){
+
+
+        if (profile) {
+            const formData = new FormData()
+            formData.append('file', profile)
             axios.put(`/api/operator/${operatorId}/profile`, formData, {
                 headers: {
                     Authorization: localStorage.getItem('token')
@@ -83,28 +99,42 @@ export default function OperatorProfile(){
             })
                 .then(res => {
                     console.log(res.data, "img result")
-                    setImg({...img, ...res.data})
+                    setImg({ ...img, ...res.data })
                 })
-                .catch(err => console.log(err))  
+                .catch(err => console.log(err))
         }
     }
+    console.log(userState.operator.image, "profile")
 
-    return(
-        <div>
+    return (
+        <div className="d-flex mt-5 justify-content-center align-items-center">
             {/* <h2>Account Details</h2>
             <p>username - {userState.userDetails.username}</p>
             <p>email - {userState.userDetails.email}</p>
             <p>mobile- {userState.userDetails.mobile}</p> */}
 
-            {!_.isEmpty(img) &&  
-            <img 
-            src={`http://localhost:3034/Images/${img.image}`} alt ='image'
-            />}
+            {!_.isEmpty(formData.img) ? (
+                <>
+                    <img className="rounded-circle mb-3 profile"
+                        src={`http://localhost:3034/Images/${formData.img}`} alt='avatar'
+                        width="100px"
+                        height="100px"
+                    />
+                </>
+            ) : (
+                <>
+                    <img className="rounded-circle mb-3 profile"
+                        src={process.env.PUBLIC_URL + '/service-pic.jpg'} alt='avatar'
+                        width="100px"
+                        height="100px"
+                    />
+                </>
+            )}
 
             <form onSubmit={handleUpload}>
-                <input type='file' onChange={(e) =>{
+                <input type='file' onChange={(e) => {
                     setProfile(e.target.files[0])
-                }}/>
+                }} />
 
                 <input type="submit" value="Upload" />
             </form>
@@ -121,11 +151,11 @@ export default function OperatorProfile(){
                         <br />
 
                         <label>city</label>
-                        <input type='text' name='city' value={formData.city} onChange={handleChange} disabled/>
+                        <input type='text' name='city' value={formData.city} onChange={handleChange} disabled />
                         <br />
 
                         <label>state</label>
-                        <input type='text' name='state' value={formData.state} onChange={handleChange} disabled/>
+                        <input type='text' name='state' value={formData.state} onChange={handleChange} disabled />
                         <br />
 
                         <label>old password</label>
@@ -140,7 +170,7 @@ export default function OperatorProfile(){
                     </form>
                 </div>
             )}
-          
+
         </div>
     )
 

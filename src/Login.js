@@ -1,8 +1,9 @@
 import *as yup from 'yup'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useFormik } from 'formik'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from './config/axios'
+import { OperatorContext } from './components/profile/operatorContext'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './login.css'
 
@@ -12,9 +13,15 @@ const loginValidationSchema = yup.object({
 })
 
 export default function Login(props) {
+
+    const { userDispatch } = useContext(OperatorContext)
+
     const navigate = useNavigate()
-    const { handleLogin, loginToast } = props
+
+    const { loginToast } = props
     const [serverErrors, setServerErrors] = useState([])
+
+
     const formik = useFormik({
         initialValues: {
             mobile: '',
@@ -32,13 +39,16 @@ export default function Login(props) {
                 const userData = response.data
                 // console.log(userData.role, "check")
                 localStorage.setItem('token', userData.token)
-                handleLogin(userData)
+                userDispatch({
+                    type: "SIGN_IN_TOGGLE",
+                    payload: true
+                })
                 loginToast()
                 navigate('/')
             } catch (error) {
                 if (error.response && error.response.data) {
                     const serverErrors = error.response.data.errors || []
-                    setServerErrors(error)
+                    alert(serverErrors)
                     console.log(error)
                   } else {
                     console.error("Unexpected error:", error)
@@ -80,6 +90,10 @@ export default function Login(props) {
                         {formik.errors.password}
                         </div>
                     </div>
+                   
+                    <button type="submit" className='btn btn-success block mt-2' value={'login'} >
+                        Login
+                    </button>
                     {serverErrors.length > 0 && (
                         <div className="alert alert-danger" role="alert">
                             {serverErrors.map((error, index) => (
@@ -87,9 +101,6 @@ export default function Login(props) {
                             ))}
                         </div>
                     )}
-                    <button type="submit" className='btn btn-success block mt-2' value={'login'} >
-                        Login
-                    </button>
                    
                 </form>
                 <div style={{ textAlign: 'right' }}>

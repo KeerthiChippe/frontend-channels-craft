@@ -4,7 +4,7 @@ import { StartGetCustomer } from "../../actions/customer-action"
 import { startGetPackage } from "../../actions/package-action"
 import { startGetChannel } from "../../actions/channel-action"
 import { startCreateOrder } from "../../actions/order-action"
-import './createOrder.css'
+import './createorder.css'
 
 const CreateOrder = ()=>{
     const dispatch = useDispatch()
