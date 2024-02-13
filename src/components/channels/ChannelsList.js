@@ -1,19 +1,33 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { startAddChannel, startEditChannel, startGetChannel, startRemoveChannel } from "../../actions/channel-action"
 import { selectedChannelOne } from "../../actions/order-action"
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap"
+import { OperatorContext } from "../profile/operatorContext"
+import { jwtDecode } from "jwt-decode"
 
 const ChannelsList = () => {
   const [editId, setEditId] = useState(null)
   const [selectedItems, setSelectedItems] = useState([])
   const [modal, setModal] = useState(false)
+  const [userRole, setUserRole] = useState('')
   const [formData, setFormData] = useState({
     channelPrice: "",
   })
 
   const dispatch = useDispatch()
   const channels = useSelector((state) => state.channel.data)
+
+  // const {userState} = useContext(OperatorContext)
+  // const role = userState.userDetails ? userState.userDetails.role : null;
+
+  useEffect(()=>{
+    if(localStorage.getItem('token')){
+        const {role} = jwtDecode(localStorage.getItem("token"))
+        console.log(role, "345")
+        setUserRole(role)
+    }
+}, [localStorage.getItem('token')])
 
   useEffect(() => {
     dispatch(startGetChannel())
@@ -87,7 +101,10 @@ const ChannelsList = () => {
                 <p className="card-text">{ele.channelPrice}</p>
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="btn-group">
-                    <button
+
+                    {userRole === 'admin' && (
+                      <>
+                        <button
                       onClick={() => {
                         handleEdit(ele._id);
                       }}
@@ -103,7 +120,12 @@ const ChannelsList = () => {
                     >
                       Delete
                     </button>
-                    <button
+                      </>
+                    )}
+
+                    {userRole === 'customer' && (
+                      <>
+                        <button
                       onClick={() => {
                         handleAdd(ele._id);
                       }}
@@ -111,6 +133,10 @@ const ChannelsList = () => {
                     >
                       Add to Cart
                     </button>
+                      </>
+                    )}
+                    
+                    
                   </div>
                 </div>
               </div>
@@ -141,20 +167,6 @@ const ChannelsList = () => {
           </form>
         </ModalBody>
       </Modal>
-
-      {/* <h2 className="mt-3">Cart</h2>
-      <ul className="list-group" style={{ height: "500px", overflowY: "auto" }}>
-        {selectedItems.map((item, index) => (
-          <li
-            key={index}
-            className="list-group-item d-flex justify-content-between align-items-center"
-          >
-            <div>
-              {item.channelId} - {item.channelPrice}
-            </div>
-          </li>
-        ))}
-      </ul> */}
     </div>
   );
 };

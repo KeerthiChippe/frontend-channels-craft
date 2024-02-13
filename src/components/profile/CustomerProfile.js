@@ -6,10 +6,8 @@ import { startEditCustomer } from "../../actions/customer-action";
 import { StartGetCustomer } from "../../actions/customer-action"
 import { startGetOrder } from "../../actions/order-action";
 import _ from "lodash"
+import { addDays, format } from 'date-fns'
 import axios from "../../config/axios";
-// import {addDays} from 'date-fns'
-import addDays from 'date-fns/addDays'
-import {format} from 'date-fns'
 // import './customerProfile.css'
 import Calendar from "./Calendar";
 
@@ -18,22 +16,22 @@ import Calendar from "./Calendar";
 const CustomerProfile = () => {
   const dispatch = useDispatch();
 
-  const customers = useSelector((state) => {
-    return state.customer.data
-  })
+  // const customers = useSelector((state) => {
+  //   return state.customer.data
+  // })
 
-  const order = useSelector((state)=>{
+  const order = useSelector((state) => {
     return state.order
   })
   // console.log(order, "current order")
   // console.log(order.packages, "kkk")
-  console.log(order.paid.orderDate, "date of order")
+  console.log(order.paid, "date of order")
   // console.log(order.packages[0].packageName, "current packages")
   // console.log(order.channels[0].channelName, "current channels")
 
-  const orderDate = order.paid.orderDate
-  const expiryDate = addDays(orderDate, 30)
-  console.log(expiryDate, "expiry date")
+  const orderDate = order.paid
+  console.log(orderDate, "expiry date")
+  // const expiryDate = addDays(orderDate + 30)
   // const formattedExpiryDate = format(expiryDate, 'yyyy mm dd')
   // console.log(formattedExpiryDate, 'format date')
 
@@ -58,12 +56,12 @@ const CustomerProfile = () => {
     oldPassword: '',
     newPassword: ''
   });
-  const [profile , setProfile] =useState(null)
-  const [img , setImg] = useState({})
+  const [profile, setProfile] = useState(null)
+  const [img, setImg] = useState({})
 
   const userId = userState.userDetails._id;
   const customerId = userState.customer._id;
-  
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -109,26 +107,26 @@ const CustomerProfile = () => {
     });
   }, [userState]);
 
-  const handleUpload = (e) =>{
+  const handleUpload = (e) => {
     e.preventDefault()
-    console.log(profile , "profile")
+    console.log(profile, "profile")
 
 
-    if(profile){
+    if (profile) {
       const formData = new FormData()
-      formData.append('file' , profile)
+      formData.append('file', profile)
 
-      axios.put(`/api/customer/${customerId}/profile` ,formData , {
-        headers :{
-          Authorization :localStorage.getItem('token')
+      axios.put(`/api/customer/${customerId}/profile`, formData, {
+        headers: {
+          Authorization: localStorage.getItem('token')
         }
       })
 
-      .then(res =>{
-        //  console.log(res.data,"img result")
-        setImg({...img , ...res.data})
-      })
-      .catch(err => console.log(err))
+        .then(res => {
+          //  console.log(res.data,"img result")
+          setImg({ ...img, ...res.data })
+        })
+        .catch(err => console.log(err))
     }
   }
 
@@ -137,47 +135,71 @@ const CustomerProfile = () => {
     <div className=" d-flex justify-content-center align-items-center">
 
       {!_.isEmpty(img) &&
-      <img  className="rounded-circle mb-3 profile"
-      src ={`http://localhost:3034/Images/${img.image}`} alt='avatar'
-      width="100px"
-      height="100px"
-      />}
+        <img className="rounded-circle mb-3 profile"
+          src={`http://localhost:3034/Images/${img.image}`} alt='avatar'
+          width="100px"
+          height="100px"
+        />}
 
-      {Object.keys(order.paid).length > 0 ? (
+      {console.log(order.paid?.map(ele=> ele.channels), 'order list')}
+      {order.paid.length > 0 ? (
         <div>
           <h4>Current packages</h4>
+
           <ul>
-            {order.paid.packages.map((ele)=>{
-              return <li key={ele.id}>{ele.packageId.packageName}</li>
-            })}
+            {order.paid?.map(ele => ele.packages.map((pack) => {
+              const originalDate = new Date(ele.orderDate);
+              const futureDate = addDays(originalDate, 30);
+
+              const formattedDate = format(futureDate, 'yyyy-MM-dd')
+              console.log(formattedDate, "workx")
+              
+              return (
+                <>
+                  <li key={ele._id}>{pack.packageId.packageName} - expiryDate - {formattedDate}</li>
+                
+                </>
+              )
+              
+            }))}
           </ul>
+          
         </div>
-      ): (
+      ) : (
         <p>No packages available</p>
-      )}  
+      )}
       <br />
 
-{Object.keys(order.paid).length > 0 ? (
+      {order.paid && order.paid.length > 0 ? (
         <div>
           <h4>Current channels</h4>
           <ul>
-            {order.paid.channels.map((ele)=>{
-              return <li key={ele.id}>{ele.channelId.channelName}</li>
-            })}
+          {order.paid?.map(ele => ele.channels?.map((chan) => {
+              const originalDate = new Date(ele.orderDate);
+              const futureDate = addDays(originalDate, 30);
+
+              const formattedDate = format(futureDate, 'yyyy-MM-dd')
+              console.log(formattedDate, "workx")
+              return (
+                <>
+                  <li key={chan._id}>{chan.channelId?.channelName} - expiryDate - {formattedDate}</li>
+                </>
+              )
+            }))}
           </ul>
         </div>
-      ): (
+      ) : (
         <p>No channels available</p>
-      )}  
-        
-      <form onSubmit ={handleUpload} style={{marginBottom:"400px", marginLeft:"100px"}}>
-        <input type = "file" onChange = {(e) =>{
-          setProfile(e.target.files[0])
-        }}/>
+      )}
 
-        <input type ="submit" value="Upload"/>
+      <form onSubmit={handleUpload} style={{ marginBottom: "400px", marginLeft: "100px" }}>
+        <input type="file" onChange={(e) => {
+          setProfile(e.target.files[0])
+        }} />
+
+        <input type="submit" value="Upload" />
       </form>
-    
+
       {userState.userDetails.role === 'customer' && (
         <div>
           <form onSubmit={handleSubmit}>
@@ -329,11 +351,11 @@ const CustomerProfile = () => {
                <p>No channels available</p> 
              )}  */}
 
-             {order.paid.orderDate && (
-                <p>Expiry Date - {expiryDate.toString()} </p>
-             )}
+            {/* {order.paid.orderDate && (
+                <p>Expiry Date - {expiryDate.toString()}-</p>
+             )} */}
 
-            
+
             <label>Old Password</label>
             <input
               type="password"
@@ -355,9 +377,6 @@ const CustomerProfile = () => {
             <input type="submit" />
           </form>
 
-          
-          <Calendar expiryDate={expiryDate}/>
-         
         </div>
       )}
     </div>

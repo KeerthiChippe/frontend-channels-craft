@@ -72,7 +72,7 @@ const OperatorList = (props) => {
                                 return <tr key={operator.id} ><td>{operator.operatorName}</td><td> {operator.mobile}</td>
         
 
-        <td><button onClick={() => {
+                                <td><button onClick={() => {
                                         console.log(operator._id)
                                         handleDelete(operator._id)
                                     }} >Delete</button></td>

@@ -1,15 +1,13 @@
 import { StartGetCustomer  , startEditCustomer ,startRemoveCustomer} from "../../actions/customer-action"
 import { useDispatch , useSelector } from "react-redux"
 import { useContext, useEffect ,useState } from "react"
-import { startUpdateUser } from "../../actions/user-action"
 import { OperatorContext } from "../profile/operatorContext"
-import { Row ,Col ,Table} from "reactstrap"
+import { Row,Table} from "reactstrap"
 import './customerlist.css'
 
 const CustomerList =(props) =>{
     const {userState} = useContext(OperatorContext) 
 
-    // const [editId ,setEditId] =useState(false)
     const [mobile ,setMobile] =useState('')
     const dispatch = useDispatch()
 
@@ -20,35 +18,18 @@ const CustomerList =(props) =>{
         return state.customer.data
     })
     console.log(customer, 'aaa')
-    // console.log(operatorId, 'bb')
+    
 
     useEffect (() =>{
         dispatch(StartGetCustomer())
-        // dispatch(startEditCustomer())
     } ,[dispatch])
 
     const handleDelete = (id, operatorId) =>{
-        // console.log(id,operatorId, 'gggg')
         const confirm = window.confirm('Are you sure ??')
         if(confirm) {
             dispatch(startRemoveCustomer(id, operatorId))
         }
     }
-
-    // const handleEdit = (id) =>{
-    //     setEditId(id)
-    //     setMobile('')
-    // }
-
-    // const handleSubmit = (e) =>{
-    //     e.preventDefault()
-    //     const formData = {
-    //         mobile :mobile
-    //     }
-    //     // dispatch(startEditCustomer(editId ,formData))
-    //     dispatch(startUpdateUser(userId, formData))
-    //     // setEditId('')
-    // }
 
     return(
         <div>
@@ -64,9 +45,7 @@ const CustomerList =(props) =>{
                         <tbody>
             {customer.map ((customer) =>{
                 return <tr key ={customer.id}> <td>{customer.customerName}</td>  <td>{customer.mobile}</td>  <td>{customer.boxNumber}</td>
-                {/* <button onClick ={() =>{
-                    handleEdit(customer._id)
-                }}>edit</button>  */}
+                
                 <td>
                 <button onClick ={() =>{
                     handleDelete(customer._id, customer.operatorId)
@@ -76,16 +55,6 @@ const CustomerList =(props) =>{
             
              </tbody>
              </Table>
-                {/* {editId && (
-                    <form onSubmit ={handleSubmit}>
-                        <label>Mobile</label>
-                        <input type ='text' value ={mobile} onChange={(e) =>{
-                            setMobile(e.target.value)
-                        }}/>
-
-                        <input type ='submit' /> 
-                         </form>
-                )}  */}
              </div>    
     
     )

@@ -9,7 +9,7 @@ import axios from "../../config/axios";
 export default function OperatorProfile(){
     const dispatch = useDispatch()
 
-    const {userState, userDispatch} = useContext(OperatorContext)
+    const {userState} = useContext(OperatorContext)
     const [formData, setFormData] = useState({
         operatorName: userState.userDetails.username,
         mobile: userState.userDetails.mobile,
@@ -30,8 +30,6 @@ export default function OperatorProfile(){
     const userId = userState.userDetails._id
     const operatorId = userState.operator._id
     console.log(userId)
-
-    const [formErrors, setFormErrors] = useState([]);
 
     const handleChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });

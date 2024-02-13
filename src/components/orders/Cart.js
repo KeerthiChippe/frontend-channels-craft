@@ -42,7 +42,7 @@ const Cart = () => {
 
     useEffect(()=>{
         if(cart.order.cart.length > 0){
-            const price = calculateTotalPriceForPackages()
+            // const price = calculateTotalPriceForPackages()
             navigate('/orderpay', {state: cart.order.cart})
             // console.log(cart.order.cart, "cart")
         }

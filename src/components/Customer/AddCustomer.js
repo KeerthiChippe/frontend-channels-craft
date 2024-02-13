@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { isEmail } from "validator"
 import _ from "lodash"
 import { useDispatch, useSelector } from "react-redux"
 import { startAddCustomer } from "../../actions/customer-action"
@@ -14,6 +13,7 @@ const AddCustomer = () => {
     const user = useSelector((state) => {
         return state.user.data
     })
+    console.log(user, "users list")
 
     const serverErrors = useSelector((state) => state.serverErrors)
 
@@ -24,7 +24,7 @@ const AddCustomer = () => {
     useEffect(() => {
         dispatch(startGetUser())
         dispatch(startGetOperator())
-    }, [])
+    }, [dispatch])
   
     const [customerName, setCustomerName] = useState('')
     const [mobile, setMobile] = useState('')

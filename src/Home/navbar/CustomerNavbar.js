@@ -1,10 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function CustomerNavbar() {
-    const navigate = useNavigate()
-
     const handleLogout = ()=>{
         localStorage.clear('') 
         // window.location.reload()

@@ -32,7 +32,7 @@ export const startGetOrder = ()=>{
                 }
             }) 
             dispatch(getOrder(response.data))
-            console.log(response.data, "listorders")
+            // console.log(response.data, "listorders")
         }catch(e){
             console.log(e)
         }
@@ -42,6 +42,29 @@ export const startGetOrder = ()=>{
 const getOrder = (data)=>{
     return {
         type: 'SET_ORDER',
+        payload: data
+    }
+}
+
+export const startGetAllOrders = ()=>{
+    return async(dispatch)=> {
+        try{
+            const response = await axios.get('/api/allorders', {
+                headers: {
+                    Authorization: localStorage.getItem('token')
+                }
+            })
+            dispatch(getAllOrders(response.data))
+            // console.log(response.data, "all orders")
+        }catch(e){
+            console.log(e)
+        }
+    }
+}
+
+const getAllOrders = (data)=>{
+    return {
+        type: 'GET_ALL_ORDERS',
         payload: data
     }
 }

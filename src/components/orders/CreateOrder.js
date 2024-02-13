@@ -11,7 +11,6 @@ const CreateOrder = ()=>{
     const [selectCustomer, setSelectCustomer] = useState('')
     const [selectPackage, setSelectPackage] = useState('')
     const [selectChannel, setSelectChannel] = useState('')
-    const [orderDate, setOrderDate] = useState('')
 
     const customers = useSelector((state)=>{
         return state.customer.data

@@ -1,10 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function OperatorNavbar() {
-    const navigate = useNavigate()
-
     const handleLogout = ()=>{
         localStorage.clear('')
         // window.location.reload()
@@ -37,6 +35,9 @@ export default function OperatorNavbar() {
                             </li>
                 <li className="nav-item">
                     <Link className="nav-link" to="/order">order</Link>
+                </li>
+                <li className="nav-item">
+                    <Link className="nav-link" to="/operatorDashboard">Dashboard</Link>
                 </li>
                 <li className="nav-item">
                     <Link className="nav-link" to="/profile">

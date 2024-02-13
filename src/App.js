@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter, Route, Routes} from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 import { useEffect, useReducer, useState } from "react";
 import {ToastContainer, toast} from 'react-toastify'
@@ -7,22 +7,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "./config/axios";
 
 import Home from "./Home/Home";
-import Register from "./Register";
 import Login from "./Login";
 //import Packages from "./components/Packages";
 import AddChannel from "./components/channels/AddChannels";
-import Header from "./Home/navbar/header";
-import Footer from "./Home/navbar/footer";
 //import AddOperator from "./components/operator/AddOperator";
 //import Image from "./multer";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
 import AddPackage from "./components/packages/AddPackage";
-import ListPackages from "./components/packages/ListPackages";
 import PackagesContainer from "./components/packages/PackagesContainer";
 import OperatorContainer from "./components/operator/operatorcontainer";
 import DeletedPackage from "./components/packages/DeletedPackage";
-import AddCustomer from "./components/Customer/AddCustomer";
 import UserContainer from "./components/user/userContainer";
 import userReducer from "./useReducer-reducer/userReducer";
 import OperatorProfile from "./components/profile/OperatorProfile";
@@ -30,18 +25,16 @@ import { OperatorContext } from "./components/profile/operatorContext";
 import CreateOrder from "./components/orders/CreateOrder";
 import CustomerProfile from "./components/profile/CustomerProfile";
 import Navbar from "./Home/navbar/Navbar";
-import Dashboard from "./Dashboard";
-
-import CustomerList from "./components/Customer/listCustomers";
+import OrdersList from "./OrdersList.";
 import CustomerContainer from "./components/Customer/customerContainer";
-
 import { useDispatch } from "react-redux";
 import { startGetUser } from "./actions/user-action";
 import Failure from "./Payment/Failure";
 import Success from "./Payment/Success";
-import Payment from "./Payment/Pay";
 import Cart from "./components/orders/Cart";
 import OrderPayment from "./components/orders/OrderPayment";
+import AdminDashboard from "./Dashboard/Dashboard";
+import OperatorDashboard from "./components/operator/OperatorDashboard";
 
 function App(props) {
   const dispatch = useDispatch()
@@ -146,12 +139,13 @@ function App(props) {
           <Route path = '/customercontainer' element={<CustomerContainer />} />
           <Route path='/profile' element={<OperatorProfile />} />
           <Route path='/customerProfile' element={<CustomerProfile />} />
-          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/orderslist' element={<OrdersList />} />
           <Route path='/order' element={<CreateOrder />} />
           <Route path='/cart' element={<Cart />} />
           <Route path='/failure' element={<Failure />} />
           <Route path='/success' element={<Success />} />
-          <Route path='/pay' element={<Payment />} />
+          <Route path='/dashboard' element={<AdminDashboard />} />
+          <Route path='/operatorDashboard' element={<OperatorDashboard />} />
           <Route path='/orderpay' element={<OrderPayment />} />
         </Routes>
        
