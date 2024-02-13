@@ -1,13 +1,21 @@
-import { useDispatch, useSelector } from "react-redux";
-import { OperatorContext } from "./operatorContext";
-import { useState, useEffect, useContext } from "react";
-import { startUpdateUser } from "../../actions/user-action";
-import { startEditCustomer } from "../../actions/customer-action";
-import { StartGetCustomer } from "../../actions/customer-action"
-import { startGetOrder } from "../../actions/order-action";
+import { useDispatch, useSelector } from "react-redux"
 import _ from "lodash"
+<<<<<<< HEAD
 import { addDays, format } from 'date-fns'
 import axios from "../../config/axios";
+=======
+import { useState, useEffect, useContext } from "react"
+import { OperatorContext } from "./operatorContext"
+import { startUpdateUser } from "../../actions/user-action"
+import { startEditCustomer } from "../../actions/customer-action"
+import { StartGetCustomer } from "../../actions/customer-action"
+import { startGetOrder } from "../../actions/order-action"
+import axios from "../../config/axios"
+import { Row, Col } from "reactstrap"
+// import {addDays} from 'date-fns'
+import addDays from 'date-fns/addDays'
+import {format} from 'date-fns'
+>>>>>>> 4edcc69fcf77dcfb087ead18eef90293c47d279a
 // import './customerProfile.css'
 import Calendar from "./Calendar";
 
@@ -16,9 +24,16 @@ import Calendar from "./Calendar";
 const CustomerProfile = () => {
   const dispatch = useDispatch();
 
+<<<<<<< HEAD
   // const customers = useSelector((state) => {
   //   return state.customer.data
   // })
+=======
+  const { userState } = useContext(OperatorContext);
+  const customers = useSelector((state) => {
+    return state.customer.data
+  })
+>>>>>>> 4edcc69fcf77dcfb087ead18eef90293c47d279a
 
   const order = useSelector((state) => {
     return state.order
@@ -40,7 +55,6 @@ const CustomerProfile = () => {
     dispatch(startGetOrder())
   }, [dispatch])
 
-  const { userState } = useContext(OperatorContext);
 
   const [formData, setFormData] = useState({
     customerName: userState.userDetails.username,
@@ -58,14 +72,32 @@ const CustomerProfile = () => {
   });
   const [profile, setProfile] = useState(null)
   const [img, setImg] = useState({})
+<<<<<<< HEAD
+=======
+  const [role, setRole] = useState("")
+>>>>>>> 4edcc69fcf77dcfb087ead18eef90293c47d279a
 
   const userId = userState.userDetails._id;
   const customerId = userState.customer._id;
 
+<<<<<<< HEAD
+=======
+  useEffect(() => {
+    if (localStorage.getItem('token').length > 0) {
+      setRole(userState.userDetails.role)
+    }
+  }, [userState.userDetails.role])
+>>>>>>> 4edcc69fcf77dcfb087ead18eef90293c47d279a
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  // useEffect(()=>{
+  //   if(localStorage.getItem('token').length > 0){
+  //     setImg(userState.customer.image)
+  //   }
+  // }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -103,7 +135,8 @@ const CustomerProfile = () => {
         pincode: customerAddress.pincode || ''
       },
       oldPassword: '',
-      newPassword: ''
+      newPassword: '',
+      img: userState.customer.image
     });
   }, [userState]);
 
@@ -130,10 +163,36 @@ const CustomerProfile = () => {
     }
   }
 
+  console.log(userState.customer.image, "profile")
 
   return (
     <div className=" d-flex justify-content-center align-items-center">
+      <Row>
+        <Col>
+          {!_.isEmpty(formData.img) ? (
+            <>
+              <img className="rounded-circle mb-3 profile"
+                src={`http://localhost:3034/Images/${formData.img}`} alt='image'
+                width="100px"
+                height="100px"
+              />
+            </>
+          ) : (
+            <>
+              <img className="rounded-circle mb-3 profile"
+                src={process.env.PUBLIC_URL + '/service-pic.jpg'} alt='avatar'
+                width="100px"
+                height="100px"
+              />
+            </>
+          )}
+          
+          <form onSubmit={handleUpload} style={{ marginBottom: "400px", marginLeft: "100px" }}>
+            <input type="file" onChange={(e) => {
+              setProfile(e.target.files[0])
+            }} />
 
+<<<<<<< HEAD
       {!_.isEmpty(img) &&
         <img className="rounded-circle mb-3 profile"
           src={`http://localhost:3034/Images/${img.image}`} alt='avatar'
@@ -143,6 +202,12 @@ const CustomerProfile = () => {
 
       {console.log(order.paid?.map(ele=> ele.channels), 'order list')}
       {order.paid.length > 0 ? (
+=======
+            <input type="submit" value="Upload" />
+          </form>
+
+{Object.keys(order.paid).length > 0 ? (
+>>>>>>> 4edcc69fcf77dcfb087ead18eef90293c47d279a
         <div>
           <h4>Current packages</h4>
 
@@ -191,6 +256,7 @@ const CustomerProfile = () => {
       ) : (
         <p>No channels available</p>
       )}
+<<<<<<< HEAD
 
       <form onSubmit={handleUpload} style={{ marginBottom: "400px", marginLeft: "100px" }}>
         <input type="file" onChange={(e) => {
@@ -212,101 +278,118 @@ const CustomerProfile = () => {
               disabled
             />
             <br />
+=======
+        </Col>
+      
 
-            <label>Mobile</label>
-            <input
-              type="text"
-              name="mobile"
-              value={formData.mobile}
-              onChange={handleChange}
-            />
-            <br />
+          {role === 'customer' && (
+            <div>
+              <form onSubmit={handleSubmit}>
+                <label>Name</label>
+                <input
+                  type="text"
+                  value={formData.customerName}
+                  onChange={handleChange}
+                  name="customerName"
+                  disabled
+                />
+                <br />
+>>>>>>> 4edcc69fcf77dcfb087ead18eef90293c47d279a
 
-            <label>Box Number</label>
-            <input
-              type="string"
-              name="boxNumber"
-              value={formData.boxNumber}
-              onChange={handleChange}
-            />
-            <br />
+                <label>Mobile</label>
+                <input
+                  type="text"
+                  name="mobile"
+                  value={formData.mobile}
+                  onChange={handleChange}
+                />
+                <br />
 
-            <label>Address</label>
-            <br />
-            <label>Door Number</label>
-            <input
-              type="text"
-              value={formData.address.doorNumber}
-              name="doorNumber"
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  address: { ...formData.address, doorNumber: e.target.value }
-                })
-              }
-              disabled
-            />
-            <br />
+                <label>Box Number</label>
+                <input
+                  type="string"
+                  name="boxNumber"
+                  value={formData.boxNumber}
+                  onChange={handleChange}
+                />
+                <br />
 
-            <label>Street</label>
-            <input
-              type="text"
-              value={formData.address.street}
-              name="street"
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  address: { ...formData.address, street: e.target.value }
-                })
-              }
-              disabled
-            />
-            <br />
+                <label>Address</label>
+                <br />
+                <label>Door Number</label>
+                <input
+                  type="text"
+                  value={formData.address.doorNumber}
+                  name="doorNumber"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      address: { ...formData.address, doorNumber: e.target.value }
+                    })
+                  }
+                  disabled
+                />
+                <br />
 
-            <label>City</label>
-            <input
-              type="text"
-              value={formData.address.city}
-              name="city"
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  address: { ...formData.address, city: e.target.value }
-                })
-              }
-              disabled
-            />
-            <br />
+                <label>Street</label>
+                <input
+                  type="text"
+                  value={formData.address.street}
+                  name="street"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      address: { ...formData.address, street: e.target.value }
+                    })
+                  }
+                  disabled
+                />
+                <br />
 
-            <label>State</label>
-            <input
-              type="text"
-              value={formData.address.state}
-              name="state"
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  address: { ...formData.address, state: e.target.value }
-                })
-              }
-              disabled
-            />
-            <br />
+                <label>City</label>
+                <input
+                  type="text"
+                  value={formData.address.city}
+                  name="city"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      address: { ...formData.address, city: e.target.value }
+                    })
+                  }
+                  disabled
+                />
+                <br />
 
-            <label>Pincode</label>
-            <input
-              type="text"
-              value={formData.address.pincode}
-              name="pincode"
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  address: { ...formData.address, pincode: e.target.value }
-                })
-              }
-              disabled
-            />
-            <br />
+                <label>State</label>
+                <input
+                  type="text"
+                  value={formData.address.state}
+                  name="state"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      address: { ...formData.address, state: e.target.value }
+                    })
+                  }
+                  disabled
+                />
+                <br />
+
+                <label>Pincode</label>
+                <input
+                  type="text"
+                  value={formData.address.pincode}
+                  name="pincode"
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      address: { ...formData.address, pincode: e.target.value }
+                    })
+                  }
+                  disabled
+                />
+                <br />
 
             {/* {Object.keys(order.paid).length > 0 ? (
               <div>
@@ -365,20 +448,21 @@ const CustomerProfile = () => {
             />
             <br />
 
-            <label>New Password</label>
-            <input
-              type="password"
-              name="newPassword"
-              value={formData.newPassword}
-              onChange={handleChange}
-            />
-            <br />
-
+                <label>New Password</label>
+                <input
+                  type="password"
+                  name="newPassword"
+                  value={formData.newPassword}
+                  onChange={handleChange}
+                />
+                <br />
+                
             <input type="submit" />
           </form>
 
         </div>
       )}
+      </Row>
     </div>
   );
 };

@@ -1,32 +1,30 @@
-import { useSelector, useDispatch } from "react-redux"
-import { startCreateOrder } from "../../actions/order-action"
-import { useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useSelector, useDispatch } from "react-redux";
+import { startCreateOrder } from "../../actions/order-action";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 const Cart = () => {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const cart = useSelector((state) => {
-        return state
-    })
-    // console.log(cart.order.channels, "ii")
+        return state;
+    });
 
     const { packages: pack, channels } = useSelector((state) => {
         return state.order || {};
     });
 
-     // Calculate total price for packages
-     const calculateTotalPriceForPackages = () => {
+    const calculateTotalPriceForPackages = () => {
         return pack.reduce((total, item) => total + item.packagePrice, 0);
     };
 
-    // Calculate total price for channels
     const calculateTotalPriceForChannels = () => {
         return channels.reduce((total, item) => total + item.channelPrice, 0);
     };
 
-    // Calculate total price for packages and channels combined
     const calculateTotalPriceForBoth = () => {
         return calculateTotalPriceForPackages() + calculateTotalPriceForChannels();
     };
@@ -40,60 +38,71 @@ const Cart = () => {
         dispatch(startCreateOrder(formData));
     };
 
+<<<<<<< HEAD
     useEffect(()=>{
         if(cart.order.cart.length > 0){
             // const price = calculateTotalPriceForPackages()
             navigate('/orderpay', {state: cart.order.cart})
             // console.log(cart.order.cart, "cart")
+=======
+    useEffect(() => {
+        if (cart.order.cart.length > 0) {
+            const price = calculateTotalPriceForPackages();
+            navigate('/orderpay', { state: cart.order.cart });
+>>>>>>> 4edcc69fcf77dcfb087ead18eef90293c47d279a
         }
     }, [cart.order.cart])
 
-    // console.log(cart.order.packages, "tttt")
+
 
 
     return (
-        <div>
-            <h2 className="mt-3">Cart</h2>
+        <Container>
+            <Row className="mt-3">
+                <Col>
+                    <h2>Cart</h2>
+                </Col>
+            </Row>
 
-            <h3>Packages</h3>
-            <ul className="list-group" style={{ height: "500px", overflowY: "auto" }}>
-                {cart.order.packages.map((item, index) => (
-                    <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            {item.packageName} - {item.packagePrice} - {item.selectedChannels}
-                        </div>
+            <Row>
+                <Col>
+                    <h3>Packages</h3>
+                    <ListGroup>
+                        {cart.order.packages.map((item, index) => (
+                            <ListGroup.Item key={index}>
+                                {item.packageName} - {item.packagePrice} - {item.selectedChannels}
+                            </ListGroup.Item>
+                        ))}
+                    </ListGroup>
+               
+                    <h3>Channels</h3>
+                    <ListGroup>
+                        {cart.order.channels.map((item, index) => (
+                            <ListGroup.Item key={index}>
+                                {item.channelName} - {item.channelPrice}
+                            </ListGroup.Item>
+                        ))}
+                    </ListGroup>
+                </Col>
+            </Row>
 
-                    </li>
-                ))}
-            </ul>
+            <Row className="mt-3">
+                <Col>
+                    <h3>Total Price for Packages: {calculateTotalPriceForPackages()}</h3>
+                    <h3>Total Price for Channels: {calculateTotalPriceForChannels()}</h3>
+                    <h3>Total Price for Both: {calculateTotalPriceForBoth()}</h3>
+                </Col>
+            </Row>
 
-            <h3>Channels</h3>
-            <ul className="list-group" style={{ height: "500px", overflowY: "auto" }}>
-                {cart.order.channels.map((item, index) => (
-                    <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            {item.channelName} - {item.channelPrice}
-                        </div>
+            <Row className="mt-3">
+                <Col>
+                    <Button variant="success" onClick={handleOrder}>
+                        Order
+                    </Button>
+                </Col>
+            </Row>
+        </Container>
+    );
+};
 
-                    </li>
-                ))}
-            </ul>
-            
-            <h3>Total Price for Packages: {calculateTotalPriceForPackages()}</h3>
-            <h3>Total Price for Channels: {calculateTotalPriceForChannels()}</h3>
-            <h3>Total Price for Both: {calculateTotalPriceForBoth()}</h3>
-            
-            <button
-                onClick={() => {
-                    handleOrder();
-                }}
-                className="btn btn-success mt-3"
-            >
-                Order
-            </button>
-            
-        </div>
-    )
-
-}
-export default Cart
+export default Cart;

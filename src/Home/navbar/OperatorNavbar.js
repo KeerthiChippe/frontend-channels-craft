@@ -1,10 +1,20 @@
-import { Link } from "react-router-dom";
+import { useContext } from "react"
+import { Link, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { OperatorContext } from "../../components/profile/operatorContext";
 
 export default function OperatorNavbar() {
+    const { userDispatch } = useContext(OperatorContext)
+
+    const navigate = useNavigate()
+
     const handleLogout = ()=>{
         localStorage.clear('')
+        userDispatch({
+            type: "SIGN_IN_TOGGLE",
+            payload: false
+        })
         // window.location.reload()
     }
 
@@ -45,7 +55,7 @@ export default function OperatorNavbar() {
                     </Link>
                 </li>
                 <li className="nav-item">
-                    <Link className="nav-link" to="/login" onClick={handleLogout}>Logout</Link>
+                    <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
                 </li>
                 </div>
             </ul>

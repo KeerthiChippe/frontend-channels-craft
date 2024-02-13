@@ -9,6 +9,9 @@ const userReducer = (state, action) =>{
         case 'SET_CUSTOMER_PROFILE': {
             return {...state, customer: action.payload}
         }
+        case "SIGN_IN_TOGGLE": {
+            return {...state, isLoggedIn: action.payload}
+        }
     }
 }
 
