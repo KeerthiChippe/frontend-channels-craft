@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import _ from "lodash"
 import { useState, useEffect, useContext } from "react"
+import { Modal } from "react-bootstrap"
 import { OperatorContext } from "./operatorContext"
 import { startUpdateUser } from "../../actions/user-action"
 import { startEditCustomer } from "../../actions/customer-action"
@@ -19,7 +20,7 @@ import Calendar from "./Calendar";
 const CustomerProfile = () => {
   const dispatch = useDispatch();
 
-  const { userState } = useContext(OperatorContext);
+  const { userState, userDispatch } = useContext(OperatorContext);
   const customers = useSelector((state) => {
     return state.customer.data
   })
@@ -60,8 +61,12 @@ const CustomerProfile = () => {
     newPassword: ''
   });
   const [profile, setProfile] = useState(null)
-  const [img, setImg] = useState({})
+
   const [role, setRole] = useState("")
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
 
   const userId = userState.userDetails._id;
   const customerId = userState.customer._id;
@@ -76,11 +81,6 @@ const CustomerProfile = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // useEffect(()=>{
-  //   if(localStorage.getItem('token').length > 0){
-  //     setImg(userState.customer.image)
-  //   }
-  // }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -125,8 +125,6 @@ const CustomerProfile = () => {
 
   const handleUpload = (e) => {
     e.preventDefault()
-    console.log(profile, "profile")
-
 
     if (profile) {
       const formData = new FormData()
@@ -139,74 +137,59 @@ const CustomerProfile = () => {
       })
 
         .then(res => {
-          //  console.log(res.data,"img result")
-          setImg({ ...img, ...res.data })
+           console.log(res.data.image, formData.img, "img result1")
+
+          setShowModal(false);
+          
+          userDispatch({
+            type: "SET_CUSTOMER_IMAGE",
+            payload: res.data.image
+          })
         })
         .catch(err => console.log(err))
     }
   }
 
-  console.log(userState.customer.image, "profile")
+  console.log(userState, "im")
+
+  const handleImageClick = () => {
+    setShowModal(true);
+  }
+
+  const handleImageChange = (e) => {
+  console.log(e.target.files[0], "pro")
+
+    setProfile(e.target.files[0]);
+  }
+  
 
   return (
     <div className=" d-flex justify-content-center align-items-center">
       <Row>
-        <Col>
-          {!_.isEmpty(formData.img) ? (
-            <>
-              <img className="rounded-circle mb-3 profile"
-                src={`http://localhost:3034/Images/${formData.img}`} alt='image'
-                width="100px"
-                height="100px"
-              />
-            </>
-          ) : (
-            <>
-              <img className="rounded-circle mb-3 profile"
-                src={process.env.PUBLIC_URL + '/service-pic.jpg'} alt='avatar'
-                width="100px"
-                height="100px"
-              />
-            </>
-          )}
-          
-          <form onSubmit={handleUpload} style={{ marginBottom: "400px", marginLeft: "100px" }}>
-            <input type="file" onChange={(e) => {
-              setProfile(e.target.files[0])
-            }} />
+      <Col>
+      <img
+        className="rounded-circle mb-3 profile"
+        src={!_.isEmpty(formData.img) ? `http://localhost:3034/Images/${formData.img}` : process.env.PUBLIC_URL + '/service-pic.jpg'}
+        alt='image'
+        width="100px"
+        height="100px"
+        onClick={handleImageClick}
+      />
 
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Upload Image</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={handleUpload}>
+            <input type="file" onChange={handleImageChange} />
             <input type="submit" value="Upload" />
           </form>
-
-{Object.keys(order.paid).length > 0 ? (
-        <div>
-          <h4>Current packages</h4>
-          <ul>
-            {order.paid.packages.map((ele)=>{
-              return <li key={ele.id}>{ele.packageId.packageName}</li>
-            })}
-          </ul>
-        </div>
-      ): (
-        <p>No packages available</p>
-      )}  
-      <br />
-
-{Object.keys(order.paid).length > 0 ? (
-        <div>
-          <h4>Current channels</h4>
-          <ul>
-            {order.paid.channels.map((ele)=>{
-              return <li key={ele.id}>{ele.channelId.channelName}</li>
-            })}
-          </ul>
-        </div>
-      ): (
-        <p>No channels available</p>
-      )}
-        </Col>
+        </Modal.Body>
+      </Modal>
+    </Col>
       
-
+        <Col>
           {role === 'customer' && (
             <div>
               <form onSubmit={handleSubmit}>
@@ -389,6 +372,7 @@ const CustomerProfile = () => {
          
         </div>
       )}
+      </Col>
       </Row>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useLocation } from "react-router-dom"
 import { useSelector } from "react-redux"
 import axios from "../../config/axios"
+import "./orderDetails.css"
 
 const OrderDetails = ()=>{
     const location = useLocation()
@@ -31,15 +32,17 @@ const OrderDetails = ()=>{
     console.log(location.state, "location")
 
     return (
-        <div>
-            <h1> Order Details</h1>
+        <div className="container">
+        <div  className="order-details-container">
+             <div className="order-details">
+            <h1 className="text-center"> Order Details</h1>
 
             <h3>Packages</h3>
             <p>No.of packages-{cart.packages.length}</p>
-            <ul>
+            <ul className="list-group">
                 {cart.packages.map((item, index) => (
                     
-                    <li key={index} >
+                    <li key={index} className="list-group-item">
                         <div>
                             Name of the package- {item.packageName}<br />
                             Price- {item.packagePrice} <br />
@@ -52,9 +55,9 @@ const OrderDetails = ()=>{
 
             <h3>Channels</h3>
             <p>No.of Channels-{cart.channels.length}</p>
-            <ul >
+            <ul className="list-group">
                 {cart.channels.map((item, index) => (
-                    <li key={index} >
+                    <li key={index}  className="list-group-item">
                         <div>
                             Name of the channel- {item.channelName} <br />
                             Price- {item.channelPrice}
@@ -65,7 +68,9 @@ const OrderDetails = ()=>{
             </ul>
 
             <h3>Total Price - {location.state[0]?.totalPrice}</h3>
-            <button onClick={handlePay}>pay</button>
+            <button onClick={handlePay} className="btn btn-primary">pay</button>
+        </div>
+        </div>
         </div>
     )
 }

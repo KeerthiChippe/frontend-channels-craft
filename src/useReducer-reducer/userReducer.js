@@ -12,6 +12,9 @@ const userReducer = (state, action) =>{
         case "SIGN_IN_TOGGLE": {
             return {...state, isLoggedIn: action.payload}
         }
+        case "SET_CUSTOMER_IMAGE": {
+            return {...state, customer: {...state.customer, image: action.payload}}
+        }
     }
 }
 
