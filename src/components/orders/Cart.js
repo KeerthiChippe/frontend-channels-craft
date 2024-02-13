@@ -38,18 +38,11 @@ const Cart = () => {
         dispatch(startCreateOrder(formData));
     };
 
-<<<<<<< HEAD
     useEffect(()=>{
         if(cart.order.cart.length > 0){
             // const price = calculateTotalPriceForPackages()
             navigate('/orderpay', {state: cart.order.cart})
             // console.log(cart.order.cart, "cart")
-=======
-    useEffect(() => {
-        if (cart.order.cart.length > 0) {
-            const price = calculateTotalPriceForPackages();
-            navigate('/orderpay', { state: cart.order.cart });
->>>>>>> 4edcc69fcf77dcfb087ead18eef90293c47d279a
         }
     }, [cart.order.cart])
 
