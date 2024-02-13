@@ -1,29 +1,33 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 import { startRemovePackage, startAddPackage, startEditPackage, startGetPackage } from "../../actions/package-action";
-import DeletedPackage from "./DeletedPackage";
-import { deletePackageOne, selectedPackageOne, startCreateOrder } from "../../actions/order-action";
-import ChannelsList from "../channels/ChannelsList";
+import { deletePackageOne, selectedPackageOne } from "../../actions/order-action";
 import { OperatorContext } from "../profile/operatorContext";
+import { jwtDecode } from "jwt-decode";
 
 const ListPackages = () => {
   const [editId, setEditId] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const [modal, setModal] = useState(false);
+  const [userRole, setUserRole] = useState('')
 
-  const { userState } = useContext(OperatorContext);
+  useEffect(()=>{
+    if(localStorage.getItem('token')){
+        const {role} = jwtDecode(localStorage.getItem("token"))
+        console.log(role, "345")
+        setUserRole(role)
+    }
+}, [localStorage.getItem('token')])
+
+  // const { userState } = useContext(OperatorContext);
   const dispatch = useDispatch();
 
-  const role = userState.userDetails ? userState.userDetails.role : null;
+  // const role = userState.userDetails ? userState.userDetails.role : null;
 
   const packages = useSelector((state) => {
     return state.package.data.filter((ele) => ele.isDeleted === false);
   });
-
-  // const { packages: pack, channels } = useSelector((state) => {
-  //   return state.order || {};
-  // });
 
   useEffect(() => {
     dispatch(startGetPackage());
@@ -65,7 +69,7 @@ const ListPackages = () => {
     dispatch(selectedPackageOne(newPackages));
     // setSelectedItems((previousItems) => [...previousItems, newPackages]);
   };
-  // console.log(selectedItems, "yyyyy")
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -86,15 +90,6 @@ const ListPackages = () => {
     dispatch(deletePackageOne(removeItem));
   };
 
-  // const handleOrder = () => {
-  //   const formData = {
-  //     packages: pack,
-  //     channels: channels,
-  //     orderDate: new Date(),
-  //   };
-  //   dispatch(startCreateOrder(formData));
-  // };
-
   return (
     <div className="row g-3 d-flex-wrap" style={{ gap: "1rem", justifyContent: "center", alignItems: "center" }}>
       <h3 style={{ marginLeft: "400px", padding: "2px" }}>PACKAGES</h3>
@@ -113,7 +108,9 @@ const ListPackages = () => {
                 <p className="card-text">{ele.packagePrice}</p>
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="btn-group">
-                    <button
+                    {userRole === 'admin' && (
+                      <>
+                        <button
                       onClick={() => {
                         handleEdit(ele._id);
                       }}
@@ -129,7 +126,12 @@ const ListPackages = () => {
                     >
                       Delete
                     </button>
-                    <button
+                      </>
+                    )}
+                    
+                    {userRole === 'customer' && (
+                      <>
+                        <button
                       onClick={() => {
                         handleAdd(ele._id);
                       }}
@@ -137,6 +139,9 @@ const ListPackages = () => {
                     >
                       Add to Cart
                     </button>
+                      </>
+                    )}
+                    
                   </div>
                 </div>
               </div>
@@ -167,35 +172,6 @@ const ListPackages = () => {
           </form>
         </ModalBody>
       </Modal>
-
-      {/* <h2 className="mt-3">Cart</h2>
-      <ul className="list-group" style={{ height: "500px", overflowY: "auto" }}>
-        {selectedItems.map((item, index) => (
-          <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-              {item.packageId} - {item.packagePrice}
-            </div>
-            <button
-              onClick={() => {
-                handleRemove(item._id);
-              }}
-              className="btn btn-danger btn-sm"
-            >
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul> */}
-      {/* <Cart selectedItems={selectedItems} handleAdd={handleAdd} handleRemove={handleRemove} /> */}
-
-      {/* <button
-        onClick={() => {
-          handleOrder();
-        }}
-        className="btn btn-success mt-3"
-      >
-        Order
-      </button> */}
     </div>
   );
 };

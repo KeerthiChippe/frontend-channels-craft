@@ -1,5 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import _ from "lodash"
+import { addDays, format } from 'date-fns'
+import axios from "../../config/axios";
 import { useState, useEffect, useContext } from "react"
 import { Modal } from "react-bootstrap"
 import { OperatorContext } from "./operatorContext"
@@ -7,11 +9,8 @@ import { startUpdateUser } from "../../actions/user-action"
 import { startEditCustomer } from "../../actions/customer-action"
 import { StartGetCustomer } from "../../actions/customer-action"
 import { startGetOrder } from "../../actions/order-action"
-import axios from "../../config/axios"
 import { Row, Col } from "reactstrap"
 // import {addDays} from 'date-fns'
-import addDays from 'date-fns/addDays'
-import {format} from 'date-fns'
 // import './customerProfile.css'
 import Calendar from "./Calendar";
 
@@ -19,24 +18,31 @@ import Calendar from "./Calendar";
 
 const CustomerProfile = () => {
   const dispatch = useDispatch();
+  const {userDispatch} = useContext(OperatorContext)
+
+
+  // const customers = useSelector((state) => {
+  //   return state.customer.data
+  // })
 
   const { userState, userDispatch } = useContext(OperatorContext);
   const customers = useSelector((state) => {
     return state.customer.data
   })
 
+
   const order = useSelector((state) => {
     return state.order
   })
   // console.log(order, "current order")
   // console.log(order.packages, "kkk")
-  console.log(order.paid.orderDate, "date of order")
+  console.log(order.paid, "date of order")
   // console.log(order.packages[0].packageName, "current packages")
   // console.log(order.channels[0].channelName, "current channels")
 
-  const orderDate = order.paid.orderDate
-  const expiryDate = addDays(orderDate, 30)
-  console.log(expiryDate, "expiry date")
+  const orderDate = order.paid
+  console.log(orderDate, "expiry date")
+  // const expiryDate = addDays(orderDate + 30)
   // const formattedExpiryDate = format(expiryDate, 'yyyy mm dd')
   // console.log(formattedExpiryDate, 'format date')
 
@@ -62,7 +68,10 @@ const CustomerProfile = () => {
   });
   const [profile, setProfile] = useState(null)
 
+
+  const [img, setImg] = useState({})
   const [role, setRole] = useState("")
+
 
   const [showModal, setShowModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -76,6 +85,7 @@ const CustomerProfile = () => {
       setRole(userState.userDetails.role)
     }
   }, [userState.userDetails.role])
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -137,10 +147,10 @@ const CustomerProfile = () => {
       })
 
         .then(res => {
-           console.log(res.data.image, formData.img, "img result1")
+          console.log(res.data.image, formData.img, "img result1")
 
           setShowModal(false);
-          
+
           userDispatch({
             type: "SET_CUSTOMER_IMAGE",
             payload: res.data.image
@@ -157,195 +167,157 @@ const CustomerProfile = () => {
   }
 
   const handleImageChange = (e) => {
-  console.log(e.target.files[0], "pro")
+    console.log(e.target.files[0], "pro")
 
     setProfile(e.target.files[0]);
   }
-  
+
 
   return (
-    <div className=" d-flex justify-content-center align-items-center">
-      <Row>
-      <Col>
-      <img
-        className="rounded-circle mb-3 profile"
-        src={!_.isEmpty(formData.img) ? `http://localhost:3034/Images/${formData.img}` : process.env.PUBLIC_URL + '/service-pic.jpg'}
-        alt='image'
-        width="100px"
-        height="100px"
-        onClick={handleImageClick}
-      />
+    <div className="d-flex justify-content-center align-items-center">
+      {role === 'customer' && (
+        <div>
+          <form onSubmit={handleSubmit}>
+            <label>Name</label>
+            <input
+              type="text"
+              value={formData.customerName}
+              onChange={handleChange}
+              name="customerName"
+              disabled
+            />
+            <br />
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Upload Image</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <form onSubmit={handleUpload}>
-            <input type="file" onChange={handleImageChange} />
-            <input type="submit" value="Upload" />
-          </form>
-        </Modal.Body>
-      </Modal>
-    </Col>
-      
-        <Col>
-          {role === 'customer' && (
-            <div>
-              <form onSubmit={handleSubmit}>
-                <label>Name</label>
-                <input
-                  type="text"
-                  value={formData.customerName}
-                  onChange={handleChange}
-                  name="customerName"
-                  disabled
-                />
-                <br />
+            <label>Mobile</label>
+            <input
+              type="text"
+              name="mobile"
+              value={formData.mobile}
+              onChange={handleChange}
+            />
+            <br />
 
-                <label>Mobile</label>
-                <input
-                  type="text"
-                  name="mobile"
-                  value={formData.mobile}
-                  onChange={handleChange}
-                />
-                <br />
+            <label>Box Number</label>
+            <input
+              type="string"
+              name="boxNumber"
+              value={formData.boxNumber}
+              onChange={handleChange}
+            />
+            <br />
 
-                <label>Box Number</label>
-                <input
-                  type="string"
-                  name="boxNumber"
-                  value={formData.boxNumber}
-                  onChange={handleChange}
-                />
-                <br />
+            <label>Address</label>
+            <br />
+            <label>Door Number</label>
+            <input
+              type="text"
+              value={formData.address.doorNumber}
+              name="doorNumber"
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  address: { ...formData.address, doorNumber: e.target.value }
+                })
+              }
+              disabled
+            />
+            <br />
 
-                <label>Address</label>
-                <br />
-                <label>Door Number</label>
-                <input
-                  type="text"
-                  value={formData.address.doorNumber}
-                  name="doorNumber"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      address: { ...formData.address, doorNumber: e.target.value }
-                    })
-                  }
-                  disabled
-                />
-                <br />
+            <label>Street</label>
+            <input
+              type="text"
+              value={formData.address.street}
+              name="street"
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  address: { ...formData.address, street: e.target.value }
+                })
+              }
+              disabled
+            />
+            <br />
 
-                <label>Street</label>
-                <input
-                  type="text"
-                  value={formData.address.street}
-                  name="street"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      address: { ...formData.address, street: e.target.value }
-                    })
-                  }
-                  disabled
-                />
-                <br />
+            <label>City</label>
+            <input
+              type="text"
+              value={formData.address.city}
+              name="city"
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  address: { ...formData.address, city: e.target.value }
+                })
+              }
+              disabled
+            />
+            <br />
 
-                <label>City</label>
-                <input
-                  type="text"
-                  value={formData.address.city}
-                  name="city"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      address: { ...formData.address, city: e.target.value }
-                    })
-                  }
-                  disabled
-                />
-                <br />
+            <label>State</label>
+            <input
+              type="text"
+              value={formData.address.state}
+              name="state"
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  address: { ...formData.address, state: e.target.value }
+                })
+              }
+              disabled
+            />
+            <br />
 
-                <label>State</label>
-                <input
-                  type="text"
-                  value={formData.address.state}
-                  name="state"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      address: { ...formData.address, state: e.target.value }
-                    })
-                  }
-                  disabled
-                />
-                <br />
+            <label>Pincode</label>
+            <input
+              type="text"
+              value={formData.address.pincode}
+              name="pincode"
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  address: { ...formData.address, pincode: e.target.value }
+                })
+              }
+              disabled
+            />
+            <br />
 
-                <label>Pincode</label>
-                <input
-                  type="text"
-                  value={formData.address.pincode}
-                  name="pincode"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      address: { ...formData.address, pincode: e.target.value }
-                    })
-                  }
-                  disabled
-                />
-                <br />
-
-            {/* {Object.keys(order.paid).length > 0 ? (
+            {order.paid && order.paid.length > 0 && (
               <div>
-                {
-                  order.paid.packages.map(ele => (
-                    <>
-                      <label>Current Packages</label>
-                      <input 
-                        type='text'
-                        value={ele.packageId.packageName}
-                        name='currentPackages'
-                        onChange={handleChange}
-                        disabled
-                      />
-                      <br />
-                    </>
-                  ))
-                }
+                <label>Current Packages</label>
+                {order.paid.map((ele) => (
+                  <input
+                    type='text'
+                    value={ele.packageId.packageName}
+                    name='currentPackages'
+                    onChange={handleChange}
+                    disabled
+                  />
+                ))}
+                <br />
               </div>
-             ) : (
-              <p>No packages available</p> 
-             )} 
+            )}
 
-            {Object.keys(order.paid).length > 0 ? (
+            {order.paid && order.paid.length > 0 && (
               <div>
-                {
-                  order.paid.channels.map(ele => (
-                    <>
-                      <label>Current Channels</label>
-                      <input 
-                        type='text'
-                        value={ele.channelId.channelName}
-                        name='currentChannels'
-                        onChange={handleChange}
-                      />
-                      <br />
-                    </>
-                  ))
-                }
+                <label>Current Channels</label>
+                {order.paid.map((ele) => (
+                  <input
+                    type='text'
+                    value={ele.channelId.channelName}
+                    name='currentChannels'
+                    onChange={handleChange}
+                  />
+                ))}
+                <br />
               </div>
-            ): ( 
-               <p>No channels available</p> 
-             )}  */}
+            )}
 
-             {order.paid.orderDate && (
-                <p>Expiry Date - {expiryDate.toString()} </p>
-             )}
+            {/* {order.paid && order.paid.orderDate && (
+              <p>Expiry Date - {expiryDate.toString()}-</p>
+            )} */}
 
-            
             <label>Old Password</label>
             <input
               type="password"
@@ -355,27 +327,26 @@ const CustomerProfile = () => {
             />
             <br />
 
-                <label>New Password</label>
-                <input
-                  type="password"
-                  name="newPassword"
-                  value={formData.newPassword}
-                  onChange={handleChange}
-                />
-                <br />
-                
+            <label>New Password</label>
+            <input
+              type="password"
+              name="newPassword"
+              value={formData.newPassword}
+              onChange={handleChange}
+            />
+            <br />
+
             <input type="submit" />
           </form>
-
-          
-          <Calendar expiryDate={expiryDate}/>
-         
         </div>
       )}
-      </Col>
-      </Row>
     </div>
-  );
-};
+  )
 
-export default CustomerProfile;
+
+
+}
+
+
+
+export default CustomerProfile

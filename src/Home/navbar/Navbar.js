@@ -96,12 +96,11 @@ import { isEmpty } from "lodash"
 import AdminNavbar from "./AdminNavbar"
 import OperatorNavbar from "./OperatorNavbar"
 import CustomerNavbar from "./CustomerNavbar"
-import { useContext, useEffect, useState } from "react"
-import { OperatorContext } from "../../components/profile/operatorContext"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
 const Navbar = () =>{
-    const { userState, userDispatch } = useContext(OperatorContext)
+    // const { userState, userDispatch } = useContext(OperatorContext)
     const [userRole, setUserRole] = useState("")
 
     // useEffect(()=>{
@@ -142,10 +141,10 @@ const Navbar = () =>{
         <div>
             {!userState.isLoggedIn ? (
                  <>
-               
-                    <Link to='/'>Home</Link>
+                    <CustomerNavbar />
+                    {/* <Link to='/'>Home</Link>
                     <Link to='/login'>Login</Link>
-                    <Link to='/register'>Register</Link> 
+                    <Link to='/register'>Register</Link>  */}
                  </>
             ) : (
                 <>

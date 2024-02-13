@@ -47,6 +47,9 @@ export default function OperatorNavbar() {
                     <Link className="nav-link" to="/order">order</Link>
                 </li>
                 <li className="nav-item">
+                    <Link className="nav-link" to="/operatorDashboard">Dashboard</Link>
+                </li>
+                <li className="nav-item">
                     <Link className="nav-link" to="/profile">
                     <i className="bi bi-person-circle"></i>
                     </Link>

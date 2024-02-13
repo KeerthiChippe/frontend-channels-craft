@@ -4,19 +4,19 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionplugin from '@fullcalendar/interaction'
 import { useState, useEffect } from 'react'
 
-export default function Calendar({expiryDate}){
+export default function Calendar({formattedDate}){
     const [events, setEvents] = useState('')
 
     useEffect(() => {
-        if (expiryDate) {
+        if (formattedDate) {
           const expiryEvent = {
             title: 'Expiry date',
-            start: expiryDate,
+            start: formattedDate,
             allDay: true, // Set it to true if you want it to span the whole day
           };
           setEvents([expiryEvent]);
         }
-      }, [expiryDate])
+      }, [formattedDate])
 
     return(
         <div>
