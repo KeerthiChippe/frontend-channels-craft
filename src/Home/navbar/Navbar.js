@@ -96,11 +96,12 @@ import { isEmpty } from "lodash"
 import AdminNavbar from "./AdminNavbar"
 import OperatorNavbar from "./OperatorNavbar"
 import CustomerNavbar from "./CustomerNavbar"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
+import { OperatorContext } from "../../components/profile/operatorContext"
 import { Link } from "react-router-dom"
 
 const Navbar = () =>{
-    // const { userState, userDispatch } = useContext(OperatorContext)
+    const { userState, userDispatch } = useContext(OperatorContext)
     const [userRole, setUserRole] = useState("")
 
     // useEffect(()=>{
