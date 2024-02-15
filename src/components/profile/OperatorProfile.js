@@ -9,11 +9,7 @@ import axios from "../../config/axios";
 export default function OperatorProfile() {
     const dispatch = useDispatch()
 
-<<<<<<< HEAD
-    const {userState} = useContext(OperatorContext)
-=======
     const { userState, userDispatch } = useContext(OperatorContext)
->>>>>>> 4edcc69fcf77dcfb087ead18eef90293c47d279a
     const [formData, setFormData] = useState({
         operatorName: userState.userDetails.username,
         mobile: userState.userDetails.mobile,
@@ -25,7 +21,7 @@ export default function OperatorProfile() {
 
     const [profile, setProfile] = useState(null)
     const [img, setImg] = useState({})
-   // const [role , setRole] = useState("")
+    const [role , setRole] = useState("")
     useEffect(() => {
         dispatch(startGetOperator())
 
@@ -45,6 +41,12 @@ export default function OperatorProfile() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    
+  useEffect(() => {
+    if (localStorage.getItem('token').length > 0) {
+      setRole(userState.userDetails.role)
+    }
+  }, [userState.userDetails.role])
     // useEffect(()=>{
     //     if(localStorage.getItem('token').length > 0){
     //       setImg(userState.operator.image)

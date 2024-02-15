@@ -18,9 +18,6 @@ import Calendar from "./Calendar";
 
 const CustomerProfile = () => {
   const dispatch = useDispatch();
-  const {userDispatch} = useContext(OperatorContext)
-
-
   // const customers = useSelector((state) => {
   //   return state.customer.data
   // })
@@ -160,7 +157,7 @@ const CustomerProfile = () => {
     }
   }
 
-  console.log(userState, "im")
+
 
   const handleImageClick = () => {
     setShowModal(true);
@@ -176,6 +173,7 @@ const CustomerProfile = () => {
   return (
     <div className="d-flex justify-content-center align-items-center">
       {role === 'customer' && (
+
         <div>
           <form onSubmit={handleSubmit}>
             <label>Name</label>
@@ -338,6 +336,28 @@ const CustomerProfile = () => {
 
             <input type="submit" />
           </form>
+          <img
+            className="rounded-circle mb-3 profile"
+            src={!_.isEmpty(formData.img) ? `http://localhost:3034/Images/${formData.img}` : process.env.PUBLIC_URL + '/service-pic.jpg'}
+            alt='image'
+            width="100px"
+            height="100px"
+            onClick={handleImageClick}
+          />
+
+          <Modal show={showModal} onHide={() => setShowModal(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Upload Image</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <form onSubmit={handleUpload}>
+                <input type="file" onChange={handleImageChange} />
+                <input type="submit" value="Upload" />
+              </form>
+            </Modal.Body>
+          </Modal>
+
+
         </div>
       )}
     </div>
