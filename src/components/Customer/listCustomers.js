@@ -44,7 +44,7 @@ const CustomerList =(props) =>{
                         </thead>
                         <tbody>
             {customer.map ((customer) =>{
-                return <tr key ={customer.id}> <td>{customer.customerName}</td>  <td>{customer.mobile}</td>  <td>{customer.boxNumber}</td>
+                return <tr key ={customer._id}> <td>{customer.customerName}</td>  <td>{customer.mobile}</td>  <td>{customer.boxNumber}</td>
                 
                 <td>
                 <button onClick ={() =>{

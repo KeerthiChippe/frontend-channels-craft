@@ -31,6 +31,7 @@ const customerReducer =(state = CustomerInitialState ,action ) =>{
             }
         }
         default :{
+            console.log(state, "keerthi")
             return{...state}
         }
     }

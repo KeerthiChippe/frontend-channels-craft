@@ -12,6 +12,7 @@ const Cart = () => {
     const cart = useSelector((state) => {
         return state;
     });
+    console.log(cart, "cart items")
 
     const { packages: pack, channels } = useSelector((state) => {
         return state.order || {};

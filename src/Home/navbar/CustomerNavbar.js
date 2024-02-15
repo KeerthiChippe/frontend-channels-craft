@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { OperatorContext } from "../../components/profile/operatorContext"
+import { isEmpty } from "lodash";
 
 export default function CustomerNavbar() {
     const { userDispatch } = useContext(OperatorContext)
@@ -31,9 +32,12 @@ export default function CustomerNavbar() {
                 <li>
                     <Link className="nav-link active" aria-current="page" to="/">Home</Link>
                 </li>
-                <li className="nav-item">
-                    <Link className="nav-link" to="/login">Login</Link>
-                </li>
+                {isEmpty(localStorage.getItem('token')) && (
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/login">Login</Link>
+                    </li>
+                )}
+                
                 <li className="nav-item">
                     <Link className="nav-link" to="/packcha">Packages & Channels</Link>
                 </li>
@@ -46,9 +50,12 @@ export default function CustomerNavbar() {
                     <i className="bi bi-person-circle fs-5"></i>
                     </Link>
                 </li>
-                <li className="nav-item">
-                    <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
+                {!isEmpty(localStorage.getItem('token')) && (
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
                 </li>
+                )}
+                
                 </div>
             </ul>
             

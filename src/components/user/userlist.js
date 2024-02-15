@@ -8,6 +8,7 @@ const UserList = () =>{
     const user = useSelector((state) => {
         return state.user.data
     })
+    console.log(user, 'user check')
      
     useEffect(() => {
         dispatch(startGetUser())
