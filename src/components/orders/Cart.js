@@ -13,6 +13,7 @@ const Cart = () => {
     const cart = useSelector((state) => {
         return state;
     });
+    console.log(cart, "cart items")
 
     const { packages: pack, channels } = useSelector((state) => {
         return state.order || {};
@@ -39,10 +40,11 @@ const Cart = () => {
         dispatch(startCreateOrder(formData));
     };
 
-    useEffect(() => {
-        if (cart.order.cart.length > 0) {
-            const price = calculateTotalPriceForPackages();
-            navigate('/orderpay', { state: cart.order.cart });
+    useEffect(()=>{
+        if(cart.order.cart.length > 0){
+            // const price = calculateTotalPriceForPackages()
+            navigate('/orderpay', {state: cart.order.cart})
+            // console.log(cart.order.cart, "cart")
         }
     }, [cart.order.cart])
 

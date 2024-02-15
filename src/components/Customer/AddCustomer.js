@@ -11,9 +11,11 @@ const AddCustomer = () => {
     const dispatch = useDispatch()
 
     const user = useSelector((state) => {
+        console.log(state, "abcdefghijkl ")
         return state.user.data
     })
-    console.log(user, "users list")
+    
+    
 
     const serverErrors = useSelector((state) => state.serverErrors)
 
@@ -32,7 +34,7 @@ const AddCustomer = () => {
     const [formErrors, setFormErrors] = useState([])
     const [userId, setUserId] = useState('')
     const [operatorId, setOperatorId] = useState('')
-    const [selectedOperator, setSelectedOperator] = useState('')
+    // const [selectedOperator, setSelectedOperator] = useState('')
     const [selectedUser, setSelectedUser] = useState('')
     const [address, setAddress] = useState({
         doorNumber: '',
@@ -131,11 +133,11 @@ const AddCustomer = () => {
         setUserId(user)
     }
 
-    const handleOperator = (e) => {
-        let operator = e.target.value
-        setSelectedOperator(operator)
-        setOperatorId(operator)
-    }
+    // const handleOperator = (e) => {
+    //     let operator = e.target.value
+    //     setSelectedOperator(operator)
+    //     setOperatorId(operator)
+    // }
 
     useEffect(() => {
         if (selectedUser) {
@@ -185,11 +187,11 @@ const AddCustomer = () => {
                             {user.map(user => <option key={user.id} value={user._id}>{user.username}</option>)}
                         </select><br />
                         <br />
-                        <label className="dropdown">Select Operator</label><br />
+                        {/* <label className="dropdown">Select Operator</label><br />
                         <select class="form-select" aria-label="Default select example" value={selectedOperator} onChange={handleOperator}>
                             <option value="">Select operator</option>
                             {operator?.map(operator => <option key={operator.id} value={operator._id}>{operator.operatorName} </option>)}
-                        </select><br />
+                        </select><br /> */}
 
                         <br />
                         <div class="col-md-6">
