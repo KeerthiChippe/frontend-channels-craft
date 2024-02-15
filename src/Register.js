@@ -84,6 +84,7 @@ export default function Register({ registerToast }) {
         console.log(formData)
         navigate("/");
         registerToast()
+        
       } catch (error) {
         if (error.response && error.response.data) {
           const serverErrors = error.response.data.errors || []

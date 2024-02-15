@@ -16,7 +16,6 @@ import { Row, Col } from "reactstrap"
 import Calendar from "./Calendar";
 
 
-
 const CustomerProfile = () => {
   const dispatch = useDispatch();
 
@@ -31,7 +30,7 @@ const CustomerProfile = () => {
   const order = useSelector((state) => {
     return state.order
   })
-  // console.log(order, "current order")
+  console.log(order, "current order")
   // console.log(order.packages, "kkk")
   console.log(order.paid, "date of order")
   // console.log(order.packages[0].packageName, "current packages")
@@ -152,6 +151,34 @@ const CustomerProfile = () => {
 
   console.log(userState.customer.image, "profile")
 
+  const calculateFormattedDates = () => {
+    if (order.paid) {
+      const formattedDates = order.paid.reduce((acc, ele) => {
+        // Loop through packages
+        ele.packages?.forEach((pack) => {
+          const originalDate = new Date(ele.orderDate);
+          const futureDate = addDays(originalDate, 30);
+          const formattedDate = format(futureDate, 'yyyy-MM-dd');
+          // Push package expiry date along with package name to the accumulator
+          acc.push({ type: 'package', name: pack.packageId?.packageName, expiryDate: formattedDate });
+        });
+        // Loop through channels
+        ele.channels?.forEach((chan) => {
+          const originalDate = new Date(ele.orderDate);
+          const futureDate = addDays(originalDate, 30);
+          const formattedDate = format(futureDate, 'yyyy-MM-dd');
+          // Push channel expiry date along with channel name to the accumulator
+          acc.push({ type: 'channel', name: chan.channelId?.channelName, expiryDate: formattedDate });
+        });
+        return acc;
+      }, []);
+      return formattedDates;
+    }
+    return [];
+};
+
+  const formattedDates = calculateFormattedDates();
+
   return (
     <div className=" d-flex justify-content-center align-items-center">
       <Row>
@@ -186,26 +213,28 @@ const CustomerProfile = () => {
           height="100px"
         />} */}
 
-      {/* {console.log(order.paid?.map(ele=> ele.channels), 'order list')} */}
+      {console.log(order.paid?.map(ele=> ele.channels), 'order list')}
       {/* {order.paid.length > 0 ? ( */}
             <input type="submit" value="Upload" />
           </form>
 
-{Object.keys(order.paid).length > 0 ? (
+{/* {Object.keys(order.paid).length > 0 ? ( */}
+  {order.paid  ? (
         <div>
           <h4>Current packages</h4>
 
           <ul>
+         
             {order.paid?.map(ele => ele.packages.map((pack) => {
               const originalDate = new Date(ele.orderDate);
               const futureDate = addDays(originalDate, 30);
 
-              const formattedDate = format(futureDate, 'yyyy-MM-dd')
-              console.log(formattedDate, "workx")
+              const formattedDate = format(futureDate, 'yyyy-MM-dd');
+              // console.log(formattedDate, "workx")
               
               return (
                 <>
-                  <li key={ele._id}>{pack.packageId.packageName} - expiryDate - {formattedDate}</li>
+                  <li key={pack._id}>{pack.packageId.packageName} - expiryDate - {formattedDate}</li>
                 
                 </>
               )
@@ -219,14 +248,14 @@ const CustomerProfile = () => {
       )}
       <br />
 
-      {order.paid && order.paid.length > 0 ? (
+      {order.paid  ? (
         <div>
           <h4>Current channels</h4>
           <ul>
           {order.paid?.map(ele => ele.channels?.map((chan) => {
               const originalDate = new Date(ele.orderDate);
               const futureDate = addDays(originalDate, 30);
-
+              
               const formattedDate = format(futureDate, 'yyyy-MM-dd')
               console.log(formattedDate, "workx")
               return (
@@ -371,6 +400,7 @@ const CustomerProfile = () => {
                   disabled
                 />
                 <br />
+                
 
             {/* {Object.keys(order.paid).length > 0 ? (
               <div>
@@ -439,8 +469,9 @@ const CustomerProfile = () => {
                 <br />
                 
             <input type="submit" />
-          </form>
 
+          </form>
+          <Calendar formattedDates={formattedDates} />
         </div>
       )}
        </Col>

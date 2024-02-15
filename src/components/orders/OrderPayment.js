@@ -1,8 +1,11 @@
 import { useLocation } from "react-router-dom"
 import { useSelector } from "react-redux"
 import axios from "../../config/axios"
+import OperatorDashboard from "../operator/OperatorDashboard"
+import { useEffect, useState } from "react"
 
 const OrderDetails = ()=>{
+    const [paymentDetails, setPaymentDetails] = useState(null)
     const location = useLocation()
 
     const cart = useSelector((state) => {
@@ -10,7 +13,7 @@ const OrderDetails = ()=>{
     })
     console.log(cart, 'cart items')
 
-    console.log(location.state[0], "location")
+    // console.log(location.state[0], "location")
     
     const handlePay = async ()=>{
         const amount = location.state[0].totalPrice
@@ -28,7 +31,9 @@ const OrderDetails = ()=>{
         }
 
     }
-    console.log(location.state, "location")
+    // console.log(location.state, "location")
+
+    
 
     return (
         <div>
@@ -64,9 +69,11 @@ const OrderDetails = ()=>{
                 ))}
             </ul>
 
-            <h3>Total Price - {location.state[0]?.totalPrice}</h3>
+            <h3>Total Price - {location.state && location.state[0]?.totalPrice}</h3>
             <button onClick={handlePay}>pay</button>
+            
         </div>
+        
     )
 }
 export default OrderDetails
