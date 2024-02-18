@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom"
 import { useSelector } from "react-redux"
 import axios from "../../config/axios"
-import "./orderDetails.css"
+import './orderDetails.css'
 import OperatorDashboard from "../operator/OperatorDashboard"
 import { useEffect, useState } from "react"
 

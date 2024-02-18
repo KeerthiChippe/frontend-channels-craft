@@ -92,12 +92,10 @@ const AddPackage = (props) => {
                 <label htmlFor="packageName" style={{ color: "white", fontWeight: "bold" }}>Package Name</label><br />
                 <input type='text' value={packageName} id="packageName" onChange={(e) => { setPackageName(e.target.value) }} /><br/>
                 {formErrors.packageName && <span className="error">{formErrors.packageName}</span>}<br />
-                <br />
 
                 <label htmlFor="packagePrice" style={{ color: "white", fontWeight: "bold" }}>Package Price</label><br/>
                 <input type='number' value={packagePrice} id="packagePrice" onChange={(e) => { setPackagePrice(e.target.value) }} /><br/>
                 {formErrors.packagePrice && <span className="error">{formErrors.packagePrice}</span>}
-                <br />
                 {/* <label htmlFor="channels">channels</label>
                 <input type='text' values={channels} id="channels" onChange={(e)=>{setChannels(e.target.value)}} /> */}
                 <br />
@@ -138,7 +136,7 @@ const AddPackage = (props) => {
                     />
                 </div>
                 {formErrors.selectedChannels && <span>{formErrors.selectedChannels}</span>}
-                <br />
+                <br/>
                 <div>
                     <input  style={{color: "white", fontWeight: "bold" }} type='file' onChange={(e) => {
                         setImage(e.target.files[0])

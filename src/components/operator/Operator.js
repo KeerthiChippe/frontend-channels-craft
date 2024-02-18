@@ -127,7 +127,6 @@ const Operator = (props) => {
                     }}
                     disabled /><br/>
                <span className={`error-message ${formErrors.operatorName ? 'visible' : 'hidden'}`}> {formErrors.operatorName && formErrors.operatorName}</span><br />
-                <br />
 
                 <label>Enter Mobile</label><br />
                 <input
@@ -140,7 +139,6 @@ const Operator = (props) => {
                     }} 
                     disabled/><br/>
                <span className={`error-message ${formErrors.operatorName ? 'visible' : 'hidden'}`}> {formErrors.mobile && formErrors.mobile}<br /></span>
-                <br />
 
                 <label>Enter city</label><br />
                 <input
@@ -151,7 +149,6 @@ const Operator = (props) => {
                     onChange={(e) => {
                         setCity(e.target.value)
                     }} /> <br/><span className={`error-message ${formErrors.operatorName ? 'visible' : 'hidden'}`}>{formErrors.city && formErrors.city}</span>
-                <br />
                 <br />
                 <label>Enter State </label><br />
                 <input
