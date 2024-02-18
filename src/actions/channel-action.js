@@ -1,6 +1,6 @@
 import axios from "../config/axios";
 
-export const startAddChannel = (data)=>{
+export const startAddChannel = (data, resetForm)=>{
     return async(dispatch) =>{
         try{
             const response = await axios.post('/api/channels', data, {
@@ -9,6 +9,7 @@ export const startAddChannel = (data)=>{
                 }
             })
             dispatch(addChannel(response.data))
+            resetForm()
         }catch(e){
             console.log(e)
             dispatch(serverErrors(e.response.data.errors))

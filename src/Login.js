@@ -50,7 +50,11 @@ export default function Login(props) {
                     const serverErrors = error.response.data.errors || []
                     alert(serverErrors)
                     console.log(error)
-                  } else {
+                  } else if (error.request) {
+                    // Handle network errors
+                    alert('Network error. Please check your internet connection.');
+                  }else {
+                    alert('An unexpected error occurred. Please try again later.');
                     console.error("Unexpected error:", error)
                   }
             }
@@ -97,7 +101,7 @@ export default function Login(props) {
                     {serverErrors.length > 0 && (
                         <div className="alert alert-danger" role="alert">
                             {serverErrors.map((error, index) => (
-                                <p key={index}>{error.msg}</p>
+                                <p key={index}>{error.message}</p>
                             ))}
                         </div>
                     )}

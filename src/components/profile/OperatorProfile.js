@@ -5,6 +5,7 @@ import { startUpdateUser } from "../../actions/user-action";
 import { startEditOperator, startGetOperator } from "../../actions/operator-action";
 import _ from "lodash"
 import axios from "../../config/axios";
+import { jwtDecode } from "jwt-decode";
 
 export default function OperatorProfile() {
     const dispatch = useDispatch()
@@ -21,11 +22,23 @@ export default function OperatorProfile() {
 
     const [profile, setProfile] = useState(null)
     const [img, setImg] = useState({})
-   // const [role , setRole] = useState("")
+   const [role, setRole] = useState("")
+
+   
+   const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+};
+
     useEffect(() => {
         dispatch(startGetOperator())
-
     }, [dispatch])
+
+    // useEffect(()=>{
+    //     if(localStorage.getItem('token')){
+    //         const {role} = jwtDecode(localStorage.getItem("token"))
+    //         setRole(role)
+    //     }
+    // }, [localStorage.getItem('token')])
 
     useEffect(()=>{
         if(localStorage.getItem('token').length > 0){
@@ -37,9 +50,12 @@ export default function OperatorProfile() {
     const operatorId = userState.operator._id
     console.log(userId)
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    useEffect(()=>{
+        if(localStorage.getItem('token').length > 0){
+            setRole(userState.userDetails.role)
+        }
+    }, [userState.userDetails.role])
+
 
     // useEffect(()=>{
     //     if(localStorage.getItem('token').length > 0){
@@ -52,11 +68,11 @@ export default function OperatorProfile() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            dispatch(startUpdateUser(userId, {
+            await dispatch(startUpdateUser(userId, {
                 "oldPassword": formData.oldPassword,
                 "newPassword": formData.newPassword
             }))
-            dispatch(startEditOperator(operatorId, {
+            await dispatch(startEditOperator(operatorId, {
                 "mobile": formData.mobile
             }))
             setFormData({
@@ -137,7 +153,7 @@ export default function OperatorProfile() {
                 <input type="submit" value="Upload" />
             </form>
 
-            {userState.userDetails.role === 'operator' && (
+            {role === 'operator' && (
                 <div>
                     <form onSubmit={handleSubmit}>
                         <label>name</label>

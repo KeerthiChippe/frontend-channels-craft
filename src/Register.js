@@ -80,8 +80,10 @@ export default function Register({ registerToast }) {
           headers: {
           Authorization: localStorage.getItem('token')
         }});
-        console.log(response.data);
-        console.log(formData)
+        setUsername('');
+      setEmail('');
+      setMobile('');
+      setPassword('');
         navigate("/");
         registerToast()
         

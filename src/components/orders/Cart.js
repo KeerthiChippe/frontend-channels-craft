@@ -12,7 +12,10 @@ const Cart = () => {
     const cart = useSelector((state) => {
         return state;
     });
-    console.log(cart, "cart items")
+    // console.log(cart.order.packages, "cart packages")
+    // console.log(cart.order.channels, 'cart channels')
+    // console.log(cart.order.packages.length + cart.order.channels.length, 'cart total')
+    const cartTotal = cart.order.packages.length + cart.order.channels.length
 
     const { packages: pack, channels } = useSelector((state) => {
         return state.order || {};
@@ -54,7 +57,7 @@ const Cart = () => {
         <Container>
             <Row className="mt-3">
                 <Col>
-                    <h2>Cart</h2>
+                    <h2>No. of Cart items - {cartTotal}</h2>
                 </Col>
             </Row>
 
@@ -64,7 +67,12 @@ const Cart = () => {
                     <ListGroup>
                         {cart.order.packages.map((item, index) => (
                             <ListGroup.Item key={index}>
-                                {item.packageName} - {item.packagePrice} - {item.selectedChannels}
+                               <b>{item.packageName}</b>  - {item.packagePrice} 
+                                <ul>
+                                    {item.selectedChannels.map((channel, i)=>{
+                                        return <li key={i}>{channel.channelName}</li>
+                                    })}
+                                </ul>
                             </ListGroup.Item>
                         ))}
                     </ListGroup>

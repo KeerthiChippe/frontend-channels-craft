@@ -1,6 +1,6 @@
 import axios from '../config/axios'
 
-export const startAddCustomer = (data) => {
+export const startAddCustomer = (data, resetForm) => {
     return async (dispatch) => {
         try {
             const response = await axios.post('/api/customers', data, {
@@ -10,6 +10,7 @@ export const startAddCustomer = (data) => {
             })
             console.log(response.data)
             dispatch(addCustomer(response.data))
+            resetForm()
         } catch (err) {
             dispatch(serverErrors(err.response.data.errors))
         }
@@ -53,6 +54,28 @@ const setCustomer = (list) => {
     }
 }
 
+export const startGetSingleCustomer = (id)=>{
+    return async (dispatch)=>{
+        try{
+            const response = await axios.get(`/api/singleCustomer/${id}`, {
+                headers: {
+                    Authorization: localStorage.getItem('token')
+                }
+            })
+            console.log(response.data, "amma")
+            dispatch(setSingleCustomer(response.data))
+        }catch(e){
+            console.log(e)
+        }
+    }
+}
+
+const setSingleCustomer = (data)=>{
+    return{
+        type: 'SINGLE_CUSTOMER',
+        payload: data
+    }
+}
 export const startRemoveCustomer = (id, operatorId) => {
     return async (dispatch) => {
         if (!id) {
