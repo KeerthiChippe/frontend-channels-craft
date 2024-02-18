@@ -5,36 +5,46 @@ import { startRemovePackage, startAddPackage, startEditPackage, startGetPackage 
 import { deletePackageOne, selectedPackageOne } from "../../actions/order-action";
 import { OperatorContext } from "../profile/operatorContext";
 import { jwtDecode } from "jwt-decode";
+import { FadeLoader, ClipLoader } from "react-spinners";
+
 
 const ListPackages = () => {
   const [editId, setEditId] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const [modal, setModal] = useState(false);
   const [userRole, setUserRole] = useState('')
-
+  const [selectedPackage, setSelectedPackage] = useState('')
+  const [viewModal, setViewModal] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [formData, setFormData] = useState({
+    packagePrice: "",
+  });
+ 
   useEffect(()=>{
     if(localStorage.getItem('token')){
         const {role} = jwtDecode(localStorage.getItem("token"))
-        console.log(role, "345")
         setUserRole(role)
     }
 }, [localStorage.getItem('token')])
 
-  // const { userState } = useContext(OperatorContext);
   const dispatch = useDispatch();
-
-  // const role = userState.userDetails ? userState.userDetails.role : null;
 
   const packages = useSelector((state) => {
     return state.package.data.filter((ele) => ele.isDeleted === false);
   });
 
   useEffect(() => {
+    setIsLoading(true)
     dispatch(startGetPackage());
+    setIsLoading(false)
   }, [dispatch]);
 
   const toggleModal = () => {
     setModal(!modal);
+  };
+
+  const toggleViewModal = () => {
+    setViewModal(!viewModal);
   };
 
   const handleDelete = (id) => {
@@ -46,12 +56,15 @@ const ListPackages = () => {
 
   const handleEdit = (id) => {
     setEditId(id);
-    toggleModal();
+    const selectedPackage = packages.find((ele) => ele._id === id)
+    setFormData({
+      packagePrice: selectedPackage.packagePrice,
+    })
+    setModal(true)
+    // toggleViewModal(false);
   };
 
-  const [formData, setFormData] = useState({
-    packagePrice: "",
-  });
+  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -90,8 +103,20 @@ const ListPackages = () => {
     dispatch(deletePackageOne(removeItem));
   };
 
+  const handleView = (id)=>{
+    const selectedPkg = packages.find((pkg) => pkg._id === id);
+    setSelectedPackage(selectedPkg); // Step 2: Set selected package details
+    setViewModal(true); // Open view modal
+    // toggleModal(false); // Close edit modal if it's open
+
+  }
+  
   return (
-    <div className="row g-3 d-flex-wrap" style={{ gap: "1rem", justifyContent: "center", alignItems: "center"}}>
+    
+    <div>
+      
+    {!isLoading ? (
+      <div className="row g-3 d-flex-wrap" style={{ gap: "1rem", justifyContent: "center", alignItems: "center" }}>
       <h3 style={{ marginLeft: "400px", padding: "2px" }}>PACKAGES</h3>
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1 mt-2">
         {packages.map((ele) => (
@@ -136,11 +161,18 @@ const ListPackages = () => {
                         handleAdd(ele._id);
                       }}
                       className="btn btn-sm btn-outline-secondary"
+                      style={{ marginRight: '20px' }}
                     >
                       Add to Cart
                     </button>
                       </>
                     )}
+
+                    <button onClick={()=>{
+                      handleView(ele._id)
+                    }} style={{ marginRight: '50px' }} >
+                      view
+                    </button>
                     
                   </div>
                 </div>
@@ -150,28 +182,63 @@ const ListPackages = () => {
         ))}
       </div>
 
-      <Modal isOpen={modal} toggle={toggleModal}>
-        <ModalHeader toggle={toggleModal}>Edit Package</ModalHeader>
+  <Modal isOpen={modal} toggle={toggleModal}>
+  <ModalHeader toggle={toggleModal}>Edit Package</ModalHeader>
+  <ModalBody>
+    <form onSubmit={handleSubmit}>
+      <div className="mb-3">
+        <label htmlFor="packagePrice" className="form-label">
+          Price
+        </label>
+        <input
+          type="number"
+          id="packagePrice"
+          value={formData.packagePrice}
+          onChange={handleChange}
+          className="form-control"
+        />
+      </div>
+      <Button type="submit" color="primary">
+        Save
+      </Button>
+    </form>
+  </ModalBody>
+</Modal>
+
+      <Modal isOpen={viewModal} toggle={toggleViewModal}>
+        <ModalHeader toggle={toggleViewModal}>Channels</ModalHeader>
         <ModalBody>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="packagePrice" className="form-label">
-                Price
-              </label>
-              <input
-                type="number"
-                id="packagePrice"
-                value={formData.packagePrice}
-                onChange={handleChange}
-                className="form-control"
-              />
+          {selectedPackage && (
+            <div>
+              {/* <ul>
+              
+                {selectedPackage.selectedChannels.map((channel, index) => (
+                  <li key={index}><img src={`http://localhost:3034/Images/${channel.image}`} alt={channel.channelName} style={{ maxHeight: "50px" }} />{channel.channelName}</li>
+                ))}
+              </ul> */}
+              <div style={{ display: "flex", flexWrap: "wrap" }}>
+          {/* Render selected channels */}
+          {selectedPackage.selectedChannels.map((channel, index) => (
+            <div key={index} style={{ margin: "5px" }}>
+              <img src={`http://localhost:3034/Images/${channel.image}`} alt={channel.channelName} style={{ maxHeight: "50px" }} />
+              <div>{channel.channelName}</div>
             </div>
-            <Button type="submit" color="primary">
-              Save
-            </Button>
-          </form>
+          ))}
+        </div>
+            </div>
+          )}
         </ModalBody>
       </Modal>
+    </div>
+     ) : (
+       <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
+                <ClipLoader
+                    color={"#7aa9ab"}
+                    isLoading={isLoading}
+                    size={30}
+                />
+            </div>
+    )}
     </div>
   );
 };

@@ -8,6 +8,13 @@ import logo from '../../images/main.png'
 
 export default function CustomerNavbar() {
     const { userDispatch } = useContext(OperatorContext)
+    const cart = useSelector((state) => {
+        return state;
+    });
+    // console.log(cart.order.packages, "cart packages")
+    // console.log(cart.order.channels, 'cart channels')
+    // console.log(cart.order.packages.length + cart.order.channels.length, 'cart total')
+    const cartTotal = cart.order.packages.length + cart.order.channels.length
 
     const navigate = useNavigate()
 
@@ -19,6 +26,9 @@ export default function CustomerNavbar() {
         })
         // window.location.reload()
     }
+    // rgba(57, 123, 177, 0.2)
+    // "rgba(11, 48, 194, 0.2)" 
+    // style={{ backgroundColor: "rgba(11, 48, 194, 0.2)" }}
 
     return (
         <div>

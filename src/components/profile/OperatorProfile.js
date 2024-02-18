@@ -39,7 +39,6 @@ export default function OperatorProfile() {
 
     useEffect(() => {
         dispatch(startGetOperator())
-
     }, [dispatch])
 
     useEffect(() => {

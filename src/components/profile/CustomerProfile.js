@@ -3,8 +3,8 @@ import _ from "lodash"
 import { addDays, format } from 'date-fns'
 import { useState, useEffect, useContext } from "react"
 import { OperatorContext } from "./operatorContext"
-import { startUpdateUser } from "../../actions/user-action"
-import { startEditCustomer } from "../../actions/customer-action"
+import { startGetUser, startUpdateUser } from "../../actions/user-action"
+import { startEditCustomer, startGetSingleCustomer } from "../../actions/customer-action"
 import { StartGetCustomer } from "../../actions/customer-action"
 import { Modal, Form, Button,Card } from "react-bootstrap"
 import { startGetOrder } from "../../actions/order-action"
@@ -12,10 +12,15 @@ import axios from "../../config/axios"
 import { Row, Col } from "reactstrap"
 import './customerProfile.css'
 import Calendar from "./Calendar";
-
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
+import { jwtDecode } from "jwt-decode"
+import { ClipLoader } from "react-spinners"
+import { useParams } from "react-router-dom"
 
 const CustomerProfile = () => {
   const dispatch = useDispatch();
+  const {id} = useParams()
 
   const { userState, userDispatch } = useContext(OperatorContext);
   
@@ -44,6 +49,13 @@ const CustomerProfile = () => {
     oldPassword: '',
     newPassword: ''
   });
+
+  useEffect(() => {
+    dispatch(StartGetCustomer())
+    dispatch(startGetUser())
+    dispatch(startGetOrder())
+  }, [dispatch])
+
   const [profile, setProfile] = useState(null)
   const [img, setImg] = useState({})
   const [role, setRole] = useState("")
@@ -85,8 +97,18 @@ const CustomerProfile = () => {
         oldPassword: '',
         newPassword: ''
       });
+      toast.success('Updated successfully!', {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored"
+      })
     } catch (e) {
       console.log(e);
+      toast.error('Failed to update password')
     }
   };
 
@@ -453,6 +475,16 @@ const CustomerProfile = () => {
           
         </Col>
       </Row>
+      {/* ) : (
+        <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
+    <ClipLoader
+        color={"#7aa9ab"}
+        isLoading={isLoading}
+        size={30}
+    />
+</div> */}
+      {/* )} */}
+      
     </div>
   );
 };

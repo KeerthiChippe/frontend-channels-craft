@@ -7,15 +7,13 @@ import { startGetOperator } from "../../actions/operator-action"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-const AddCustomer = () => {
+const AddCustomer = ({addCustomer}) => {
     const dispatch = useDispatch()
 
     const user = useSelector((state) => {
-        console.log(state, "abcdefghijkl ")
+        // console.log(state, "abcdefghijkl ")
         return state.user.data
     })
-    
-    
 
     const serverErrors = useSelector((state) => state.serverErrors)
     console.log(serverErrors)
@@ -86,6 +84,21 @@ const AddCustomer = () => {
     const handleChange = (e) => {
         setAddress({ ...address, [e.target.name]: e.target.value })
     }
+
+    const resetForm = ()=>{
+        setCustomerName('')
+        setMobile('')
+        setBoxNumber('')
+        setAddress({
+            doorNumber: '',
+            street: '',
+            city: '',
+            state: '',
+            pincode: ''
+        })
+        setSelectedUser('')
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault()
         runValidation()
@@ -105,26 +118,27 @@ const AddCustomer = () => {
                 operatorId
 
             }
-            dispatch(startAddCustomer(formData))
-                .then(() => {
-                    setCustomerName('')
-                    setMobile('')
-                    setBoxNumber('')
-                    setAddress({
-                        doorNumber: '',
-                        street: '',
-                        city: '',
-                        state: '',
-                        pincode: ''
-                    })
+            dispatch(startAddCustomer(formData, resetForm))
+            addCustomer()
+                // .then(() => {
+                //     setCustomerName('')
+                //     setMobile('')
+                //     setBoxNumber('')
+                //     setAddress({
+                //         doorNumber: '',
+                //         street: '',
+                //         city: '',
+                //         state: '',
+                //         pincode: ''
+                //     })
 
-                }).catch((error) => {
-                    if (error.response && error.response.data) {
-                        dispatch(serverErrors(error.response.data.errors || []))
-                    } else {
-                        console.error("Unexpected error:", error);
-                    }
-                })
+                // }).catch((error) => {
+                //     if (error.response && error.response.data) {
+                //         dispatch(serverErrors(error.response.data.errors || []))
+                //     } else {
+                //         console.error("Unexpected error:", error);
+                //     }
+                // })
         } else {
             setFormErrors(errors)
         }

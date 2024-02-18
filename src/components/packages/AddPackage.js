@@ -32,26 +32,40 @@ const AddPackage = (props) => {
         if (packagePrice.trim().length === 0) {
             errors.packagePrice = "package price is required"
         }
+        if (selectedChannels.length === 0){
+            errors.selectedChannels = 'At least one channel is required'
+        }
     }
 
     useEffect(() => {
         dispatch(startGetChannel())
     }, [dispatch, selectedChannels])
 
+    const resetForm = ()=>{
+        setPackageName('')
+        setPackagePrice('')
+        setImage(null)
+        setSelectedChannels([]);
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault()
         runValidation()
 
-        const resetForm = ()=>{
-            setPackageName('')
-            setPackagePrice('')
-            setImage(null)
-        }
+        // const resetForm = ()=>{
+        //     setPackageName('')
+        //     setPackagePrice('')
+        //     setImage(null)
+        //     setSelectedChannels([]);
+        //     setImage(null);
+        //     setFormErrors({}); 
+        // }
 
         if (Object.keys(errors).length === 0) {
             const formData = new FormData()
             formData.append("packageName", packageName)
             formData.append("packagePrice", packagePrice)
+            // formData.append("selectedChannels", selectedChannels)
             formData.append("file", image)
 
             // selectedChannels: selectedChannels ? selectedChannels.map(channel => channel.value) : null
@@ -60,7 +74,7 @@ const AddPackage = (props) => {
                     formData.append(`selectedChannels[${index}]`, channel.value);
                 })
             }
-            console.log(formData)
+            // console.log(formData)
             dispatch(startAddPackage(formData, resetForm))
             addPackage()
         } else {
@@ -122,7 +136,9 @@ const AddPackage = (props) => {
                             })
                         }}
                     />
-                </div><br />
+                </div>
+                {formErrors.selectedChannels && <span>{formErrors.selectedChannels}</span>}
+                <br />
                 <div>
                     <input  style={{color: "white", fontWeight: "bold" }} type='file' onChange={(e) => {
                         setImage(e.target.files[0])

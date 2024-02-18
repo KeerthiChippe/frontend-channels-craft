@@ -1,6 +1,6 @@
 import axios from "../config/axios";
 
-export const startAddOperator = (data) => {
+export const startAddOperator = (data, resetForm) => {
 
     return async (dispatch) => {
         try {
@@ -10,6 +10,7 @@ export const startAddOperator = (data) => {
                 }
             })
             dispatch(addOperator(response.data))
+            resetForm()
         } catch (err) {
             dispatch(serverErrors(err.response.data.errors))
         }
