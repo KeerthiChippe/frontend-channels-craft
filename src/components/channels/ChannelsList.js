@@ -5,6 +5,7 @@ import { selectedChannelOne } from "../../actions/order-action"
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap"
 import { OperatorContext } from "../profile/operatorContext"
 import { jwtDecode } from "jwt-decode"
+import { ClipLoader } from "react-spinners"
 
 const ChannelsList = () => {
   const [editId, setEditId] = useState(null)
@@ -14,6 +15,8 @@ const ChannelsList = () => {
   const [formData, setFormData] = useState({
     channelPrice: "",
   })
+  const [isLoading, setIsLoading] = useState(true)
+  
 
   const dispatch = useDispatch()
   const channels = useSelector((state) => state.channel.data)
@@ -30,7 +33,9 @@ const ChannelsList = () => {
 }, [localStorage.getItem('token')])
 
   useEffect(() => {
+    setIsLoading(true)
     dispatch(startGetChannel())
+    setIsLoading(false)
   }, [dispatch])
 
   const toggleModal = () => {
@@ -84,7 +89,9 @@ const ChannelsList = () => {
   };
 
   return (
-    <div className="row g-3 d-flex-wrap" style={{ gap: "1rem", justifyContent: "center", alignItems: "center" }}>
+    <div>
+    {!isLoading ? (
+      <div className="row g-3 d-flex-wrap" style={{ gap: "1rem", justifyContent: "center", alignItems: "center" }}>
       <h3 style={{ marginLeft: "400px", padding: "2px" }}>CHANNELS</h3>
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1 mt-2">
         {channels.map((ele) => (
@@ -98,7 +105,7 @@ const ChannelsList = () => {
               />
               <div className="card-body" style={{ height: "80%" }}>
                 <h5 className="card-title">{ele.channelName}</h5>
-                <p className="card-text">{ele.channelPrice}</p>
+                <p className="card-text">Price - {ele.channelPrice}</p>
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="btn-group">
 
@@ -167,6 +174,16 @@ const ChannelsList = () => {
           </form>
         </ModalBody>
       </Modal>
+    </div>
+    ): (
+      <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
+                <ClipLoader
+                    color={"#7aa9ab"}
+                    isLoading={isLoading}
+                    size={30}
+                />
+            </div>
+    )}
     </div>
   );
 };

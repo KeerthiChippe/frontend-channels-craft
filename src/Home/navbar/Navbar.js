@@ -114,12 +114,11 @@ const Navbar = () =>{
     useEffect(()=>{
         if(localStorage.getItem('token')){
             const {role} = jwtDecode(localStorage.getItem("token"))
-            console.log(role, "345")
             setUserRole(role)
         }
     }, [localStorage.getItem('token')])
 
-    console.log(userRole, "45")
+   
 
     
     const navbarCondition = () => {

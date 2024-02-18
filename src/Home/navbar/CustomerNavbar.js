@@ -4,9 +4,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { OperatorContext } from "../../components/profile/operatorContext"
 import { isEmpty } from "lodash";
+import { useSelector } from "react-redux";
 
 export default function CustomerNavbar() {
     const { userDispatch } = useContext(OperatorContext)
+    const cart = useSelector((state) => {
+        return state;
+    });
+    // console.log(cart.order.packages, "cart packages")
+    // console.log(cart.order.channels, 'cart channels')
+    // console.log(cart.order.packages.length + cart.order.channels.length, 'cart total')
+    const cartTotal = cart.order.packages.length + cart.order.channels.length
 
     const navigate = useNavigate()
 
@@ -18,10 +26,13 @@ export default function CustomerNavbar() {
         })
         // window.location.reload()
     }
+    // rgba(57, 123, 177, 0.2)
+    // "rgba(11, 48, 194, 0.2)" 
+    // style={{ backgroundColor: "rgba(11, 48, 194, 0.2)" }}
 
     return (
         <div>
-            <nav className="navbar navbar-expand-lg ">
+            <nav className="navbar navbar-expand-lg" >
             <div className="container-fluid">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <Link className="navbar-brand" to="/">Channel Craft</Link>
@@ -32,6 +43,7 @@ export default function CustomerNavbar() {
                 <li>
                     <Link className="nav-link active" aria-current="page" to="/">Home</Link>
                 </li>
+                
                 {isEmpty(localStorage.getItem('token')) && (
                     <li className="nav-item">
                         <Link className="nav-link" to="/login">Login</Link>
@@ -41,23 +53,30 @@ export default function CustomerNavbar() {
                 <li className="nav-item">
                     <Link className="nav-link" to="/packcha">Packages & Channels</Link>
                 </li>
-                <li className="nav-item">
-                    <Link className="nav-link" to="/cart">Cart</Link>
-                </li>
-
-                <li className="nav-item">
-                    <Link className="nav-link" to="/customerProfile">
-                    <i className="bi bi-person-circle fs-5"></i>
-                    </Link>
-                </li>
-                {!isEmpty(localStorage.getItem('token')) && (
-                    <li className="nav-item">
-                        <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
-                </li>
-                )}
+                {/* <li className="nav-item">
+                    <Link className="nav-link" to="/cart"><i className="bi bi-cart-fill fs-5"></i>({cartTotal})</Link>
+                </li> */}
                 
                 </div>
             </ul>
+
+            {!isEmpty(localStorage.getItem('token')) && (
+                        <div className="d-flex">
+                            <ul className="navbar-nav">
+                            <li className="nav-item">
+                    <Link className="nav-link" to="/cart"><i className="bi bi-cart-fill fs-5"></i>({cartTotal})</Link>
+                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/customerProfile">
+                                        <i className="bi bi-person-circle fs-5"></i>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
             
             </div>
             </nav>

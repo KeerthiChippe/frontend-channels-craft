@@ -10,7 +10,7 @@ import './operator.css'
 
 
 const Operator = (props) => {
-    // const {addOperator} = props
+    const {addOperator} = props
     const dispatch = useDispatch()
 
     const user = useSelector((state) => {
@@ -49,6 +49,14 @@ const Operator = (props) => {
         setFormErrors(errors)
     }
 
+    const resetForm = ()=>{
+        setOperatorName('')
+        setMobile('')
+        setCity('')
+        setState('')
+        setSelectedUser('')
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         runValidation()
@@ -60,8 +68,8 @@ const Operator = (props) => {
                 city: city,
                 userId: userId,
             }
-            dispatch(startAddOperator(operatorData))
-            // addOperator()
+            dispatch(startAddOperator(operatorData, resetForm))
+            addOperator()
         } else {
             setFormErrors(errors)
         }

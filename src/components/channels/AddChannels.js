@@ -51,6 +51,13 @@ const AddChannel = (props)=>{
         return state.channel.serverErrors
     })
 
+    const resetForm = ()=>{
+        setChannelName('')
+        setChannelPrice('')
+        setChannelNumber('')
+        setLanguage('')
+        setImage(null)
+    }
 
     const handleSubmit = (e)=>{
         e.preventDefault()
@@ -65,7 +72,7 @@ const AddChannel = (props)=>{
                formData.append(" isHD",  isHD)
                formData.append("file", image)
 
-            dispatch(startAddChannel(formData))
+            dispatch(startAddChannel(formData, resetForm))
             addChannel()
             // .then(()=>{
             //     setChannelName('')

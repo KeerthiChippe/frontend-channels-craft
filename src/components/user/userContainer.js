@@ -3,12 +3,12 @@ import UserList from "./userlist"
 import { Row ,Col} from 'reactstrap'
 //import './user.css'
 
-const UserContainer = () =>{
+const UserContainer = ({registerToast}) =>{
     return(
         <div>
         <Row>
         <Col md={5} className="middle">
-        <Register/>
+        <Register registerToast={registerToast}/>
         </Col>
         <Col md={6}>
         <UserList />

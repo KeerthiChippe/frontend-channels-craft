@@ -21,7 +21,7 @@ export default function AdminNavbar() {
 
     return (
         <div>
-            <nav className="navbar navbar-expand-lg ">
+            <nav className="navbar navbar-expand-lg">
             <div className="container-fluid">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <Link className="navbar-brand" to="/">Channel Craft</Link>
@@ -59,17 +59,30 @@ export default function AdminNavbar() {
                 <li className="nav-item">
                     <Link className="nav-link" to="/orderslist">Orders</Link>
                 </li>
-                <li className="nav-item">
+                {/* <li className="nav-item">
                     <Link className="nav-link" to="/dashboard">Dashboard</Link>
                 </li>
                 {!isEmpty(localStorage.getItem('token')) && (
                     <li className="nav-item">
                         <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
                     </li>
-                )}
+                )} */}
                 
                 </div>
             </ul>
+
+            {!isEmpty(localStorage.getItem('token')) && (
+                        <div className="d-flex">
+                            <ul className="navbar-nav">
+                            <li className="nav-item">
+                    <Link className="nav-link" to="/dashboard">Dashboard</Link>
+                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
             
             </div>
             </nav>

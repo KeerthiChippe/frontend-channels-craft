@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { FadeLoader } from "react-spinners"
 import axios from "../config/axios"
 import { useNavigate } from "react-router-dom"
 
@@ -23,7 +24,7 @@ export default function Success(){
 
                 setTimeout(()=>{
                     navigate('/customerProfile', {state: data})
-                }, 8000)
+                }, 5000)
             }catch(e){
                 console.log(e)
             }
@@ -33,17 +34,24 @@ export default function Success(){
     }, [])
     return(
         <div>
-            {isSuccess && (
+            {isSuccess ? (
                 <>
                     <div className="d-flex justify-content-center mt-4">
                 <h3>Payment is successfull</h3>
-                {/* <img 
-                    src={process.env.PUBLIC_URL + "/Images/status/payment-success.png"}
-                    alt="success"
-                    style={{width: "25%",}}
-                /> */}
+                </div>
+
+                <div className="d-flex justify-content-center m-4">
+                    <b>Please don't click anything & stay on the page.......</b>
                 </div>
                 </>
+            ) : (
+                <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
+                <FadeLoader
+                    color={"#7aa9ab"}
+                    loading={loading}
+                    size={30}
+                />
+            </div>
             )}
         </div>
     )

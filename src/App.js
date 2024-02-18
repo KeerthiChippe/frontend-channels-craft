@@ -47,27 +47,79 @@ function App(props) {
   })
 
   const registerToast = ()=>{
-    toast('registerd successfully')
+    toast.success('Successfully created account', {
+      position: "top-right",
+      autoClose: 2000,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true
+
+    })
   }
 
   const loginToast =() =>{
-    toast('logged in succesfully')
+    toast.success('logged in succesfully', {
+      position: "top-right",
+      autoClose: 2000,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true
+    })
   }
 
   const resetPassword = ()=>{
-    toast('password updated successfully')
+    toast('password updated successfully', {
+      position: "top-right",
+      autoClose: 2000
+    })
   }
 
   const addOperator = ()=>{
-    toast('added operator')
+    toast.success('Successfully created operator', {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "colored"
+    })
+  }
+
+  const addCustomer = ()=>{
+    toast.success('Successfully created customer', {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "colored"
+    })
   }
 
   const addPackage = ()=>{
-    toast('Successfully added package')
+    toast.success('Successfully added package', {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "colored"
+    })
   }
 
   const addChannel = ()=>{
-    toast('Successfully added channel')
+    toast.success('Successfully added channel', {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "colored"
+    })
   }
   
   useEffect(()=>{
@@ -141,7 +193,7 @@ function App(props) {
           <Route path='/packcha' element={<PackagesContainer />} />
           <Route path='/channels' element = {<AddChannel addChannel={addChannel} />} />
           <Route path='/deletedPackages' element={<DeletedPackage />} />
-          <Route path = '/customercontainer' element={<CustomerContainer />} />
+          <Route path = '/customercontainer' element={<CustomerContainer addCustomer={addCustomer}/>} />
           <Route path='/profile' element={<OperatorProfile />} />
           <Route path='/customerProfile' element={<CustomerProfile />} />
           <Route path='/orderslist' element={<OrdersList />} />

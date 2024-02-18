@@ -3,8 +3,8 @@ import _ from "lodash"
 import { addDays, format } from 'date-fns'
 import { useState, useEffect, useContext } from "react"
 import { OperatorContext } from "./operatorContext"
-import { startUpdateUser } from "../../actions/user-action"
-import { startEditCustomer } from "../../actions/customer-action"
+import { startGetUser, startUpdateUser } from "../../actions/user-action"
+import { startEditCustomer, startGetSingleCustomer } from "../../actions/customer-action"
 import { StartGetCustomer } from "../../actions/customer-action"
 import { startGetOrder } from "../../actions/order-action"
 import axios from "../../config/axios"
@@ -14,11 +14,17 @@ import { Row, Col } from "reactstrap"
 // import {format} from 'date-fns'
 // import './customerProfile.css'
 import Calendar from "./Calendar";
-
+import { ToastContainer, toast } from "react-toastify"
+import 'react-toastify/dist/ReactToastify.css';
+import { jwtDecode } from "jwt-decode"
+import { ClipLoader } from "react-spinners"
+import { useParams } from "react-router-dom"
 
 const CustomerProfile = () => {
   const dispatch = useDispatch();
+  const {id} = useParams()
 
+  const [isLoading, setIsLoading] = useState(true)
   // const customers = useSelector((state) => {
   //   return state.customer.data
   // })
@@ -30,23 +36,10 @@ const CustomerProfile = () => {
   const order = useSelector((state) => {
     return state.order
   })
-  console.log(order, "current order")
-  // console.log(order.packages, "kkk")
-  console.log(order.paid, "date of order")
   // console.log(order.packages[0].packageName, "current packages")
   // console.log(order.channels[0].channelName, "current channels")
 
   const orderDate = order.paid
-  console.log(orderDate, "expiry date")
-  // const expiryDate = addDays(orderDate + 30)
-  // const formattedExpiryDate = format(expiryDate, 'yyyy mm dd')
-  // console.log(formattedExpiryDate, 'format date')
-
-  useEffect(() => {
-    dispatch(StartGetCustomer())
-    dispatch(startGetOrder())
-  }, [dispatch])
-
 
   const [formData, setFormData] = useState({
     customerName: userState.userDetails.username,
@@ -62,9 +55,21 @@ const CustomerProfile = () => {
     oldPassword: '',
     newPassword: ''
   });
+
+  useEffect(() => {
+    dispatch(StartGetCustomer())
+    dispatch(startGetUser())
+    dispatch(startGetOrder())
+  }, [dispatch])
+
   const [profile, setProfile] = useState(null)
   const [img, setImg] = useState({})
   const [role, setRole] = useState("")
+
+  useEffect(() => {
+    setIsLoading(false); // Once data is fetched, set isLoading to false
+  }, [userState]);
+
 
   const userId = userState.userDetails._id;
   const customerId = userState.customer._id;
@@ -74,6 +79,14 @@ const CustomerProfile = () => {
       setRole(userState.userDetails.role)
     }
   }, [userState.userDetails.role])
+
+  useEffect(()=>{
+    if(localStorage.getItem('token')){
+        const {role} = jwtDecode(localStorage.getItem("token"))
+        setRole(role)
+    }
+}, [localStorage.getItem('token')])
+
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -100,8 +113,18 @@ const CustomerProfile = () => {
         oldPassword: '',
         newPassword: ''
       });
+      toast.success('Updated successfully!', {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored"
+      })
     } catch (e) {
       console.log(e);
+      toast.error('Failed to update password')
     }
   };
 
@@ -149,7 +172,7 @@ const CustomerProfile = () => {
     }
   }
 
-  console.log(userState.customer.image, "profile")
+  // console.log(userState.customer.image, "profile")
 
   const calculateFormattedDates = () => {
     if (order.paid) {
@@ -181,7 +204,9 @@ const CustomerProfile = () => {
 
   return (
     <div className=" d-flex justify-content-center align-items-center">
-      <Row>
+      <ToastContainer />
+      {!isLoading ? (
+        <Row>
         <Col>
           {!_.isEmpty(formData.img) ? (
             <>
@@ -213,15 +238,18 @@ const CustomerProfile = () => {
           height="100px"
         />} */}
 
-      {console.log(order.paid?.map(ele=> ele.channels), 'order list')}
+      {/* {console.log(order.paid?.map(ele=> ele.channels), 'order list')} */}
       {/* {order.paid.length > 0 ? ( */}
             <input type="submit" value="Upload" />
           </form>
 
 {/* {Object.keys(order.paid).length > 0 ? ( */}
-  {order.paid  ? (
+{role === 'customer' && (
+  <div>
+    <h4>Current packages</h4>
+  {order.paid && order.paid.length > 0 ? (
         <div>
-          <h4>Current packages</h4>
+        
 
           <ul>
          
@@ -248,9 +276,10 @@ const CustomerProfile = () => {
       )}
       <br />
 
-      {order.paid  ? (
+      <h4>Current channels</h4>
+      {order.paid && order.paid.length > 0 ? (
         <div>
-          <h4>Current channels</h4>
+       
           <ul>
           {order.paid?.map(ele => ele.channels?.map((chan) => {
               const originalDate = new Date(ele.orderDate);
@@ -269,6 +298,9 @@ const CustomerProfile = () => {
       ) : (
         <p>No channels available</p>
       )}
+  </div>
+)}
+
 
       {/* <form onSubmit={handleUpload} style={{ marginBottom: "400px", marginLeft: "100px" }}>
         <input type="file" onChange={(e) => {
@@ -278,7 +310,7 @@ const CustomerProfile = () => {
         <input type="submit" value="Upload" />
       </form> */}
 
-      {userState.userDetails.role === 'customer' && (
+       {userState.userDetails.role === 'customer' && (
         <div>
           <form onSubmit={handleSubmit}>
             <label>Name</label>
@@ -473,9 +505,19 @@ const CustomerProfile = () => {
           </form>
           <Calendar formattedDates={formattedDates} />
         </div>
-      )}
+     )} 
        </Col>
       </Row>
+      ) : (
+        <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
+    <ClipLoader
+        color={"#7aa9ab"}
+        isLoading={isLoading}
+        size={30}
+    />
+</div>
+      )}
+      
     </div>
   );
 };
