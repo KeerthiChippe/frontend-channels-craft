@@ -67,6 +67,12 @@ const Operator = (props) => {
         }
     }
 
+    const serverErrors = useSelector((state)=>{
+        return state.operator.serverErrors
+
+    })
+    console.log(serverErrors)
+
     const handleChange = (e) => { 
         let user = e.target.value
         setSelectedUser(user)
@@ -111,8 +117,8 @@ const Operator = (props) => {
                     onChange={(e) => {
                         setOperatorName(e.target.value)
                     }}
-                    disabled />
-                {formErrors.operatorName && formErrors.operatorName}<br />
+                    disabled /><br/>
+               <span className={`error-message ${formErrors.operatorName ? 'visible' : 'hidden'}`}> {formErrors.operatorName && formErrors.operatorName}</span><br />
                 <br />
 
                 <label>Enter Mobile</label><br />
@@ -124,8 +130,8 @@ const Operator = (props) => {
                     onChange={(e) => {
                         setMobile(e.target.value)
                     }} 
-                    disabled/>
-                {formErrors.mobile && formErrors.mobile}<br />
+                    disabled/><br/>
+               <span className={`error-message ${formErrors.operatorName ? 'visible' : 'hidden'}`}> {formErrors.mobile && formErrors.mobile}<br /></span>
                 <br />
 
                 <label>Enter city</label><br />
@@ -136,7 +142,7 @@ const Operator = (props) => {
                     id="city"
                     onChange={(e) => {
                         setCity(e.target.value)
-                    }} /> {formErrors.city && formErrors.city}
+                    }} /> <br/><span className={`error-message ${formErrors.operatorName ? 'visible' : 'hidden'}`}>{formErrors.city && formErrors.city}</span>
                 <br />
                 <br />
                 <label>Enter State </label><br />
@@ -147,12 +153,13 @@ const Operator = (props) => {
                     id="State"
                     onChange={(e) => {
                         setState(e.target.value)
-                    }} />
-                {formErrors.state && formErrors.state}
+                    }} /><br/>
+               <span className={`error-message ${formErrors.operatorName ? 'visible' : 'hidden'}`}>{formErrors.state && formErrors.state}</span> 
                 <br />
                 
                 <br />
                 <input type="submit" value="operator" />
+                <p className={serverErrors ? 'error-message' : ''}>{serverErrors}</p>
             </form>
             </Col>
             </Row>

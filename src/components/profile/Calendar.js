@@ -1,37 +1,3 @@
-// import FullCalendar from '@fullcalendar/react'
-// import dayGridPlugin from '@fullcalendar/daygrid'
-// import timeGridPlugin from '@fullcalendar/timegrid'
-// import interactionplugin from '@fullcalendar/interaction'
-// import { useState, useEffect } from 'react'
-
-// export default function Calendar({formattedDates}){
-//     const [events, setEvents] = useState('')
-
-//     useEffect(() => {
-//       if (formattedDates && formattedDates.length > 0) {
-//         const expiryEvents = formattedDates.map(date => ({
-//           title: 'Expiry date',
-//           start: date,
-//           allDay: true, // Set it to true if you want it to span the whole day
-//         }));
-//         setEvents(expiryEvents);
-//       }
-//     }, [formattedDates])
-//     return(
-//         <div>
-//             <FullCalendar 
-//                 plugins={[dayGridPlugin, timeGridPlugin, interactionplugin]}
-//                 initialView={'dayGridMonth'}
-//                 headerToolbar={{
-//                     start: "",
-//                     center: "title",
-//                     end: "today prev, next"
-//                 }}
-//                 events={events}
-//             />
-//         </div>
-//     )
-// }
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -58,19 +24,7 @@ export default function Calendar({ formattedDates }) {
 
     return (
         <div style={{ position: 'absolute', top: '80px', right: '20px', zIndex: '99' }}>
-           <div style={{ width: '800px', margin: 'auto' }}>
-          {/* <div style={{ float: 'right', width: 'calc(100% - 350px)' }}> */}
-            {/* <FullCalendar
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                initialView={'dayGridMonth'}
-                headerToolbar={{
-                    start: "",
-                    center: "title",
-                    end: "today prev,next"
-                }}
-                events={events}
-                eventDidMount={renderEventContent}
-            /> */}
+           <div style={{ width: '700px', margin: 'auto' }}>
             <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView={'dayGridMonth'}

@@ -91,7 +91,7 @@ const ListPackages = () => {
   };
 
   return (
-    <div className="row g-3 d-flex-wrap" style={{ gap: "1rem", justifyContent: "center", alignItems: "center" }}>
+    <div className="row g-3 d-flex-wrap" style={{ gap: "1rem", justifyContent: "center", alignItems: "center"}}>
       <h3 style={{ marginLeft: "400px", padding: "2px" }}>PACKAGES</h3>
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1 mt-2">
         {packages.map((ele) => (
@@ -101,11 +101,11 @@ const ListPackages = () => {
                 src={`http://localhost:3034/Images/${ele.image}`}
                 alt="Package"
                 className="bd-placeholder-img card-img-top"
-                style={{ objectFit: "cover", height: "45%" }}
+                style={{ objectFit: "cover", height: "12rem", width: "100%" }}
               />
-              <div className="card-body" style={{ height: "80%" }}>
+              <div className="card-body" style={{ height: "10rem" }}>
                 <h5 className="card-title">{ele.packageName}</h5>
-                <p className="card-text">{ele.packagePrice}</p>
+                <p className="card-text" style ={{fontWeight:"bold"}}>Package Price-{ele.packagePrice}.Rs</p>
                 <div className="d-flex justify-content-between align-items-center">
                   <div className="btn-group">
                     {userRole === 'admin' && (

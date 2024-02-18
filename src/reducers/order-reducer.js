@@ -24,6 +24,11 @@ export const orderReducer = (state = ordersInitialState, action) =>{
             // console.log(action.payload, "kkkkk")
             return {...state, packages: state.packages.filter(ele => ele._id !== action.payload)}
         }
+        case 'SET_SERVER_ERRORS':{
+            return{
+                ...state , serverErrors:action.payload
+            }
+        }
         default: {
             return {...state}
         }

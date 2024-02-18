@@ -9,7 +9,6 @@ export const startAddOperator = (data) => {
                     Authorization: localStorage.getItem('token')
                 }
             })
-            console.log(response.data)
             dispatch(addOperator(response.data))
         } catch (err) {
             dispatch(serverErrors(err.response.data.errors))
@@ -45,7 +44,6 @@ export const startGetOperator = () => {
 }
 
 const setOperator = (list) => {
-    console.log(list, "pooo123")
     return { type: 'SET_OPERATOR', 
     payload: list }
 }

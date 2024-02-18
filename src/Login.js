@@ -34,15 +34,13 @@ export default function Login(props) {
                 const formData = { mobile: values.mobile, password: values.password }
                 console.log(formData)
                 const response = await axios.post('/api/users/login', formData)
-                console.log(response)
-                // console.log(response.data,'srini')
                 const userData = response.data
-                // console.log(userData.role, "check")
                 localStorage.setItem('token', userData.token)
                 userDispatch({
                     type: "SIGN_IN_TOGGLE",
                     payload: true
                 })
+                
                 loginToast()
                 navigate('/')
             } catch (error) {

@@ -9,13 +9,10 @@ const customerReducer =(state = CustomerInitialState ,action ) =>{
             return { ...state , data:action.payload}
         }
         case 'REMOVE_CUSTOMER' :{
-            console.log(action.payload, 'dddd')
             const newData = state.data.filter(customer => customer._id !== action.payload)
-            console.log(newData)
             return{ ...state , data:newData}
         }
         case 'EDIT_CUSTOMER' :{
-            {console.log(action.payload, "checking1234")}
             return { ...state , data : state.data.map ((customer) =>{
                 if(customer._id === action.payload._id){
                     return {...customer , mobile:action.payload.mobile}
@@ -31,7 +28,6 @@ const customerReducer =(state = CustomerInitialState ,action ) =>{
             }
         }
         default :{
-            console.log(state, "keerthi")
             return{...state}
         }
     }

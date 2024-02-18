@@ -1,8 +1,8 @@
 import axios from "../config/axios"
 
-export const startCreateOrder = (formData)=>{
-    return async (dispatch)=>{
-        try{
+export const startCreateOrder = (formData) => {
+    return async (dispatch) => {
+        try {
             const response = await axios.post('/api/orders', formData, {
                 headers: {
                     Authorization: localStorage.getItem('token')
@@ -10,45 +10,53 @@ export const startCreateOrder = (formData)=>{
             })
             console.log(response.data, "order created")
             dispatch(createOrder(response.data))
-        }catch(e){
+        } catch (e) {
             console.log(e)
         }
     }
 }
 
-const createOrder = (data) =>{
+const createOrder = (data) => {
     return {
         type: 'CREATE_ORDER',
         payload: data
     }
 }
 
-export const startGetOrder = ()=>{
-    return async (dispatch)=>{
-        try{
+const serverErrors = (msg) => {
+    return {
+        type: 'SET_SERVER_ERRORS',
+        payload: msg
+    }
+}
+
+
+export const startGetOrder = () => {
+    return async (dispatch) => {
+        try {
             const response = await axios.get('/api/orders', {
                 headers: {
                     Authorization: localStorage.getItem('token')
                 }
-            }) 
+            })
             dispatch(getOrder(response.data))
             // console.log(response.data, "listorders")
-        }catch(e){
+        } catch (e) {
             console.log(e)
         }
     }
 }
 
-const getOrder = (data)=>{
+const getOrder = (data) => {
     return {
         type: 'SET_ORDER',
         payload: data
     }
 }
 
-export const startGetAllOrders = ()=>{
-    return async(dispatch)=> {
-        try{
+export const startGetAllOrders = () => {
+    return async (dispatch) => {
+        try {
             const response = await axios.get('/api/allorders', {
                 headers: {
                     Authorization: localStorage.getItem('token')
@@ -56,55 +64,55 @@ export const startGetAllOrders = ()=>{
             })
             dispatch(getAllOrders(response.data))
             // console.log(response.data, "all orders")
-        }catch(e){
+        } catch (e) {
             console.log(e)
         }
     }
 }
 
-const getAllOrders = (data)=>{
+const getAllOrders = (data) => {
     return {
         type: 'GET_ALL_ORDERS',
         payload: data
     }
 }
 
-export const startGetPackage = () =>{
-    return async(dispatch)=>{
-        try{
+export const startGetPackage = () => {
+    return async (dispatch) => {
+        try {
             const response = await axios.get('/api/listAllPackages')
             console.log(response.data, "22")
             dispatch(setPackage(response.data))
-        }catch(e){
+        } catch (e) {
             console.log(e)
         }
     }
 }
 
-const setPackage = (list)=>{
+const setPackage = (list) => {
     return {
         type: 'SET_PACKAGE',
         payload: list
     }
 }
 
-export const selectedPackageOne = (data)=>{
-    return{
+export const selectedPackageOne = (data) => {
+    return {
         type: 'SELECTED_PACKAGE_ONE',
         payload: data
     }
 }
 
-export const selectedChannelOne = (data)=>{
-    return{
+export const selectedChannelOne = (data) => {
+    return {
         type: 'SELECTED_CHANNEL_ONE',
         payload: data
     }
 }
 
-export const deletePackageOne = (data)=>{
+export const deletePackageOne = (data) => {
     console.log(data, "hhhhhhh")
-    return{
+    return {
         type: 'DELETED_PACKAGE_ONE',
         payload: data
     }

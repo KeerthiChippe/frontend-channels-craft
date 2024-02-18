@@ -7,11 +7,11 @@ import configureStore from './store/configurestore'
 
 const store = configureStore()
 
-console.log(store.getState())
+// console.log(store.getState())
 
-store.subscribe(()=>{
-    console.log(store.getState(), 'updated state')
-})
+// store.subscribe(()=>{
+//     console.log(store.getState(), 'updated state')
+// })
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

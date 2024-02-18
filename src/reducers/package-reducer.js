@@ -1,4 +1,4 @@
-const packageInitialState = {data: [], deletedPackages: []}
+const packageInitialState = {data: [], deletedPackages: [] ,serverErrors:[]}
 
 const packageReducer = (state = packageInitialState, action)=>{
     switch (action.type){
@@ -43,6 +43,11 @@ const packageReducer = (state = packageInitialState, action)=>{
                     return {...ele}
                 }
             })}
+        }
+        case 'SET_SERVER_ERRORS':{
+            return{
+                ...state , serverErrors:action.payload
+            }
         }
         default: {
             return {...state}

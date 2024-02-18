@@ -43,7 +43,7 @@ function App(props) {
     operator: {},
     customer: {}, 
     cart:[],
-    isLoggedIn: false
+    isLoggedIn:false
   })
 
   const registerToast = ()=>{
@@ -87,7 +87,7 @@ function App(props) {
   useEffect(()=>{
     const fetchUserData = async ()=>{
       try{
-        // if(localStorage.getItem('token')){
+        if(localStorage.getItem('token')){
           const userDetails = await axios.get('/api/users/profile', {
             headers: {
               Authorization: localStorage.getItem('token')
@@ -114,13 +114,13 @@ function App(props) {
             })
             userDispatch({type: 'SET_CUSTOMER_PROFILE', payload: customer.data})
           }
-        // }
+        }
       }catch(e){
         console.log(e)
       }
     }
     fetchUserData()
-    }, [userDispatch])
+    }, [userDispatch, userState.isLoggedIn])
 
    return (
     <div>

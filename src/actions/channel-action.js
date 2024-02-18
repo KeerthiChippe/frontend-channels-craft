@@ -10,8 +10,7 @@ export const startAddChannel = (data)=>{
             })
             dispatch(addChannel(response.data))
         }catch(e){
-            console.log(e)
-            dispatch(serverErrors(e.response.data.errors))
+            dispatch(serverErrors(e.response.data.errors[0].msg))
         }
     }
 }

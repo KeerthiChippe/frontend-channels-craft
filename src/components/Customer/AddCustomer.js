@@ -18,7 +18,7 @@ const AddCustomer = () => {
     
 
     const serverErrors = useSelector((state) => state.serverErrors)
-
+    console.log(serverErrors)
     const operator = useSelector((state) => {
         return state.operator.data
     })
@@ -45,6 +45,7 @@ const AddCustomer = () => {
     })
     const errors = {}
 
+    
     function runValidation() {
         if (_.isEmpty(customerName.trim())) {
             errors.customerName = "customerName is required"
@@ -81,6 +82,7 @@ const AddCustomer = () => {
         }
     }
 
+    
     const handleChange = (e) => {
         setAddress({ ...address, [e.target.name]: e.target.value })
     }
@@ -138,6 +140,7 @@ const AddCustomer = () => {
     //     setSelectedOperator(operator)
     //     setOperatorId(operator)
     // }
+   
 
     useEffect(() => {
         if (selectedUser) {
@@ -167,6 +170,7 @@ const AddCustomer = () => {
             console.error("Error fetching city and state:", error);
         }
     };
+
 
     useEffect(() => {
         if (address.pincode) {
@@ -206,7 +210,7 @@ const AddCustomer = () => {
                                 }}
                                 disabled
                             />
-                            {formErrors.customerName && formErrors.customerName}
+                           <span className="error"> {formErrors.customerName && formErrors.customerName}</span>
                         </div>
                         <div class="col-md-6">
                             <label htmlFor="mobile">Mobile</label>
@@ -221,7 +225,7 @@ const AddCustomer = () => {
                                 disabled
                             />
 
-                            {formErrors.mobile && formErrors.mobile}<br />
+                            <span className="error">{formErrors.mobile && formErrors.mobile}</span><br />
                         </div>
                         <div class="col-12">
                             <label htmlFor="boxNumber">Box Number</label><br />
@@ -234,7 +238,7 @@ const AddCustomer = () => {
                                     setBoxNumber(e.target.value)
                                 }}
                             />
-                            {formErrors.boxNumber && formErrors.boxNumber}
+                           <span className="error"> {formErrors.boxNumber && formErrors.boxNumber}</span>
                         </div>
                         <br />
                         <label>ADDRESS</label><br />
@@ -249,7 +253,7 @@ const AddCustomer = () => {
                                 name='doorNumber'
                                 onChange={handleChange}
                             />
-                            {formErrors.doorNumber && formErrors.doorNumber}
+                          <span className="error"> {formErrors.doorNumber && formErrors.doorNumber}</span> 
                         </div>
 
                         <div class="col-md-6">
@@ -262,8 +266,8 @@ const AddCustomer = () => {
                                 name='street'
                                 onChange={handleChange}
                             /><br />
-                            {formErrors.street && formErrors.street}
-                        </div>
+                           <span  className="error">{formErrors.street && formErrors.street}</span> 
+                        </div >
                         <div class="col-md-4">
                             <label htmlFor="Pincode">pincode</label><br />
                             <input type="text"
@@ -273,7 +277,7 @@ const AddCustomer = () => {
                                 id="Pincode"
                                 name='pincode'
                                 onChange={handleChange} />
-                            {formErrors.pincode && formErrors.pincode}
+                          <span className="error"> {formErrors.pincode && formErrors.pincode}</span> 
                         </div>
 
                         <div class="col-md-4">
@@ -285,7 +289,7 @@ const AddCustomer = () => {
                                 id="city"
                                 name='city'
                                 onChange={handleChange} />
-                            {formErrors.city && formErrors.city}
+                            <span className="error">{formErrors.city && formErrors.city}</span>
                         </div>
                         <div class="col-md-4">
                             <label htmlFor="state">State</label><br />
@@ -296,12 +300,13 @@ const AddCustomer = () => {
                                 id="state"
                                 name='state'
                                 onChange={handleChange} /><br />
-                            {formErrors.state && formErrors.state}<br />
+                           <span className="error">{formErrors.state && formErrors.state}</span> <br />
                         </div>
                         
                         <div class="col-12">
                             <input type='submit' />
                         </div>
+                        <p>{serverErrors}</p>
                     </form>
                
             </div>

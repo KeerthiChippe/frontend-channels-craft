@@ -117,12 +117,9 @@ const Navbar = () =>{
     useEffect(()=>{
         if(localStorage.getItem('token')){
             const {role} = jwtDecode(localStorage.getItem("token"))
-            console.log(role, "345")
             setUserRole(role)
         }
     }, [localStorage.getItem('token')])
-
-    console.log(userRole, "45")
 
     
     const navbarCondition = () => {
@@ -140,7 +137,8 @@ const Navbar = () =>{
         // }
         // return null; // Return null if userState or userDetails are not defined
     }
-    console.log(userState.isLoggedIn, "logged")
+
+    
     return (
         <div>
             {!userState.isLoggedIn ? (

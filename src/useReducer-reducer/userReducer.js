@@ -15,6 +15,9 @@ const userReducer = (state, action) =>{
         case "SET_CUSTOMER_IMAGE": {
             return {...state, customer: {...state.customer, image: action.payload}}
         }
+        case "SET_OPERATOR_IMAGE": {
+            return {...state, operator: {...state.operator, image: action.payload}}
+        }
     }
 }
 

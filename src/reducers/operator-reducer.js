@@ -1,4 +1,4 @@
-const operatorInitialState ={data :[]}
+const operatorInitialState ={data :[] ,serverErrors:[]}
 
 const operatorReducer = (state = operatorInitialState , action) =>{
     switch (action.type){
@@ -6,7 +6,6 @@ const operatorReducer = (state = operatorInitialState , action) =>{
             return{...state ,data:[...state.data, action.payload]}
         }
         case 'SET_OPERATOR': {
-            console.log(action.payload, "payload1")
             return {...state, data: action.payload}
         }
         case 'REMOVE_OPERATOR':{
@@ -22,6 +21,11 @@ const operatorReducer = (state = operatorInitialState , action) =>{
                     return {...operator}
                 }
             })}
+        }
+        case 'SET_SERVER_ERRORS':{
+            return{
+                ...state , serverErrors:action.payload
+            }
         }
         default:{
 

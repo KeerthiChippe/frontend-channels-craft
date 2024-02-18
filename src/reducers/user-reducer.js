@@ -1,4 +1,4 @@
-const userIntialState = { data: [] }
+const userIntialState = { data: [] ,serverErrors:[] }
 
 const userReducer = (state = userIntialState , action) =>{
     switch (action.type){
@@ -13,6 +13,11 @@ const userReducer = (state = userIntialState , action) =>{
                     return {...ele}
                 }
             })}
+        }
+        case 'SET_SERVER_ERRORS':{
+            return{
+                ...state , serverErrors:action.payload
+            }
         }
         default :{
             return state

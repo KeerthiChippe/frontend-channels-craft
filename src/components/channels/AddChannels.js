@@ -49,8 +49,9 @@ const AddChannel = (props)=>{
 
     const serverErrors = useSelector((state)=>{
         return state.channel.serverErrors
-    })
 
+    })
+    console.log(serverErrors)
 
     const handleSubmit = (e)=>{
         e.preventDefault()
@@ -96,29 +97,29 @@ const AddChannel = (props)=>{
                 <label className="label-custom" htmlFor="channelName">Channel Name</label>
                 <input className="input-custom" type='text' value={channelName} placeholder="channel name.." id="channelName" onChange={(e)=>{
                     setChannelName(e.target.value)
-                }} />
-                {formErrors.channelName && <span>{formErrors.channelName}</span>}<br />
+                }} /><br/>
+                {formErrors.channelName && <span className="error">{formErrors.channelName}</span>}<br />
             
                 <label className="label-custom" htmlFor="channelPrice">Channel Price</label>
                 <input className="input-custom" type='number' value={channelPrice} placeholder="channel price.." id="channelPrice" onChange={(e)=>{
                     setChannelPrice(e.target.value)
-                }} />
-                {formErrors.channelPrice && <span>{formErrors.channelPrice}</span>}<br />
+                }} /><br/>
+                {formErrors.channelPrice && <span className="error">{formErrors.channelPrice}</span>}<br />
 
             
                 <label className="label-custom" htmlFor="channelNumber">Channel Number</label>
                 <input className="input-custom" type="number" value={channelNumber} placeholder="channel number.." id="channelNumber" onChange={(e)=>{
                     setChannelNumber(e.target.value)
-                }} />
-                {formErrors.channelNumber && <span>{formErrors.channelNumber}</span> }
+                }} /><br/>
+                {formErrors.channelNumber && <span className="error">{formErrors.channelNumber}</span> }
 
 
                 <label className="label-custom" htmlFor="language">Language</label>
                 <input className="input-custom" type='text' value={language} placeholder="language.." id="language" onChange={(e)=>{
 
                     setLanguage(e.target.value)
-                }} />
-                {formErrors.language && <span>{formErrors.language}</span>} <br />
+                }} /><br/>
+                {formErrors.language && <span className="error">{formErrors.language}</span>} <br />
                 <br/>
                 <div>
 
@@ -129,7 +130,7 @@ const AddChannel = (props)=>{
                 </div><br/>
 
                 <input className="button" type='submit' />
-                  
+                  <p>{serverErrors}</p>
                 {/* {/* {serverErrors.map((ele, index)=>(
                  <div key={index}>{ele.msg}</div> */}
              

@@ -114,7 +114,7 @@ export default function Register({ registerToast }) {
               }}
             />
           </div>
-          {formErrors.username && <span>{formErrors.username}</span>}
+          {formErrors.username && <span className="error">{formErrors.username}</span>}
           <br />
 
           <div>
@@ -129,7 +129,7 @@ export default function Register({ registerToast }) {
               }}
             />
           </div>
-          {formErrors.email && <span>{formErrors.email}</span>}
+          {formErrors.email && <span className="error">{formErrors.email}</span>}
           <br />
 
           <div>
@@ -143,9 +143,8 @@ export default function Register({ registerToast }) {
                 setMobile(e.target.value)
               }}
             /><br/>
-            {formErrors.mobile && <span>{formErrors.mobile}</span>}
+            {formErrors.mobile && <span className="error">{formErrors.mobile}</span>}
           </div>
-          <br/>
           <div>
             <label style={{ fontWeight: 'bold' }} htmlFor="password">Password</label><br />
             <input
@@ -158,14 +157,14 @@ export default function Register({ registerToast }) {
               }}
             />
           </div>
-          {formErrors.password && <span>{formErrors.password}</span>}
+          {formErrors.password && <span className="error">{formErrors.password}</span>}
           <br />
 
           <div>
             <input type="submit" value="create" className="btn btn-success" />
           </div>
           {formErrors.serverErrors && (
-            <ul>
+            <ul className="error">
               {formErrors.serverErrors.map((error, index) => (
                 <li key={index}>{error.msg}</li>
               ))}
