@@ -26,15 +26,15 @@ export default function AdminNavbar() {
                 <div className="container-fluid">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <Link className="navbar-brand" to="/">
-                            <img src={logo} alt="Channel Craft Logo" className='rounded-circle' style={{ width: '60px', height: '60px' }}/>
+                            <img src={logo} alt="Channel Craft Logo" className='rounded-circle' style={{ width: '60px', height: '60px' }} />
                         </Link>
                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"></span>
                         </button>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                            <li>
+                            {/* <li>
                                 <Link className="nav-link active" aria-current="page" to="/">Home</Link>
-                            </li>
+                            </li> */}
                             <li className="nav-item">
                                 <Link className="nav-link active" aria-current="page" to="/register">Create Account</Link>
                             </li>
@@ -59,9 +59,16 @@ export default function AdminNavbar() {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/packcha">Packages & Channels</Link>
                             </li>
-                            <li className="nav-item">
+                            {/* <li className="nav-item">
                                 <Link className="nav-link" to="/orderslist">Orders</Link>
-                            </li>
+                            </li> */}
+
+
+
+                        </div>
+                    </ul>
+                    <div className="d-flex">
+                        <ul className="navbar-nav">
                             <li className="nav-item">
                                 <Link className="nav-link" to="/dashboard">Dashboard</Link>
                             </li>
@@ -71,9 +78,8 @@ export default function AdminNavbar() {
                                 </li>
                             )}
 
-                        </div>
-                    </ul>
-
+                        </ul>
+                    </div>
                 </div>
             </nav>
         </div>

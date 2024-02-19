@@ -8,6 +8,9 @@ const OperatorDashboard = () => {
     const [paymentDetails, setPaymentDetails] = useState(null)
     const [activateSubscription, setActivateSubscription] = useState(false)
 
+    const operator = useSelector((state)=>{
+        return state.operator
+    })
     useEffect(()=>{
         const fetchPaymentDetails = async ()=>{
             try{

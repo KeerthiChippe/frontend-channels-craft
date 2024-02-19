@@ -16,7 +16,7 @@ const OperatorContainer =(props) =>{
         <div>
              <Row className="row">
             <Col md={5}>
-            <Operator addOperator={addOperator}/>
+            <Operator />
             </Col>
             <Col md={7}  >
             <OperatorList />

@@ -27,6 +27,7 @@ export default function CustomerNavbar() {
         })
         // window.location.reload()
     }
+    
     // rgba(57, 123, 177, 0.2)
     // "rgba(11, 48, 194, 0.2)" 
     // style={{ backgroundColor: "rgba(11, 48, 194, 0.2)" }}
@@ -43,9 +44,9 @@ export default function CustomerNavbar() {
                             <span className="navbar-toggler-icon"></span>
                         </button>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                            <li>
+                            {/* <li>
                                 <Link className="nav-link active" aria-current="page" to="/">Home</Link>
-                            </li>
+                            </li> */}
                             {isEmpty(localStorage.getItem('token')) && (
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/login">Login</Link>
@@ -56,22 +57,28 @@ export default function CustomerNavbar() {
                                 <Link className="nav-link" to="/packcha">Packages & Channels</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/cart">Cart</Link>
+                                <Link className="nav-link" to="/yourOrders">Your orders</Link>
                             </li>
-
+ </div>
+                    </ul>
+                    <div className="d-flex">
+                            <ul className="navbar-nav">
                             <li className="nav-item">
-                                <Link className="nav-link" to="/customerProfile">
-                                    <i className="bi bi-person-circle fs-5"></i>
-                                </Link>
-                            </li>
-                            {!isEmpty(localStorage.getItem('token')) && (
+                    <Link className="nav-link" to="/cart"><i className="bi bi-cart-fill fs-5"></i>({cartTotal})</Link>
+                </li>
                                 <li className="nav-item">
+                                    <Link className="nav-link" to="/customerProfile">
+                                        <i className="bi bi-person-circle fs-5"></i>
+                                    </Link>
+                                </li>
+                                {!isEmpty(localStorage.getItem('token')) && (
+                                    <li className="nav-item">
                                     <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
                                 </li>
-                            )}
-
+                                )}
+                                
+                            </ul>
                         </div>
-                    </ul>
 
                 </div>
             </nav>

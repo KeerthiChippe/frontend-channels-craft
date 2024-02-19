@@ -9,7 +9,7 @@ export const startAddOperator = (data, resetForm) => {
                     Authorization: localStorage.getItem('token')
                 }
             })
-            dispatch(addOperator(response.data))
+            dispatch(addOperators(response.data))
             resetForm()
         } catch (err) {
             dispatch(serverErrors(err.response.data.errors))
@@ -21,7 +21,7 @@ const serverErrors = (msg) => {
     return { type: 'SET_SERVER_ERRORS', payload: msg }
 }
 
-const addOperator = (operatorData) => {
+const addOperators = (operatorData) => {
     return {
         type: 'ADD_OPERATOR',
         payload: operatorData

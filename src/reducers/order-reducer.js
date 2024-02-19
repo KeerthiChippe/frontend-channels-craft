@@ -8,7 +8,7 @@ export const orderReducer = (state = ordersInitialState, action) =>{
         }
         case 'SET_ORDER': {
             // console.log(action.payload, "payload date")
-            return {...state, paid: [...state.paid, ...action.payload]}
+            return {...state, paid: action.payload}
         }
         case 'GET_ALL_ORDERS': {
             // console.log(action.payload, 'orders of customers')
