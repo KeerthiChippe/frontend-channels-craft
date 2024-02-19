@@ -1,6 +1,6 @@
 import axios from "../config/axios";
 
-export const startAddPackage = (data, resetForm)=>{
+export const startAddPackage = (data, resetForm, addPackage)=>{
     return async(dispatch)=>{
         try{
             const response = await axios.post('/api/packages', data, {
@@ -8,8 +8,9 @@ export const startAddPackage = (data, resetForm)=>{
                     Authorization: localStorage.getItem('token')
                 }
             })
-            dispatch(addPackage(response.data))
+            dispatch(addPackages(response.data))
             resetForm()
+            addPackage()
         }catch(e){
             console.log(e, "error")
             dispatch(serverErrors(e.response.data.errors))
@@ -24,7 +25,7 @@ const serverErrors = (msg)=>{
         }
 }
 
-const addPackage = (data)=>{
+const addPackages = (data)=>{
     return {
         type: 'ADD_PACKAGE',
         payload: data

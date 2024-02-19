@@ -275,7 +275,7 @@ const OperatorList = () => {
             <Row>
                 <Col>
                     <input type='text' value={search} onChange={handleSearch} placeholder="Search by operator name" />
-                    <Form>
+                    {/* <Form>
                         <FormGroup>
                             <Label for="sort">Sort Order:</Label>
                             <Input type="select" name="sort" id="sortOrder" value={sort} onChange={handleSort}>
@@ -283,7 +283,7 @@ const OperatorList = () => {
                                 <option value="desc">Z-A</option>
                             </Input>
                         </FormGroup>
-                    </Form>
+                    </Form> */}
                     <Table striped bordered>
                         <thead>
                             <tr>

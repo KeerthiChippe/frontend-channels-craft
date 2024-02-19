@@ -19,8 +19,6 @@ const AddChannel = (props)=>{
     const [language, setLanguage] = useState('')
     const [image, setImage] = useState(null)
     const [formErrors, setFormErrors] = useState([])
-   
-    // const [selectedPackage, setSelectedPackage] = useState(false)
 
     const errors = {}
 
@@ -51,7 +49,7 @@ const AddChannel = (props)=>{
         return state.channel.serverErrors
 
     })
-    console.log(serverErrors)
+    // console.log(serverErrors)
     const resetForm = ()=>{
         setChannelName('')
         setChannelPrice('')
@@ -73,29 +71,14 @@ const AddChannel = (props)=>{
                formData.append(" isHD",  isHD)
                formData.append("file", image)
 
-            dispatch(startAddChannel(formData, resetForm))
-            addChannel()
-            // .then(()=>{
-            //     setChannelName('')
-            //     setChannelPrice('')
-            //     setChannelName('')
-            //     setLanguage('')
-            //     setIsHD('')
-            // }).catch((error) =>{
-            //     if (error.response && error.response.data) {
-            //         dispatch(serverErrors(error.response.data.errors || []));
-            //         console.log(error.response.data.errors, "kkkkk")
-            //     }else {
-            //         console.error("Unexpected error:", error);
-            //     }
-            // })
+            dispatch(startAddChannel(formData, resetForm, addChannel))
+            setFormErrors([])
         }else{
             setFormErrors(errors)
         }
 
     }
-
-    
+   
     return(
 
         <div className=" mt-5 baby-custom container-custom">

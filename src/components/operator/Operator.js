@@ -14,7 +14,7 @@ const Operator = (props) => {
     const dispatch = useDispatch()
 
     const user = useSelector((state) => {
-        return state.user.data
+        return state.user.data || []
     })
 
     useEffect(()=>{
@@ -68,8 +68,8 @@ const Operator = (props) => {
                 city: city,
                 userId: userId,
             }
-            dispatch(startAddOperator(operatorData, resetForm))
-            addOperator()
+            dispatch(startAddOperator(operatorData, resetForm, addOperator))
+            setFormErrors([])
         } else {
             setFormErrors(errors)
         }
@@ -109,11 +109,14 @@ const Operator = (props) => {
                 <br />
                 <select value={selectedUser} onChange={handleChange}>
                 <option value="" >Select a user...</option>
-                {user.map((user) => (
-                  <option key={user.id} value={user._id}>
-                    {user.username}
-                  </option>
-                ))}
+                {user.map((user) => {
+                    if(user.role === 'operator'){
+                        return (<option key={user.id} value={user._id}>
+                        {user.username}
+                      </option>)
+                    }
+                 
+})}
               </select><br/>
               <br />
                 <label>Enter Operator Name</label><br />

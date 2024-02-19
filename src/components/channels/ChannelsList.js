@@ -6,6 +6,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap"
 import { OperatorContext } from "../profile/operatorContext"
 import { jwtDecode } from "jwt-decode"
 import { ClipLoader } from "react-spinners"
+import { Row, Col, Table, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 const ChannelsList = () => {
   const [editId, setEditId] = useState(null)
@@ -16,7 +17,10 @@ const ChannelsList = () => {
     channelPrice: "",
   })
   const [isLoading, setIsLoading] = useState(true)
-  
+  const [search, setSearch] = useState('');
+  const [sort, setSort] = useState('asc'); // Default sort order
+  const [currentPage, setCurrentPage] = useState(1); // Current page state
+  const [itemsPerPage, setItemsPerPage] = useState(10); // Items per page state
 
   const dispatch = useDispatch()
   const channels = useSelector((state) => state.channel.data)
@@ -88,13 +92,58 @@ const ChannelsList = () => {
     toggleModal()
   };
 
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+    setCurrentPage(1); // Reset current page when search changes
+};
+
+const filteredChannels = channels.filter((ele) =>
+        ele.channelName.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const handleSort = (e) => {
+      setSort(e.target.value);
+  };
+
+  const sortedChannels = [...filteredChannels].sort((a, b) => {
+    if (sort === 'asc') {
+        return a.channelName.localeCompare(b.channelName);
+    } else {
+        return b.channelName.localeCompare(a.channelName);
+    }
+});
+
+const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentChannels = sortedChannels.slice(indexOfFirstItem, indexOfLastItem);
+
+    const totalPages = Math.ceil(sortedChannels.length / itemsPerPage);
+
+    // Function to handle page change
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
   return (
     <div>
-      {!isLoading ? (
-    <div className="row g-3 d-flex-wrap" style={{ gap: "1rem", justifyContent: "center", alignItems: "center" }}>
+      {isLoading ? (
+        <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
+        <ClipLoader
+            color={"#7aa9ab"}
+            isLoading={isLoading}
+            size={30}
+        />
+    </div>
+    
+    ): (
+      <div className="row g-3 d-flex-wrap" style={{ gap: "1rem", justifyContent: "center", alignItems: "center" }}>
       <h3 style={{ textAlign: "center", padding: "2px" }}>CHANNELS</h3>
+      <div className="d-flex" style={{ marginBottom: "0rem" }}>
+        <input type='text' value={search} onChange={handleSearch} placeholder="Search by channel name" className="form-control me-2" style={{ width: "200px" }}/>
+        
+      </div>
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1 mt-2">
-        {channels.map((ele) => (
+        {currentChannels.map((ele) => (
           <div key={ele.id} style={{ padding: "5px", width: "fit-content" , height: "25rem"}}>
             <div className="card shadow-sm" style={{ width: "15rem", margin: "20px" }}>
               <img
@@ -174,15 +223,22 @@ const ChannelsList = () => {
           </form>
         </ModalBody>
       </Modal>
+      <Pagination>
+                        <PaginationItem disabled={currentPage === 1}>
+                            <PaginationLink previous onClick={() => handlePageChange(currentPage - 1)} />
+                        </PaginationItem>
+                        {[...Array(totalPages)].map((_, index) => (
+                            <PaginationItem key={index} active={index + 1 === currentPage}>
+                                <PaginationLink onClick={() => handlePageChange(index + 1)}>
+                                    {index + 1}
+                                </PaginationLink>
+                            </PaginationItem>
+                        ))}
+                        <PaginationItem disabled={currentPage === totalPages}>
+                            <PaginationLink next onClick={() => handlePageChange(currentPage + 1)} />
+                        </PaginationItem>
+                    </Pagination>
     </div>
-    ): (
-      <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
-                <ClipLoader
-                    color={"#7aa9ab"}
-                    isLoading={isLoading}
-                    size={30}
-                />
-            </div>
     )}
     </div>
   );

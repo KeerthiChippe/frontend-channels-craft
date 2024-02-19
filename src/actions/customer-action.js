@@ -8,7 +8,7 @@ export const startAddCustomer = (data, resetForm) => {
                     Authorization: localStorage.getItem('token')
                 }
             })
-            console.log(response.data)
+            console.log(response.data, 'customer')
             dispatch(addCustomer(response.data))
             resetForm()
         } catch (err) {

@@ -40,7 +40,7 @@ export const startGetOrder = () => {
                 }
             })
             dispatch(getOrder(response.data))
-            // console.log(response.data, "listorders")
+            console.log(response.data, "listorders")
         } catch (e) {
             console.log(e)
         }
