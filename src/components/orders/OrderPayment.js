@@ -51,7 +51,6 @@ const OrderDetails = ()=>{
                         <div>
                             Name of the package- {item.packageName}<br />
                             Price- {item.packagePrice} <br />
-                            channels- {item.selectedChannels.channelName}
                         </div>
 
                     </li>

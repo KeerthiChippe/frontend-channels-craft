@@ -32,9 +32,9 @@ export default function OperatorNavbar() {
                             <span className="navbar-toggler-icon"></span>
                         </button>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                            <li>
+                            {/* <li>
                                 <Link className="nav-link active" aria-current="page" to="/">Home</Link>
-                            </li>
+                            </li> */}
                             <li className="nav-item">
                                 <Link className="nav-link active" aria-current="page" to="/register">Create Account</Link>
                             </li>
@@ -53,7 +53,7 @@ export default function OperatorNavbar() {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/order">order</Link>
                             </li>
-                            <li className="nav-item">
+                            {/* <li className="nav-item">
                                 <Link className="nav-link" to="/operatorDashboard">Dashboard</Link>
                             </li>
                             <li className="nav-item">
@@ -65,11 +65,31 @@ export default function OperatorNavbar() {
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
                                 </li>
-                            )}
+                            )} */}
+
+                            
 
                         </div>
                     </ul>
 
+                    <div className="d-flex">
+                            <ul className="navbar-nav">
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/operatorDashboard">Dashboard</Link>
+                            </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/profile">
+                                        <i className="bi bi-person-circle fs-5"></i>
+                                    </Link>
+                                </li>
+                                {!isEmpty(localStorage.getItem('token')) && (
+                                    <li className="nav-item">
+                                    <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
+                                </li>
+                                )}
+                                
+                            </ul>
+                        </div>
                 </div>
             </nav>
         </div>

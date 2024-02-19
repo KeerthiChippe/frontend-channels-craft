@@ -35,6 +35,8 @@ import Cart from "./components/orders/Cart";
 import OrderPayment from "./components/orders/OrderPayment";
 import AdminDashboard from "./Dashboard/Dashboard";
 import OperatorDashboard from "./components/operator/OperatorDashboard";
+import PrivateRoute from "./Home/navbar/PrivateRoute";
+import ExpiredOrders from "./components/profile/ExpiredOrders";
 
 function App(props) {
   const dispatch = useDispatch()
@@ -195,15 +197,28 @@ function App(props) {
           <Route path='/deletedPackages' element={<DeletedPackage />} />
           <Route path = '/customercontainer' element={<CustomerContainer addCustomer={addCustomer}/>} />
           <Route path='/profile' element={<OperatorProfile />} />
-          <Route path='/customerProfile' element={<CustomerProfile />} />
-          <Route path='/orderslist' element={<OrdersList />} />
+          <Route path='/customerProfile' element={
+            <PrivateRoute>
+              <CustomerProfile />
+            </PrivateRoute>
+          } />
+          {/* <Route path='/orderslist' element={<OrdersList />} /> */}
           <Route path='/order' element={<CreateOrder />} />
-          <Route path='/cart' element={<Cart />} />
+          <Route path='/cart' element={
+            <PrivateRoute>
+              <Cart />
+            </PrivateRoute>
+          } />
           <Route path='/failure' element={<Failure />} />
           <Route path='/success' element={<Success />} />
           <Route path='/dashboard' element={<AdminDashboard />} />
-          <Route path='/operatorDashboard' element={<OperatorDashboard />} />
+          <Route path='/operatorDashboard' element={
+            <PrivateRoute>
+              <OperatorDashboard />
+            </PrivateRoute>
+          } />
           <Route path='/orderpay' element={<OrderPayment />} />
+          <Route path='/yourOrders' element={<ExpiredOrders />} />
         </Routes>
        
       </div>

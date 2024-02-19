@@ -1,3 +1,22 @@
+{order.paid?.map(ele => ele.packages.map((pack) => {
+  console.log(order.paid, "pay pack")
+  const originalDate = new Date(ele.orderDate);
+  const futureDate = addDays(originalDate, 30);
+  const formattedDate = format(futureDate, 'yyyy-MM-dd');
+  return (
+    <Col key={pack._id} sm={6}>
+      <Card className="mb-3">
+        <Card.Body>
+          <Card.Title>{pack.packageId?.packageName}</Card.Title>
+          <Card.Text>
+            Expiry Date: {formattedDate}
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    </Col>
+  );
+}))}
+
 
 
       

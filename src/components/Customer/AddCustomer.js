@@ -16,7 +16,7 @@ const AddCustomer = ({addCustomer}) => {
     })
 
     const serverErrors = useSelector((state) => state.serverErrors)
-    console.log(serverErrors)
+    // console.log(serverErrors)
     const operator = useSelector((state) => {
         return state.operator.data
     })
@@ -119,7 +119,7 @@ const AddCustomer = ({addCustomer}) => {
 
             }
             dispatch(startAddCustomer(formData, resetForm))
-            addCustomer()
+            // addCustomer()
                 // .then(() => {
                 //     setCustomerName('')
                 //     setMobile('')

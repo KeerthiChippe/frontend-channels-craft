@@ -52,20 +52,10 @@ const AddPackage = (props) => {
         e.preventDefault()
         runValidation()
 
-        // const resetForm = ()=>{
-        //     setPackageName('')
-        //     setPackagePrice('')
-        //     setImage(null)
-        //     setSelectedChannels([]);
-        //     setImage(null);
-        //     setFormErrors({}); 
-        // }
-
         if (Object.keys(errors).length === 0) {
             const formData = new FormData()
             formData.append("packageName", packageName)
             formData.append("packagePrice", packagePrice)
-            // formData.append("selectedChannels", selectedChannels)
             formData.append("file", image)
 
             // selectedChannels: selectedChannels ? selectedChannels.map(channel => channel.value) : null
@@ -74,9 +64,9 @@ const AddPackage = (props) => {
                     formData.append(`selectedChannels[${index}]`, channel.value);
                 })
             }
-            // console.log(formData)
-            dispatch(startAddPackage(formData, resetForm))
-            addPackage()
+            
+            dispatch(startAddPackage(formData, resetForm, addPackage))
+            setFormErrors([])
         } else {
             setFormErrors(errors)
         }

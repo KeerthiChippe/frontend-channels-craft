@@ -6,6 +6,8 @@ import { deletePackageOne, selectedPackageOne } from "../../actions/order-action
 import { OperatorContext } from "../profile/operatorContext";
 import { jwtDecode } from "jwt-decode";
 import { FadeLoader, ClipLoader } from "react-spinners";
+import { Form, FormGroup, Input, Label } from "reactstrap";
+import { Row, Col, Table, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 
 const ListPackages = () => {
@@ -19,6 +21,12 @@ const ListPackages = () => {
   const [formData, setFormData] = useState({
     packagePrice: "",
   });
+
+  const [search, setSearch] = useState('');
+  const [sort, setSort] = useState('asc'); // Default sort order
+  const [currentPage, setCurrentPage] = useState(1); // Current page state
+  const [itemsPerPage, setItemsPerPage] = useState(10); // Items per page state
+
  
   useEffect(()=>{
     if(localStorage.getItem('token')){
@@ -110,16 +118,75 @@ const ListPackages = () => {
     // toggleModal(false); // Close edit modal if it's open
 
   }
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+    setCurrentPage(1); // Reset current page when search changes
+};
+
+const filteredPackages = packages.filter((ele) =>
+        ele.packageName.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const handleSort = (e) => {
+      setSort(e.target.value);
+  };
+
+  const sortedPackages = [...filteredPackages].sort((a, b) => {
+    if (sort === 'asc') {
+        return a.packageName.localeCompare(b.packageName);
+    } else {
+        return b.packageName.localeCompare(a.packageName);
+    }
+});
+
+const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentPackages = sortedPackages.slice(indexOfFirstItem, indexOfLastItem);
+
+    const totalPages = Math.ceil(sortedPackages.length / itemsPerPage);
+
+    // Function to handle page change
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
   
   return (
     
     <div>
       
-    {!isLoading ? (
+    {isLoading ? (
+      <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
+      <ClipLoader
+          color={"#7aa9ab"}
+          isLoading={isLoading}
+          size={30}
+      />
+  </div>
+
+     
+     ) : (
+      
       <div className="row g-3 d-flex-wrap" style={{ gap: "1rem", justifyContent: "center", alignItems: "center" }}>
+        
       <h3 style={{ marginLeft: "400px", padding: "2px" }}>PACKAGES</h3>
+      <div className="d-flex" style={{ marginBottom: "0rem" }}>
+        <input type='text' value={search} onChange={handleSearch} placeholder="Search by package name" className="form-control me-2" style={{ width: "200px" }}/>
+        
+      </div>
+      {/* <input type='text' value={search} onChange={handleSearch} placeholder="Search by package name" className="form-control" style={{ width: "150px" }}/> */}
+                    {/* <Form>
+                        <FormGroup>
+                            <Label for="sort">Sort Order:</Label>
+                            <Input type="select" name="sort" id="sortOrder" value={sort} onChange={handleSort} className="form-select" style={{ width: "150px" }}>
+                                <option value="asc">A-Z</option>
+                                <option value="desc">Z-A</option>
+                            </Input>
+                        </FormGroup>
+                    </Form> */}
+                   
       <div className="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-1 mt-2">
-        {packages.map((ele) => (
+        {currentPackages.map((ele) => (
           <div key={ele.id} style={{ padding: "5px", width: "fit-content", height: "25rem" }}>
             <div className="card shadow-sm" style={{ width: "15rem", margin: "20px" }}>
               <img
@@ -229,17 +296,24 @@ const ListPackages = () => {
           )}
         </ModalBody>
       </Modal>
+      <Pagination>
+                        <PaginationItem disabled={currentPage === 1}>
+                            <PaginationLink previous onClick={() => handlePageChange(currentPage - 1)} />
+                        </PaginationItem>
+                        {[...Array(totalPages)].map((_, index) => (
+                            <PaginationItem key={index} active={index + 1 === currentPage}>
+                                <PaginationLink onClick={() => handlePageChange(index + 1)}>
+                                    {index + 1}
+                                </PaginationLink>
+                            </PaginationItem>
+                        ))}
+                        <PaginationItem disabled={currentPage === totalPages}>
+                            <PaginationLink next onClick={() => handlePageChange(currentPage + 1)} />
+                        </PaginationItem>
+                    </Pagination>
     </div>
-     ) : (
-       <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
-                <ClipLoader
-                    color={"#7aa9ab"}
-                    isLoading={isLoading}
-                    size={30}
-                />
-            </div>
-    )}
-    </div>
+       )}
+       </div>
   );
 };
 

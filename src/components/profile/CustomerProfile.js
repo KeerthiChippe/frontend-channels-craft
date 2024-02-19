@@ -22,6 +22,7 @@ const CustomerProfile = () => {
   const dispatch = useDispatch();
   const {id} = useParams()
 
+  const [isLoading, setIsLoading] = useState(true)
   const { userState, userDispatch } = useContext(OperatorContext);
   
   const order = useSelector((state) => {
@@ -80,7 +81,10 @@ const CustomerProfile = () => {
       setRole(userState.userDetails.role)
     }
   }, [userState.userDetails.role])
- 
+
+  useEffect(() => {
+    setIsLoading(false); // Once data is fetched, set isLoading to false
+  }, [userState]); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -194,6 +198,7 @@ const CustomerProfile = () => {
 
   return (
     <div className=" d-flex justify-content-center align-items-center">
+      {!isLoading ? (
       <Row>
       <Col>
        
@@ -365,9 +370,10 @@ const CustomerProfile = () => {
                 
               <Calendar formattedDates={formattedDates} />
 
-              {/* {order.paid ? (
+              {/* <h4>Current packages</h4>
+              {order.paid && order.paid.length > 0 ? (
                 <div>
-                  <h4>Current packages</h4>
+                  
 
                   <ul>
 
@@ -392,9 +398,10 @@ const CustomerProfile = () => {
               )}
               <br />
 
-              {order.paid ? (
+              <h4>Current channels</h4>
+              {order.paid && order.paid.length > 0 ? (
                 <div>
-                  <h4>Current channels</h4>
+                  
                   <ul>
                     {order.paid?.map(ele => ele.channels?.map((chan) => {
                       const originalDate = new Date(ele.orderDate);
@@ -415,13 +422,14 @@ const CustomerProfile = () => {
               )} */}
             
 
-            {order.paid ? (
+            {order.paid && order.paid.length > 0 ? ( 
   <div className="current">
     <Row>
       <Col>
         <h4>Current packages</h4>
+        {/* {order.paid && order.paid.length > 0 ? ( */}
         <Row>
-          {order.paid.map(ele => ele.packages.map((pack) => {
+          {order.paid?.map(ele => ele.packages.map((pack) => {
             const originalDate = new Date(ele.orderDate);
             const futureDate = addDays(originalDate, 30);
             const formattedDate = format(futureDate, 'yyyy-MM-dd');
@@ -429,7 +437,7 @@ const CustomerProfile = () => {
               <Col key={pack._id} sm={6}>
                 <Card className="mb-3">
                   <Card.Body>
-                    <Card.Title>{pack.packageId.packageName}</Card.Title>
+                    <Card.Title>{pack.packageId?.packageName}</Card.Title>
                     <Card.Text>
                       Expiry Date: {formattedDate}
                     </Card.Text>
@@ -439,11 +447,17 @@ const CustomerProfile = () => {
             );
           }))}
         </Row>
+         {/* ): ( */}
+          {/* <p>No package available</p> */}
+        {/* )} */}
       </Col>
+     
       <Col>
         <h4>Current channels</h4>
-        <Row>
-          {order.paid.map(ele => ele.channels?.map((chan) => {
+        {/* {order.paid && order.paid.length > 0 ? ( */}
+          <Row>
+          {order.paid?.flatMap(ele => ele.channels?.map((chan) => {
+            console.log(chan.channelId.channelName, 'pay chan')
             const originalDate = new Date(ele.orderDate);
             const futureDate = addDays(originalDate, 30);
             const formattedDate = format(futureDate, 'yyyy-MM-dd');
@@ -461,28 +475,33 @@ const CustomerProfile = () => {
             );
           }))}
         </Row>
+        {/* ) : ( */}
+          {/* <p>No channel available</p> */}
+        {/* )} */}
+        
       </Col>
     </Row>
   </div>
-) : (
-  <p>No packages or channels available</p>
-)}
+ ) : ( 
+   <p>No packages or channels available</p>
+ )} 
 
             </div>
             
-          )}
+          )} 
           
         </Col>
       </Row>
-      {/* ) : (
+       ) : (
         <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
     <ClipLoader
         color={"#7aa9ab"}
         isLoading={isLoading}
         size={30}
     />
-</div> */}
-      {/* )} */}
+</div>
+
+       )} 
       
     </div>
   );
