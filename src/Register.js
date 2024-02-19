@@ -147,6 +147,7 @@ export default function Register({ registerToast }) {
             /><br/>
             {formErrors.mobile && <span className="error">{formErrors.mobile}</span>}
           </div>
+          <br/>
           <div>
             <label style={{ fontWeight: 'bold' }} htmlFor="password">Password</label><br />
             <input

@@ -168,20 +168,19 @@ const CustomerProfile = () => {
   const calculateFormattedDates = () => {
     if (order.paid) {
       const formattedDates = order.paid.reduce((acc, ele) => {
-        // Loop through packages
+        
         ele.packages?.forEach((pack) => {
           const originalDate = new Date(ele.orderDate);
           const futureDate = addDays(originalDate, 30);
           const formattedDate = format(futureDate, 'yyyy-MM-dd');
-          // Push package expiry date along with package name to the accumulator
+        
           acc.push({ type: 'package', name: pack.packageId?.packageName, expiryDate: formattedDate });
         });
-        // Loop through channels
+        
         ele.channels?.forEach((chan) => {
-          const originalDate = new Date(ele.orderDate);
-          const futureDate = addDays(originalDate, 30);
-          const formattedDate = format(futureDate, 'yyyy-MM-dd');
-          // Push channel expiry date along with channel name to the accumulator
+          const originalDate = new Date(ele.orderDate)
+          const futureDate = addDays(originalDate, 30)
+          const formattedDate = format(futureDate, 'yyyy-MM-dd')
           acc.push({ type: 'channel', name: chan.channelId?.channelName, expiryDate: formattedDate });
         });
         return acc;
