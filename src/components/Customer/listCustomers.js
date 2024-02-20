@@ -65,7 +65,7 @@ const CustomerList =() =>{
 
     return(
         <div>
-            <input type='text' value={search} onChange={handleSearch} placeholder="Search by customer name" />
+            <input  type='text' value={search} onChange={handleSearch} placeholder="Search by customer name" />
             <Form>
                         <FormGroup>
                             <Label for="sort">Sort Order:</Label>

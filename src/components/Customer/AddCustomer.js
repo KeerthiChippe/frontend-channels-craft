@@ -7,7 +7,7 @@ import { startGetOperator } from "../../actions/operator-action"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-const AddCustomer = ({addCustomer}) => {
+const AddCustomer = ({ addCustomer }) => {
     const dispatch = useDispatch()
 
     const user = useSelector((state) => {
@@ -15,8 +15,8 @@ const AddCustomer = ({addCustomer}) => {
         return state.user.data
     })
 
-    const serverErrors = useSelector((state) => state.serverErrors)
-    // console.log(serverErrors)
+    const serverErrors = useSelector((state) => state.customer.serverErrors)
+    console.log(serverErrors)
     const operator = useSelector((state) => {
         return state.operator.data
     })
@@ -25,7 +25,7 @@ const AddCustomer = ({addCustomer}) => {
         dispatch(startGetUser())
         dispatch(startGetOperator())
     }, [dispatch])
-  
+
     const [customerName, setCustomerName] = useState('')
     const [mobile, setMobile] = useState('')
     const [boxNumber, setBoxNumber] = useState('')
@@ -43,7 +43,7 @@ const AddCustomer = ({addCustomer}) => {
     })
     const errors = {}
 
-    
+
     function runValidation() {
         if (_.isEmpty(customerName.trim())) {
             errors.customerName = "customerName is required"
@@ -80,12 +80,12 @@ const AddCustomer = ({addCustomer}) => {
         }
     }
 
-    
+
     const handleChange = (e) => {
         setAddress({ ...address, [e.target.name]: e.target.value })
     }
 
-    const resetForm = ()=>{
+    const resetForm = () => {
         setCustomerName('')
         setMobile('')
         setBoxNumber('')
@@ -120,25 +120,25 @@ const AddCustomer = ({addCustomer}) => {
             }
             dispatch(startAddCustomer(formData, resetForm))
             // addCustomer()
-                // .then(() => {
-                //     setCustomerName('')
-                //     setMobile('')
-                //     setBoxNumber('')
-                //     setAddress({
-                //         doorNumber: '',
-                //         street: '',
-                //         city: '',
-                //         state: '',
-                //         pincode: ''
-                //     })
+            // .then(() => {
+            //     setCustomerName('')
+            //     setMobile('')
+            //     setBoxNumber('')
+            //     setAddress({
+            //         doorNumber: '',
+            //         street: '',
+            //         city: '',
+            //         state: '',
+            //         pincode: ''
+            //     })
 
-                // }).catch((error) => {
-                //     if (error.response && error.response.data) {
-                //         dispatch(serverErrors(error.response.data.errors || []))
-                //     } else {
-                //         console.error("Unexpected error:", error);
-                //     }
-                // })
+            // }).catch((error) => {
+            //     if (error.response && error.response.data) {
+            //         dispatch(serverErrors(error.response.data.errors || []))
+            //     } else {
+            //         console.error("Unexpected error:", error);
+            //     }
+            // })
         } else {
             setFormErrors(errors)
         }
@@ -149,12 +149,6 @@ const AddCustomer = ({addCustomer}) => {
         setUserId(user)
     }
 
-    // const handleOperator = (e) => {
-    //     let operator = e.target.value
-    //     setSelectedOperator(operator)
-    //     setOperatorId(operator)
-    // }
-   
 
     useEffect(() => {
         if (selectedUser) {
@@ -182,6 +176,7 @@ const AddCustomer = ({addCustomer}) => {
             }
         } catch (error) {
             console.error("Error fetching city and state:", error);
+
         }
     };
 
@@ -197,134 +192,128 @@ const AddCustomer = ({addCustomer}) => {
 
         <div className="container mt-5 d-flex justify-content-center" >
 
-                    <form onSubmit={handleSubmit} class="row g-3"  >
-                        <h3 style={{marginLeft:"120px"}}>Add Customer</h3>
-                        <label>Select User</label><br />
-                        <select class="form-select" aria-label="Default select example" value={selectedUser} onChange={handleUser}>
-                            <option value="" >Select a User</option>
-                            {user.map(user => <option key={user.id} value={user._id}>{user.username}</option>)}
-                        </select><br />
-                        <br />
-                        {/* <label className="dropdown">Select Operator</label><br />
-                        <select class="form-select" aria-label="Default select example" value={selectedOperator} onChange={handleOperator}>
-                            <option value="">Select operator</option>
-                            {operator?.map(operator => <option key={operator.id} value={operator._id}>{operator.operatorName} </option>)}
-                        </select><br /> */}
+            <form onSubmit={handleSubmit} class="row g-3"  >
+                <h3 style={{ marginLeft: "120px" }}>Add Customer</h3>
+                <label>Select User</label><br />
+                <select class="form-select" aria-label="Default select example" value={selectedUser} onChange={handleUser}>
+                    <option value="" >Select a User</option>
+                    {user.map(user => <option key={user.id} value={user._id}>{user.username}</option>)}
+                </select><br />
+                <br />
 
-                        <br />
-                        <div class="col-md-6">
-                            <label htmlFor="customerName">Name</label>
-                            <input type="text"
-                                value={customerName}
-                                class="form-control"
-                                placeholder="Name"
-                                id="customerName"
-                                onChange={(e) => {
-                                    setCustomerName(e.target.value)
-                                }}
-                                disabled
-                            />
-                           <span className="error"> {formErrors.customerName && formErrors.customerName}</span>
-                        </div>
-                        <div class="col-md-6">
-                            <label htmlFor="mobile">Mobile</label>
-                            <input type="text"
-                                value={mobile}
-                                class="form-control"
-                                placeholder="Mobile"
-                                id="mobile"
-                                onChange={(e) => {
-                                    setMobile(e.target.value)
-                                }}
-                                disabled
-                            />
+                <div class="col-md-6">
+                    <label htmlFor="customerName">Name</label>
+                    <input type="text"
+                        value={customerName}
+                        class="form-control"
+                        placeholder="Name"
+                        id="customerName"
+                        onChange={(e) => {
+                            setCustomerName(e.target.value)
+                        }}
+                        disabled
+                    />
+                    <span className="error"> {formErrors.customerName && formErrors.customerName}</span>
+                </div>
+                <div class="col-md-6">
+                    <label htmlFor="mobile">Mobile</label>
+                    <input type="text"
+                        value={mobile}
+                        class="form-control"
+                        placeholder="Mobile"
+                        id="mobile"
+                        onChange={(e) => {
+                            setMobile(e.target.value)
+                        }}
+                        disabled
+                    />
 
-                            <span className="error">{formErrors.mobile && formErrors.mobile}</span><br />
-                        </div>
-                        <div class="col-12">
-                            <label htmlFor="boxNumber">Box Number</label><br />
-                            <input type="text"
-                                value={boxNumber}
-                                class="form-control"
-                                placeholder="box Number"
-                                id="boxNumber"
-                                onChange={(e) => {
-                                    setBoxNumber(e.target.value)
-                                }}
-                            />
-                           <span className="error"> {formErrors.boxNumber && formErrors.boxNumber}</span>
-                        </div>
-                        <br />
-                        <label>ADDRESS</label><br />
+                    <span className="error">{formErrors.mobile && formErrors.mobile}</span><br />
+                </div>
+                <div class="col-12">
+                    <label htmlFor="boxNumber">Box Number</label><br />
+                    <input type="text"
+                        value={boxNumber}
+                        class="form-control"
+                        placeholder="box Number"
+                        id="boxNumber"
+                        onChange={(e) => {
+                            setBoxNumber(e.target.value)
+                        }}
+                    />
+                    <span className="error"> {formErrors.boxNumber && formErrors.boxNumber}</span>
+                </div>
+                <br />
+                <label>ADDRESS</label><br />
 
-                        <div class="col-md-6">
-                            <label htmlFor="doorNumber">Door Number</label><br />
-                            <input type="text"
-                                value={address.doorNumber}
-                                class="form-control"
-                                placeholder="DoorNumber"
-                                id="DoorNumber"
-                                name='doorNumber'
-                                onChange={handleChange}
-                            />
-                          <span className="error"> {formErrors.doorNumber && formErrors.doorNumber}</span> 
-                        </div>
+                <div class="col-md-6">
+                    <label htmlFor="doorNumber">Door Number</label><br />
+                    <input type="text"
+                        value={address.doorNumber}
+                        class="form-control"
+                        placeholder="DoorNumber"
+                        id="DoorNumber"
+                        name='doorNumber'
+                        onChange={handleChange}
+                    />
+                    <span className="error"> {formErrors.doorNumber && formErrors.doorNumber}</span>
+                </div>
 
-                        <div class="col-md-6">
-                            <label htmlFor="Street">Street</label>
-                            <input type="text"
-                                class="form-control"
-                                value={address.street}
-                                placeholder="Street"
-                                id="street"
-                                name='street'
-                                onChange={handleChange}
-                            /><br />
-                           <span  className="error">{formErrors.street && formErrors.street}</span> 
-                        </div >
-                        <div class="col-md-4">
-                            <label htmlFor="Pincode">pincode</label><br />
-                            <input type="text"
-                                value={address.pincode}
-                                class="form-control"
-                                placeholder="pincode"
-                                id="Pincode"
-                                name='pincode'
-                                onChange={handleChange} />
-                          <span className="error"> {formErrors.pincode && formErrors.pincode}</span> 
-                        </div>
+                <div class="col-md-6">
+                    <label htmlFor="Street">Street</label>
+                    <input type="text"
+                        class="form-control"
+                        value={address.street}
+                        placeholder="Street"
+                        id="street"
+                        name='street'
+                        onChange={handleChange}
+                    /><br />
+                    <span className="error">{formErrors.street && formErrors.street}</span>
+                </div >
+                <div class="col-md-4">
+                    <label htmlFor="Pincode">pincode</label><br />
+                    <input type="text"
+                        value={address.pincode}
+                        class="form-control"
+                        placeholder="pincode"
+                        id="Pincode"
+                        name='pincode'
+                        onChange={handleChange} />
+                    <span className="error"> {formErrors.pincode && formErrors.pincode}</span>
+                </div>
 
-                        <div class="col-md-4">
-                            <label htmlFor="city">city</label><br />
-                            <input type="text"
-                                value={address.city}
-                                class="form-control"
-                                placeholder="city"
-                                id="city"
-                                name='city'
-                                onChange={handleChange} />
-                            <span className="error">{formErrors.city && formErrors.city}</span>
-                        </div>
-                        <div class="col-md-4">
-                            <label htmlFor="state">State</label><br />
-                            <input type="text"
-                                value={address.state}
-                                class="form-control"
-                                placeholder="state"
-                                id="state"
-                                name='state'
-                                onChange={handleChange} /><br />
-                           <span className="error">{formErrors.state && formErrors.state}</span> <br />
-                        </div>
-                        
-                        <div class="col-12">
-                            <input type='submit' />
-                        </div>
-                        <p>{serverErrors}</p>
-                    </form>
-               
-            </div>
+                <div class="col-md-4">
+                    <label htmlFor="city">city</label><br />
+                    <input type="text"
+                        value={address.city}
+                        class="form-control"
+                        placeholder="city"
+                        id="city"
+                        name='city'
+                        onChange={handleChange} />
+                    <span className="error">{formErrors.city && formErrors.city}</span>
+                </div>
+                <div class="col-md-4">
+                    <label htmlFor="state">State</label><br />
+                    <input type="text"
+                        value={address.state}
+                        class="form-control"
+                        placeholder="state"
+                        id="state"
+                        name='state'
+                        onChange={handleChange} /><br />
+                    <span className="error">{formErrors.state && formErrors.state}</span> <br />
+                </div>
+                <p className="error">{serverErrors}</p>
+                <div class="col-12">
+                    <input type='submit' />
+                </div>
+
+            </form>
+
+        </div>
     )
-                            }
+}
 export default AddCustomer
 

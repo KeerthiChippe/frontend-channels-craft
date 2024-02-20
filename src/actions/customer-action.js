@@ -12,7 +12,8 @@ export const startAddCustomer = (data, resetForm) => {
             dispatch(addCustomer(response.data))
             resetForm()
         } catch (err) {
-            dispatch(serverErrors(err.response.data.errors))
+            console.log(err.response.data.errors[0].msg)
+            dispatch(serverErrors(err.response.data.errors[0].msg))
         }
 
     }
@@ -39,7 +40,7 @@ export const StartGetCustomer = () => {
                     Authorization: localStorage.getItem('token')
                 }
             })
-            console.log(response.data,"123")
+            // console.log(response.data,"123")
             dispatch(setCustomer(response.data))
         } catch (err) {
             console.log(err)
