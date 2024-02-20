@@ -10,8 +10,8 @@ const UserList = () =>{
 
     const [searchOperator, setSearchOperator] = useState('')
     const [searchCustomer, setSearchCustomer] = useState('')
-    const [sortOperator, setSortOperator] = useState('')
-    const [sortCustomer, setSortCustomer] = useState('')
+    const [sortOperator, setSortOperator] = useState('asc')
+    const [sortCustomer, setSortCustomer] = useState('asc')
     const [role, setRole] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
@@ -122,7 +122,7 @@ const UserList = () =>{
                 </tr>
             </thead>
             <tbody>
-        {user.filter((ele)=>{ 
+        {currentOperators.filter((ele)=>{ 
             return ele.role === 'operator'}).map((user) =>{
                return <tr key = {user.id}><td>{user.username}</td> <td>{user.mobile}</td>  <td>{user.role}</td> </tr>
            })}
@@ -139,7 +139,7 @@ const UserList = () =>{
                  </Pagination>        */}
             
                 <input type='text' value={searchCustomer} onChange={handleSearchCustomer} placeholder="Search by user name or mobile" />
-          <Form>
+          {/* <Form>
                     <FormGroup>
                         <Label for="sort">Sort Order:</Label>
                         <Input type="select" name="sort" id="sortOrder" value={sortCustomer} onChange={handleSortCustomer}>
@@ -147,7 +147,7 @@ const UserList = () =>{
                             <option value="desc">Z-A</option>
                         </Input>
                     </FormGroup>
-                </Form>
+                </Form> */}
           <Table striped bordered>
             <thead>
                 <tr>
@@ -178,7 +178,7 @@ const UserList = () =>{
         {role === 'operator' && (
             <div>
                 <input type='text' value={searchCustomer} onChange={handleSearchCustomer} placeholder="Search by user name or mobile" />
-          <Form>
+          {/* <Form>
                     <FormGroup>
                         <Label for="sort">Sort Order:</Label>
                         <Input type="select" name="sort" id="sortOrder" value={sortCustomer} onChange={handleSortCustomer}>
@@ -186,7 +186,7 @@ const UserList = () =>{
                             <option value="desc">Z-A</option>
                         </Input>
                     </FormGroup>
-                </Form>
+                </Form> */}
           <Table striped bordered>
             <thead>
                 <tr>

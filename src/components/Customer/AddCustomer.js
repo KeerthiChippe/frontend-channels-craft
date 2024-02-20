@@ -15,7 +15,7 @@ const AddCustomer = ({addCustomer}) => {
         return state.user.data
     })
 
-    const serverErrors = useSelector((state) => state.serverErrors)
+    const serverErrors = useSelector((state) => state.customer.serverErrors)
     // console.log(serverErrors)
     const operator = useSelector((state) => {
         return state.operator.data
@@ -81,10 +81,16 @@ const AddCustomer = ({addCustomer}) => {
     }
 
     
-    const handleChange = (e) => {
-        setAddress({ ...address, [e.target.name]: e.target.value })
-    }
+    // const handleChange = (e) => {
+    //     setAddress({ ...address, [e.target.name]: e.target.value })
+    // }
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setAddress(prevAddress => ({ ...prevAddress, [name]: value }));
+        // Clear error for the changed field
+        setFormErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
+    };
     const resetForm = ()=>{
         setCustomerName('')
         setMobile('')
@@ -119,26 +125,7 @@ const AddCustomer = ({addCustomer}) => {
 
             }
             dispatch(startAddCustomer(formData, resetForm))
-            // addCustomer()
-                // .then(() => {
-                //     setCustomerName('')
-                //     setMobile('')
-                //     setBoxNumber('')
-                //     setAddress({
-                //         doorNumber: '',
-                //         street: '',
-                //         city: '',
-                //         state: '',
-                //         pincode: ''
-                //     })
-
-                // }).catch((error) => {
-                //     if (error.response && error.response.data) {
-                //         dispatch(serverErrors(error.response.data.errors || []))
-                //     } else {
-                //         console.error("Unexpected error:", error);
-                //     }
-                // })
+           
         } else {
             setFormErrors(errors)
         }
@@ -147,6 +134,11 @@ const AddCustomer = ({addCustomer}) => {
         let user = e.target.value
         setSelectedUser(user)
         setUserId(user)
+        setFormErrors(prevErrors => ({
+            ...prevErrors,
+            customerName: '',
+            mobile: ''
+        }));
     }
 
     // const handleOperator = (e) => {
@@ -220,7 +212,7 @@ const AddCustomer = ({addCustomer}) => {
                                 placeholder="Name"
                                 id="customerName"
                                 onChange={(e) => {
-                                    setCustomerName(e.target.value)
+                                    setCustomerName(e.target.value);
                                 }}
                                 disabled
                             />
@@ -249,7 +241,8 @@ const AddCustomer = ({addCustomer}) => {
                                 placeholder="box Number"
                                 id="boxNumber"
                                 onChange={(e) => {
-                                    setBoxNumber(e.target.value)
+                                    setBoxNumber(e.target.value);
+                                    setFormErrors({...formErrors, boxNumber: '' });
                                 }}
                             />
                            <span className="error"> {formErrors.boxNumber && formErrors.boxNumber}</span>
@@ -303,7 +296,7 @@ const AddCustomer = ({addCustomer}) => {
                                 id="city"
                                 name='city'
                                 onChange={handleChange} />
-                            <span className="error">{formErrors.city && formErrors.city}</span>
+                            {/* <span className="error">{formErrors.city && formErrors.city}</span> */}
                         </div>
                         <div class="col-md-4">
                             <label htmlFor="state">State</label><br />
@@ -314,13 +307,15 @@ const AddCustomer = ({addCustomer}) => {
                                 id="state"
                                 name='state'
                                 onChange={handleChange} /><br />
-                           <span className="error">{formErrors.state && formErrors.state}</span> <br />
+                           {/* <span className="error">{formErrors.state && formErrors.state}</span> <br /> */}
                         </div>
-                        
+                        <p>{serverErrors}</p>
                         <div class="col-12">
                             <input type='submit' />
                         </div>
-                        <p>{serverErrors}</p>
+                        
+                        {/* <p>{serverErrors && serverErrors.map(error => <span key={error}>{error}</span>)}</p> */}
+
                     </form>
                
             </div>

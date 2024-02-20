@@ -4,10 +4,8 @@ import axios from "./config/axios";
 import { useNavigate } from "react-router-dom";
 import './Register.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { isNumber } from "lodash";
 import { Row, Col } from "reactstrap"
 import {jwtDecode} from 'jwt-decode'
-// import { colors } from "react-select/dist/declarations/src/theme";
 
 export default function Register({ registerToast }) {
   const navigate = useNavigate();
@@ -19,6 +17,7 @@ export default function Register({ registerToast }) {
   const [role, setRole] = useState('')
   const [selectedRole, setSelectedRole] = useState('')
   const [formErrors, setFormErrors] = useState({});
+  const [serverErrors, setServerErrors] = useState([]);
 
   useEffect(()=>{
     const token = localStorage.getItem('token')
@@ -70,7 +69,7 @@ export default function Register({ registerToast }) {
 
       try {
         const formData = { username, email, password, mobile, role };
-        console.log(formData);
+        // console.log(formData);
         if(role === 'admin'){
           formData.role='operator'
         }else if(role === 'operator'){
@@ -79,7 +78,8 @@ export default function Register({ registerToast }) {
         const response = await axios.post("/api/users/register", formData, {
           headers: {
           Authorization: localStorage.getItem('token')
-        }});
+        }
+      });
         setUsername('');
       setEmail('');
       setMobile('');
@@ -90,13 +90,22 @@ export default function Register({ registerToast }) {
       } catch (error) {
         if (error.response && error.response.data) {
           const serverErrors = error.response.data.errors || []
-          setFormErrors({ serverErrors })
+          // setFormErrors({ serverErrors })
+          setServerErrors(serverErrors)
           console.log(error)
         } else {
           console.error("Unexpected error:", error)
         }
       }
     }
+  }
+  const clearFieldError = (fieldName) => {
+    setFormErrors(prevErrors => {
+      const newErrors = { ...prevErrors };
+      delete newErrors[fieldName];
+      return newErrors;
+    });
+    setServerErrors([]);
   }
 
   return (
@@ -113,6 +122,7 @@ export default function Register({ registerToast }) {
               id="username"
               onChange={(e) => {
                 setUsername(e.target.value);
+                clearFieldError('username')
               }}
             />
           </div>
@@ -128,6 +138,7 @@ export default function Register({ registerToast }) {
               id="email"
               onChange={(e) => {
                 setEmail(e.target.value);
+                clearFieldError('email')
               }}
             />
           </div>
@@ -143,6 +154,7 @@ export default function Register({ registerToast }) {
               id="mobile"
               onChange={(e) => {
                 setMobile(e.target.value)
+                clearFieldError('mobile')
               }}
             /><br/>
             {formErrors.mobile && <span className="error">{formErrors.mobile}</span>}
@@ -157,6 +169,7 @@ export default function Register({ registerToast }) {
               id="password"
               onChange={(e) => {
                 setPassword(e.target.value);
+                clearFieldError('password')
               }}
             />
           </div>
@@ -166,9 +179,16 @@ export default function Register({ registerToast }) {
           <div>
             <input type="submit" value="create" className="btn btn-success" />
           </div>
-          {formErrors.serverErrors && (
+          {/* {formErrors.serverErrors && (
             <ul className="error">
               {formErrors.serverErrors.map((error, index) => (
+                <li key={index}>{error.msg}</li>
+              ))}
+            </ul>
+          )} */}
+           {serverErrors.length > 0 && (
+            <ul className="error">
+              {serverErrors.map((error, index) => (
                 <li key={index}>{error.msg}</li>
               ))}
             </ul>

@@ -56,9 +56,7 @@ export default function CustomerNavbar() {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/packcha">Packages & Channels</Link>
                             </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/yourOrders">Your orders</Link>
-                            </li>
+                            
  </div>
                     </ul>
                     <div className="d-flex">
@@ -72,9 +70,15 @@ export default function CustomerNavbar() {
                                     </Link>
                                 </li>
                                 {!isEmpty(localStorage.getItem('token')) && (
-                                    <li className="nav-item">
+                                    <>
+                                    
+                                <li className="nav-item">
+                                <Link className="nav-link" to="/yourOrders">Your orders</Link>
+                            </li>
+                            <li className="nav-item">
                                     <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
                                 </li>
+                           </>
                                 )}
                                 
                             </ul>
