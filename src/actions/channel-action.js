@@ -92,9 +92,9 @@ export const startEditChannel = (id, formData)=>{
     }
 }
 
-const editChannel = (id) =>{
+const editChannel = (data) =>{
     return {
         type: 'EDIT_CHANNEL',
-        payload: id
+        payload: data
     }
 }

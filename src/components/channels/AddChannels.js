@@ -86,20 +86,23 @@ const AddChannel = (props)=>{
               <h3 className="chan">ADD CHANNEL</h3>
                 <label className="label-custom" htmlFor="channelName">Channel Name</label>
                 <input className="input-custom" type='text' value={channelName} placeholder="channel name.." id="channelName" onChange={(e)=>{
-                    setChannelName(e.target.value)
+                    setChannelName(e.target.value);
+                    setFormErrors({ ...formErrors, channelName: '' });
                 }} /><br/>
                 {formErrors.channelName && <span className="error">{formErrors.channelName}</span>}<br />
             
                 <label className="label-custom" htmlFor="channelPrice">Channel Price</label>
                 <input className="input-custom" type='number' value={channelPrice} placeholder="channel price.." id="channelPrice" onChange={(e)=>{
-                    setChannelPrice(e.target.value)
+                    setChannelPrice(e.target.value);
+                    setFormErrors({ ...formErrors, channelPrice: '' });
                 }} /><br/>
                 {formErrors.channelPrice && <span className="error">{formErrors.channelPrice}</span>}<br />
 
             
                 <label className="label-custom" htmlFor="channelNumber">Channel Number</label>
                 <input className="input-custom" type="number" value={channelNumber} placeholder="channel number.." id="channelNumber" onChange={(e)=>{
-                    setChannelNumber(e.target.value)
+                    setChannelNumber(e.target.value);
+                    setFormErrors({ ...formErrors, channelNumber: '' });
                 }} /><br/>
                 {formErrors.channelNumber && <span className="error">{formErrors.channelNumber}</span> }
 
@@ -107,7 +110,8 @@ const AddChannel = (props)=>{
                 <label className="label-custom" htmlFor="language">Language</label>
                 <input className="input-custom" type='text' value={language} placeholder="language.." id="language" onChange={(e)=>{
 
-                    setLanguage(e.target.value)
+                    setLanguage(e.target.value);
+                    setFormErrors({ ...formErrors, language: '' });
                 }} /><br/>
                 {formErrors.language && <span className="error">{formErrors.language}</span>} <br />
                 <br/>
@@ -115,7 +119,8 @@ const AddChannel = (props)=>{
 
 
                     <input className="label-custom" type='file' onChange={(e) =>{
-                        setImage(e.target.files[0])
+                        setImage(e.target.files[0]);
+                        
                     }}/>
                 </div><br/>
 

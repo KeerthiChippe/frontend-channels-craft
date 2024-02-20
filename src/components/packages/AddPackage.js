@@ -32,7 +32,7 @@ const AddPackage = (props) => {
         if (packagePrice.trim().length === 0) {
             errors.packagePrice = "package price is required"
         }
-        if (selectedChannels.length === 0){
+        if (!selectedChannels || selectedChannels.length === 0){
             errors.selectedChannels = 'At least one channel is required'
         }
     }
@@ -80,11 +80,11 @@ const AddPackage = (props) => {
                 <h3 style={{ color: "white", fontFamily: "Verdana, sans-serif" }}>Add Packages</h3>
 
                 <label htmlFor="packageName" style={{ color: "white", fontWeight: "bold" }}>Package Name</label><br />
-                <input type='text' value={packageName} id="packageName" onChange={(e) => { setPackageName(e.target.value) }} /><br/>
+                <input type='text' value={packageName} id="packageName" onChange={(e) => { setPackageName(e.target.value); setFormErrors({ ...formErrors, packageName: '' }) }} /><br/>
                 {formErrors.packageName && <span className="error">{formErrors.packageName}</span>}<br />
 
                 <label htmlFor="packagePrice" style={{ color: "white", fontWeight: "bold" }}>Package Price</label><br/>
-                <input type='number' value={packagePrice} id="packagePrice" onChange={(e) => { setPackagePrice(e.target.value) }} /><br/>
+                <input type='number' value={packagePrice} id="packagePrice" onChange={(e) => { setPackagePrice(e.target.value); setFormErrors({ ...formErrors, packagePrice: '' }) }} /><br/>
                 {formErrors.packagePrice && <span className="error">{formErrors.packagePrice}</span>}
                 {/* <label htmlFor="channels">channels</label>
                 <input type='text' values={channels} id="channels" onChange={(e)=>{setChannels(e.target.value)}} /> */}
@@ -95,7 +95,7 @@ const AddPackage = (props) => {
                         options={channels}
                         value={selectedChannels}
                         placeholder="select your channels"
-                        onChange={(selectedOptions) => setSelectedChannels(selectedOptions)}
+                        onChange={(selectedOptions) => {setSelectedChannels(selectedOptions); setFormErrors({ ...formErrors, selectedChannels: '' })}}
                         isMulti
                         isSearchable
                         noOptionsMessage={() => "No channels found.."}
@@ -125,7 +125,7 @@ const AddPackage = (props) => {
                         }}
                     />
                 </div>
-                {formErrors.selectedChannels && <span>{formErrors.selectedChannels}</span>}
+                {formErrors.selectedChannels && <span className="error">{formErrors.selectedChannels}</span>}
                 <br/>
                 <div>
                     <input  style={{color: "white", fontWeight: "bold" }} type='file' onChange={(e) => {

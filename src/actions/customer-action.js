@@ -12,7 +12,6 @@ export const startAddCustomer = (data, resetForm) => {
             dispatch(addCustomer(response.data))
             resetForm()
         } catch (err) {
-            console.log(err.response.data.errors[0].msg)
             dispatch(serverErrors(err.response.data.errors[0].msg))
         }
 

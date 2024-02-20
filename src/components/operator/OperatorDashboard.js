@@ -59,9 +59,9 @@ const OperatorDashboard = () => {
                         <p>Amount: {payment.amount}</p>
                         <p>Payment Status: {payment.status}</p>
                        
-                        <ul>Packages {payment.orderId?.packages?.map((ele)=>{
+                        {/* <ul>Packages {payment.orderId?.packages?.map((ele)=>{
                             return <li key={ele._id}>{ele.packageId}</li>
-                        })}</ul>
+                        })}</ul> */}
                         {!payment.activate && (
                             <button onClick={()=>{
                                 handleActivate(payment._id)

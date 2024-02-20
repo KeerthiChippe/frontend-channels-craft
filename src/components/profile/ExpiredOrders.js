@@ -3,7 +3,7 @@ import axios from '../../config/axios';; // Assuming you're using axios for maki
 
 const ExpiredOrders = () => {
     const [expiredOrders, setExpiredOrders] = useState([]);
-    
+
     useEffect(() => {
         const fetchExpiredOrders = async () => {
             try {
@@ -20,23 +20,39 @@ const ExpiredOrders = () => {
                 console.error('Error fetching expired orders:', error);
             }
         };
-        
+
         fetchExpiredOrders(); // Call the function to fetch expired orders when the component mounts
     }, []);
 
     return (
         <div>
             <h2>Expired Orders</h2>
+
             <ul>
                 {expiredOrders.map(order => (
                     <li key={order._id}>
-                        {/* Render order details here */}
-                        <p>Order ID: {order.orderId}</p>
+                        <ul>
+                            {order.orderId?.packages.map((pkg, index) => (
+                                <li key={index}>
+                                    <p>Package Name: {pkg.packageId.packageName}</p>
+
+                                </li>
+                            ))}
+                        </ul>
+                       
                         <p>Amount: {order.amount}</p>
-                        {/* Add more details as needed */}
+                        {/* <ul>
+                            {order.orderId?.channels.map((chan, i)=> {
+                                <li key={i}>
+                                    <p>Channel Name: {chan.channelId.channelName}</p>
+                                </li>
+                            })}
+                        </ul> */}
+
                     </li>
                 ))}
             </ul>
+
         </div>
     );
 };

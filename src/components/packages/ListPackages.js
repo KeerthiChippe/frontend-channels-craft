@@ -8,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import { FadeLoader, ClipLoader } from "react-spinners";
 import { Form, FormGroup, Input, Label } from "reactstrap";
 import { Row, Col, Table, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const ListPackages = () => {
@@ -88,23 +89,49 @@ const ListPackages = () => {
       selectedChannels: selectedPackage.selectedChannels
     };
     dispatch(selectedPackageOne(newPackages));
+    toast.success('Added to cart successfully',{
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true})
     // setSelectedItems((previousItems) => [...previousItems, newPackages]);
   };
   
 
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (editId) {
+  //     dispatch(startEditPackage(editId, formData));
+  //     toggleModal();
+  //   } else {
+  //     dispatch(startAddPackage(formData));
+  //   }
+  //   setFormData({
+  //     packagePrice: "",
+  //   });
+  //   dispatch(startGetPackage());
+  // };
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editId) {
-      dispatch(startEditPackage(editId, formData));
-      toggleModal();
+      dispatch(startEditPackage(editId, formData))
+        .then(() => {
+          dispatch(startGetPackage()); // Fetch updated list of packages
+          toggleModal(); // Close the modal after successful edit
+        })
+        .catch((error) => {
+          console.log("Error editing package:", error);
+        });
     } else {
       dispatch(startAddPackage(formData));
     }
     setFormData({
       packagePrice: "",
     });
-    dispatch(startGetPackage());
   };
+  
 
   const handleRemove = (id) => {
     const removeItem = selectedItems.find((ele) => ele._id === id);
@@ -154,7 +181,7 @@ const indexOfLastItem = currentPage * itemsPerPage;
   return (
     
     <div>
-      
+       <ToastContainer />
     {isLoading ? (
       <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
       <ClipLoader

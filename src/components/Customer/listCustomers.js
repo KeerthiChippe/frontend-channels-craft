@@ -11,7 +11,7 @@ const CustomerList =() =>{
 
     const dispatch = useDispatch()
     const [search, setSearch] = useState('')
-    const [sort, setSort] = useState('')
+    const [sort, setSort] = useState('asc')
     const [currentPage, setCurrentPage] = useState(1); // Current page state
     const [itemsPerPage, setItemsPerPage] = useState(10); // Items per page state
 
@@ -65,8 +65,8 @@ const CustomerList =() =>{
 
     return(
         <div>
-            <input  type='text' value={search} onChange={handleSearch} placeholder="Search by customer name" />
-            <Form>
+            <input type='text' value={search} onChange={handleSearch} placeholder="Search by customer name" />
+            {/* <Form>
                         <FormGroup>
                             <Label for="sort">Sort Order:</Label>
                             <Input type="select" name="sort" id="sortOrder" value={sort} onChange={handleSort}>
@@ -74,7 +74,7 @@ const CustomerList =() =>{
                                 <option value="desc">Z-A</option>
                             </Input>
                         </FormGroup>
-                    </Form>
+                    </Form> */}
             <Table striped bordered className="customer" style={{margin:"0px" ,padding:"0px" , marginTop:"100px"}}>
             <thead>
                             <tr>
