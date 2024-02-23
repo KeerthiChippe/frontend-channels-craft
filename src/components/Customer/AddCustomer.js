@@ -5,14 +5,19 @@ import { startAddCustomer } from "../../actions/customer-action"
 import { startGetUser } from "../../actions/user-action"
 import { startGetOperator } from "../../actions/operator-action"
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Select from "react-select"
+import Swal from "sweetalert2"
 
-
-const AddCustomer = ({addCustomer}) => {
+const AddCustomer = () => {
     const dispatch = useDispatch()
 
     const user = useSelector((state) => {
         // console.log(state, "abcdefghijkl ")
         return state.user.data
+    })
+
+    const customers = useSelector((state) => {
+        return state.customer.data
     })
 
     const serverErrors = useSelector((state) => state.customer.serverErrors)
@@ -25,7 +30,7 @@ const AddCustomer = ({addCustomer}) => {
         dispatch(startGetUser())
         dispatch(startGetOperator())
     }, [dispatch])
-  
+
     const [customerName, setCustomerName] = useState('')
     const [mobile, setMobile] = useState('')
     const [boxNumber, setBoxNumber] = useState('')
@@ -43,7 +48,7 @@ const AddCustomer = ({addCustomer}) => {
     })
     const errors = {}
 
-    
+
     function runValidation() {
         if (_.isEmpty(customerName.trim())) {
             errors.customerName = "customerName is required"
@@ -80,7 +85,7 @@ const AddCustomer = ({addCustomer}) => {
         }
     }
 
-    
+
     // const handleChange = (e) => {
     //     setAddress({ ...address, [e.target.name]: e.target.value })
     // }
@@ -90,8 +95,9 @@ const AddCustomer = ({addCustomer}) => {
         setAddress(prevAddress => ({ ...prevAddress, [name]: value }));
         // Clear error for the changed field
         setFormErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
+        dispatch({ type: 'CLEAR_SERVER_ERRORS' })
     };
-    const resetForm = ()=>{
+    const resetForm = () => {
         setCustomerName('')
         setMobile('')
         setBoxNumber('')
@@ -105,7 +111,7 @@ const AddCustomer = ({addCustomer}) => {
         setSelectedUser('')
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         runValidation()
         if (Object.keys(errors).length === 0) {
@@ -124,40 +130,85 @@ const AddCustomer = ({addCustomer}) => {
                 operatorId
 
             }
-            dispatch(startAddCustomer(formData, resetForm))
-           
+            try{
+                await dispatch(startAddCustomer(formData, resetForm))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Customer Added Successfully',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }catch(error){
+                console.error('Error adding operator:', error);
+                // Display error message using SweetAlert2 if needed
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                });
+            }
+            
+
         } else {
             setFormErrors(errors)
         }
     }
-    const handleUser = (e) => {
-        let user = e.target.value
-        setSelectedUser(user)
-        setUserId(user)
-        setFormErrors(prevErrors => ({
+    // const handleUser = (e) => {
+    //     let user = e.target.value
+    //     setSelectedUser(user)
+    //     setUserId(user)
+    //     setFormErrors(prevErrors => ({
+    //         ...prevErrors,
+    //         customerName: '',
+    //         mobile: ''
+    //     }));
+    // }
+
+    const handleUserSelect = (selectedOption) => {
+        setSelectedUser(selectedOption);
+        setUserId(selectedOption.value);
+        setCustomerName(selectedOption.label);
+        setMobile(selectedOption.mobile);
+        setFormErrors((prevErrors) => ({
             ...prevErrors,
-            customerName: '',
-            mobile: ''
+            customerName: "",
+            mobile: "",
         }));
-    }
+        dispatch({ type: 'CLEAR_SERVER_ERRORS' })
+    };
+
+    //   const options = user
+    //     .filter((user) => !operator.find((op) => op.userId === user._id)) // Filter out users who are already operators
+    //     .map((user) => ({
+    //       value: user._id,
+    //       label: user.username,
+    //       mobile: user.mobile,
+    //     }));
+    const userOptions = user
+        .filter((user) => !customers.find((customer) => customer.userId === user._id))
+        .map((user) => ({
+            value: user._id,
+            label: user.username,
+            mobile: user.mobile,
+        }));
 
     // const handleOperator = (e) => {
     //     let operator = e.target.value
     //     setSelectedOperator(operator)
     //     setOperatorId(operator)
     // }
-   
 
-    useEffect(() => {
-        if (selectedUser) {
-            const selectedUserDetails = user.find((u) => u._id === selectedUser);
-            if (selectedUserDetails) {
-                setUserId(selectedUserDetails._id);
-                setCustomerName(selectedUserDetails.username || '');
-                setMobile(selectedUserDetails.mobile || '');
-            }
-        }
-    }, [selectedUser, user])
+
+    // useEffect(() => {
+    //     if (selectedUser) {
+    //         const selectedUserDetails = user.find((u) => u._id === selectedUser);
+    //         if (selectedUserDetails) {
+    //             setUserId(selectedUserDetails._id);
+    //             setCustomerName(selectedUserDetails.username || '');
+    //             setMobile(selectedUserDetails.mobile || '');
+    //         }
+    //     }
+    // }, [selectedUser, user])
 
     const fetchCityStateFromPincode = async () => {
         try {
@@ -189,137 +240,144 @@ const AddCustomer = ({addCustomer}) => {
 
         <div className="container mt-5 d-flex justify-content-center" >
 
-                    <form onSubmit={handleSubmit} class="row g-3"  >
-                        <h3 style={{marginLeft:"120px"}}>Add Customer</h3>
-                        <label>Select User</label><br />
+            <form onSubmit={handleSubmit} class="row g-3"  >
+                <h3 style={{ marginLeft: "120px" }}>Add Customer</h3>
+                {/* <label>Select User</label><br />
                         <select class="form-select" aria-label="Default select example" value={selectedUser} onChange={handleUser}>
                             <option value="" >Select a User</option>
                             {user.map(user => <option key={user.id} value={user._id}>{user.username}</option>)}
                         </select><br />
-                        <br />
-                        {/* <label className="dropdown">Select Operator</label><br />
-                        <select class="form-select" aria-label="Default select example" value={selectedOperator} onChange={handleOperator}>
-                            <option value="">Select operator</option>
-                            {operator?.map(operator => <option key={operator.id} value={operator._id}>{operator.operatorName} </option>)}
-                        </select><br /> */}
+                        <br /> */}
+                <div style={{ width: 300 }}>
+                    <label>Select User</label>
+                    <Select
+                        value={selectedUser}
+                        onChange={handleUserSelect}
+                        options={userOptions}
+                        placeholder="Select a User"
+                        isSearchable
+                        noOptionsMessage={() => "No user found.."}
+                    />
+                </div>
 
-                        <br />
-                        <div class="col-md-6">
-                            <label htmlFor="customerName">Name</label>
-                            <input type="text"
-                                value={customerName}
-                                class="form-control"
-                                placeholder="Name"
-                                id="customerName"
-                                onChange={(e) => {
-                                    setCustomerName(e.target.value);
-                                }}
-                                disabled
-                            />
-                           <span className="error"> {formErrors.customerName && formErrors.customerName}</span>
-                        </div>
-                        <div class="col-md-6">
-                            <label htmlFor="mobile">Mobile</label>
-                            <input type="text"
-                                value={mobile}
-                                class="form-control"
-                                placeholder="Mobile"
-                                id="mobile"
-                                onChange={(e) => {
-                                    setMobile(e.target.value)
-                                }}
-                                disabled
-                            />
 
-                            <span className="error">{formErrors.mobile && formErrors.mobile}</span><br />
-                        </div>
-                        <div class="col-12">
-                            <label htmlFor="boxNumber">Box Number</label><br />
-                            <input type="text"
-                                value={boxNumber}
-                                class="form-control"
-                                placeholder="box Number"
-                                id="boxNumber"
-                                onChange={(e) => {
-                                    setBoxNumber(e.target.value);
-                                    setFormErrors({...formErrors, boxNumber: '' });
-                                }}
-                            />
-                           <span className="error"> {formErrors.boxNumber && formErrors.boxNumber}</span>
-                        </div>
-                        <br />
-                        <label>ADDRESS</label><br />
+                <br />
+                <div class="col-md-6">
+                    <label htmlFor="customerName">Name</label>
+                    <input type="text"
+                        value={customerName}
+                        class="form-control"
+                        placeholder="Name"
+                        id="customerName"
+                        onChange={(e) => {
+                            setCustomerName(e.target.value);
+                        }}
+                        disabled
+                    />
+                    <span className="error"> {formErrors.customerName && formErrors.customerName}</span>
+                </div>
+                <div class="col-md-6">
+                    <label htmlFor="mobile">Mobile</label>
+                    <input type="text"
+                        value={mobile}
+                        class="form-control"
+                        placeholder="Mobile"
+                        id="mobile"
+                        onChange={(e) => {
+                            setMobile(e.target.value)
+                        }}
+                        disabled
+                    />
 
-                        <div class="col-md-6">
-                            <label htmlFor="doorNumber">Door Number</label><br />
-                            <input type="text"
-                                value={address.doorNumber}
-                                class="form-control"
-                                placeholder="DoorNumber"
-                                id="DoorNumber"
-                                name='doorNumber'
-                                onChange={handleChange}
-                            />
-                          <span className="error"> {formErrors.doorNumber && formErrors.doorNumber}</span> 
-                        </div>
+                    <span className="error">{formErrors.mobile && formErrors.mobile}</span><br />
+                </div>
+                <div class="col-12">
+                    <label htmlFor="boxNumber">Box Number</label><br />
+                    <input type="text"
+                        value={boxNumber}
+                        class="form-control"
+                        placeholder="box Number"
+                        id="boxNumber"
+                        onChange={(e) => {
+                            setBoxNumber(e.target.value);
+                            setFormErrors({ ...formErrors, boxNumber: '' });
+                        }}
+                    />
+                    <span className="error"> {formErrors.boxNumber && formErrors.boxNumber}</span>
+                </div>
+                <br />
+                <label>ADDRESS</label><br />
 
-                        <div class="col-md-6">
-                            <label htmlFor="Street">Street</label>
-                            <input type="text"
-                                class="form-control"
-                                value={address.street}
-                                placeholder="Street"
-                                id="street"
-                                name='street'
-                                onChange={handleChange}
-                            /><br />
-                           <span  className="error">{formErrors.street && formErrors.street}</span> 
-                        </div >
-                        <div class="col-md-4">
-                            <label htmlFor="Pincode">pincode</label><br />
-                            <input type="text"
-                                value={address.pincode}
-                                class="form-control"
-                                placeholder="pincode"
-                                id="Pincode"
-                                name='pincode'
-                                onChange={handleChange} />
-                          <span className="error"> {formErrors.pincode && formErrors.pincode}</span> 
-                        </div>
+                <div class="col-md-6">
+                    <label htmlFor="doorNumber">Door Number</label><br />
+                    <input type="text"
+                        value={address.doorNumber}
+                        class="form-control"
+                        placeholder="DoorNumber"
+                        id="DoorNumber"
+                        name='doorNumber'
+                        onChange={handleChange}
+                    />
+                    <span className="error"> {formErrors.doorNumber && formErrors.doorNumber}</span>
+                </div>
 
-                        <div class="col-md-4">
-                            <label htmlFor="city">city</label><br />
-                            <input type="text"
-                                value={address.city}
-                                class="form-control"
-                                placeholder="city"
-                                id="city"
-                                name='city'
-                                onChange={handleChange} />
-                            {/* <span className="error">{formErrors.city && formErrors.city}</span> */}
-                        </div>
-                        <div class="col-md-4">
-                            <label htmlFor="state">State</label><br />
-                            <input type="text"
-                                value={address.state}
-                                class="form-control"
-                                placeholder="state"
-                                id="state"
-                                name='state'
-                                onChange={handleChange} /><br />
-                           {/* <span className="error">{formErrors.state && formErrors.state}</span> <br /> */}
-                        </div>
-                        <p>{serverErrors}</p>
-                        <div class="col-12">
-                            <input type='submit' />
-                        </div>
-                        
-                        {/* <p>{serverErrors && serverErrors.map(error => <span key={error}>{error}</span>)}</p> */}
+                <div class="col-md-6">
+                    <label htmlFor="Street">Street</label>
+                    <input type="text"
+                        class="form-control"
+                        value={address.street}
+                        placeholder="Street"
+                        id="street"
+                        name='street'
+                        onChange={handleChange}
+                    /><br />
+                    <span className="error">{formErrors.street && formErrors.street}</span>
+                </div >
+                <div class="col-md-4">
+                    <label htmlFor="Pincode">pincode</label><br />
+                    <input type="text"
+                        value={address.pincode}
+                        class="form-control"
+                        placeholder="pincode"
+                        id="Pincode"
+                        name='pincode'
+                        onChange={handleChange} />
+                    <span className="error"> {formErrors.pincode && formErrors.pincode}</span>
+                </div>
 
-                    </form>
-               
-            </div>
+                <div class="col-md-4">
+                    <label htmlFor="city">city</label><br />
+                    <input type="text"
+                        value={address.city}
+                        class="form-control"
+                        placeholder="city"
+                        id="city"
+                        name='city'
+                        onChange={handleChange} />
+                    {/* <span className="error">{formErrors.city && formErrors.city}</span> */}
+                </div>
+                <div class="col-md-4">
+                    <label htmlFor="state">State</label><br />
+                    <input type="text"
+                        value={address.state}
+                        class="form-control"
+                        placeholder="state"
+                        id="state"
+                        name='state'
+                        onChange={handleChange} /><br />
+                    {/* <span className="error">{formErrors.state && formErrors.state}</span> <br /> */}
+                </div>
+                <p>{serverErrors}</p>
+                <div class="col-12">
+                    <input type='submit' />
+                </div>
+
+                {/* <p>{serverErrors && serverErrors.map(error => <span key={error}>{error}</span>)}</p> */}
+
+            </form>
+
+        </div>
     )
-                            }
+}
 export default AddCustomer
 

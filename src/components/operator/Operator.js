@@ -8,14 +8,20 @@ import { startGetUser } from "../../actions/user-action";
 import { Row , Col} from "reactstrap"
 import './operator.css'
 import serverErrors from '../../actions/operator-action'
+import Select from 'react-select'
+import Swal from 'sweetalert2';
 
 
-const Operator = (props) => {
-    const {addOperator} = props
+const Operator = () => {
+    
     const dispatch = useDispatch()
 
     const user = useSelector((state) => {
         return state.user.data || []
+    })
+
+    const operator = useSelector((state)=>{
+        return state.operator.data
     })
 
     useEffect(()=>{
@@ -69,7 +75,28 @@ const Operator = (props) => {
                 city: city,
                 userId: userId,
             }
-            dispatch(startAddOperator(operatorData, resetForm, addOperator))
+            try{
+                await dispatch(startAddOperator(operatorData, resetForm))
+            
+                // Display success message using SweetAlert2
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Operator Added Successfully',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }
+         
+           
+            catch(error){
+                console.error('Error adding operator:', error);
+                // Display error message using SweetAlert2 if needed
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                });
+            }
             setFormErrors([])
         } else {
             setFormErrors(errors)
@@ -91,24 +118,41 @@ const Operator = (props) => {
         dispatch({ type: 'SET_SERVER_ERRORS', payload: [] })
       }
 
-    const handleChange = (e) => { 
-        let user = e.target.value
-        setSelectedUser(user)
-        setUserId(user)
-        clearFieldError('operatorName'); // Clear errors for operatorName field
-  clearFieldError('mobile')
-    }
+//     const handleChange = (e) => { 
+//         let user = e.target.value
+//         setSelectedUser(user)
+//         setUserId(user)
+//         clearFieldError('operatorName'); // Clear errors for operatorName field
+//   clearFieldError('mobile')
+//     }
+const handleChange = (selectedOption) => {
+    setSelectedUser(selectedOption);
+    setUserId(selectedOption.value);
+    setOperatorName(selectedOption.label);
+    setMobile(selectedOption.mobile);
+    clearFieldError('operatorName');
+    clearFieldError('mobile');
+}
 
-    useEffect(() => {
-        if (selectedUser) {
-            const selectedUserDetails = user.find((u) => u._id === selectedUser);
-            if (selectedUserDetails) {
-                setUserId(selectedUserDetails._id);
-                setOperatorName(selectedUserDetails.username || '');
-                setMobile(selectedUserDetails.mobile || '');
-            }
-        }
-    }, [selectedUser, user]);
+const options = user
+    .filter(u => u.role === 'operator') // Filter users with role 'operator'
+    .filter(u => !operator.find(op => op.userId === u._id)) // Filter out users who are already operators
+    .map(user => ({
+        value: user._id,
+        label: user.username,
+        mobile: user.mobile
+    }));
+
+    // useEffect(() => {
+    //     if (selectedUser) {
+    //         const selectedUserDetails = user.find((u) => u._id === selectedUser);
+    //         if (selectedUserDetails) {
+    //             setUserId(selectedUserDetails._id);
+    //             setOperatorName(selectedUserDetails.username || '');
+    //             setMobile(selectedUserDetails.mobile || '');
+    //         }
+    //     }
+    // }, [selectedUser, user]);
 
     return (
         <div>
@@ -117,7 +161,7 @@ const Operator = (props) => {
             <form onSubmit={handleSubmit} style ={{textAlign :'centre' , fontWeight: 'bold' }} className="operator">
                 <h2>Add Operator</h2><br/>
 
-                <label className="dropdown">Select User</label>
+                {/* <label className="dropdown">Select User</label>
                 <br />
                 <select value={selectedUser} onChange={handleChange}>
                 <option value="" >Select a user...</option>
@@ -129,8 +173,20 @@ const Operator = (props) => {
                     }
                  
 })}
-              </select><br/>
-              <br />
+              </select><br/> */}
+              <div style={{ width: 200 }}>
+              <label>Select User</label>
+                        <Select
+                            value={selectedUser}
+                            onChange={handleChange}
+                            options={options}
+                            placeholder="Select a user..."
+                            isSearchable
+                        noOptionsMessage={() => "No user found.."}
+                        />
+                        </div>
+                        <br/>
+             
                 <label>Enter Operator Name</label><br />
                 <input
                     type="text"

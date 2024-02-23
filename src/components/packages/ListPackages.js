@@ -44,8 +44,14 @@ const ListPackages = () => {
 
   useEffect(() => {
     setIsLoading(true)
-    dispatch(startGetPackage());
-    setIsLoading(false)
+    dispatch(startGetPackage())
+    .then(() => {
+      setIsLoading(false);
+    })
+    .catch((error) => {
+      console.error('Error fetching packages:', error);
+      setIsLoading(false); // Ensure loading spinner is turned off even if there's an error
+    });
   }, [dispatch]);
 
   const toggleModal = () => {

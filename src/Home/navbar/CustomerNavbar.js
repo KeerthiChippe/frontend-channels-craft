@@ -56,6 +56,7 @@ export default function CustomerNavbar() {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/packcha">Packages & Channels</Link>
                             </li>
+
                             
  </div>
                     </ul>

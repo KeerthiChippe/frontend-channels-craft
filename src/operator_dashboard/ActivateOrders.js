@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import axios from '../../config/axios';
+import axios from '../config/axios';
 import { useSelector, useDispatch } from 'react-redux';
 
 
-const OperatorDashboard = () => {
+const ActivateOrders = () => {
     const dispatch = useDispatch()
     const [paymentDetails, setPaymentDetails] = useState(null)
     const [activateSubscription, setActivateSubscription] = useState(false)
@@ -77,4 +77,4 @@ const OperatorDashboard = () => {
     )
 };
 
-export default OperatorDashboard;
+export default ActivateOrders;

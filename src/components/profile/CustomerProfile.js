@@ -195,7 +195,7 @@ const CustomerProfile = () => {
   };
 
   const formattedDates = calculateFormattedDates();
-
+  
   return (
     <div className=" d-flex justify-content-center align-items-center">
       {!isLoading ? (
@@ -433,6 +433,7 @@ const CustomerProfile = () => {
             const originalDate = new Date(ele.orderDate);
             const futureDate = addDays(originalDate, 30);
             const formattedDate = format(futureDate, 'yyyy-MM-dd');
+            if (new Date(formattedDate) > new Date()) {
             return (
               <Col key={pack._id} sm={6}>
                 <Card className="mb-3">
@@ -445,6 +446,7 @@ const CustomerProfile = () => {
                 </Card>
               </Col>
             );
+            }
           }))}
         </Row>
          {/* ): ( */}
@@ -456,11 +458,12 @@ const CustomerProfile = () => {
         <h4>Current channels</h4>
         {/* {order.paid && order.paid.length > 0 ? ( */}
           <Row>
-          {order.paid?.flatMap(ele => ele.channels?.map((chan) => {
+          {order.paid?.map(ele => ele.channels?.map((chan) => {
             console.log(chan.channelId.channelName, 'pay chan')
             const originalDate = new Date(ele.orderDate);
             const futureDate = addDays(originalDate, 30);
             const formattedDate = format(futureDate, 'yyyy-MM-dd');
+            if (new Date(formattedDate) > new Date()) {
             return (
               <Col key={chan._id} sm={6}>
                 <Card className="mb-3">
@@ -473,6 +476,14 @@ const CustomerProfile = () => {
                 </Card>
               </Col>
             );
+            }
+            // else {
+            //   return (
+            //     <Col key={chan._id} sm={12}>
+            //       <p>You are not subscribed to any channels.....</p>
+            //     </Col>
+            //   )
+            // }
           }))}
         </Row>
         {/* ) : ( */}

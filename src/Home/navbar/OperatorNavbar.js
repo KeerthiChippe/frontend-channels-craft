@@ -50,6 +50,10 @@ export default function OperatorNavbar() {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/packcha">Packages & Channels</Link>
                             </li>
+                            
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/activateOrders">Activate orders</Link>
+                            </li>
                             <li className="nav-item">
                                 <Link className="nav-link" to="/order">order</Link>
                             </li>

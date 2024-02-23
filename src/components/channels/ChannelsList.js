@@ -39,7 +39,13 @@ const ChannelsList = () => {
   useEffect(() => {
     setIsLoading(true)
     dispatch(startGetChannel())
-    setIsLoading(false)
+    .then(() => {
+      setIsLoading(false);
+    })
+    .catch((error) => {
+      console.error('Error fetching channels:', error);
+      setIsLoading(false); // Ensure loading spinner is turned off even if there's an error
+    });
   }, [dispatch])
 
   const toggleModal = () => {

@@ -1,20 +1,23 @@
-import CustomersOrders from "./customersData"
+// import CustomersOrders from "./customersData"
 import OrdersDashboard from "./OrdersDashboard"
 import UsersDashboard from "./usersDashboard"
 import { Row , Col} from "reactstrap"
+import { Chart } from "chart.js/auto";
 
 const AdminDashboard = ()=>{
     return(
         <div>
-            <Row className="row">
-            <Col md={5}>
-            <CustomersOrders />
-            </Col>
-            <Col md={7}  >
+            {/* <Row className="row">
+            <Col md={5}> */}
+            {/* <CustomersOrders /> */}
             <UsersDashboard />
-            </Col>
+            {/* </Col>
+            <Col md={7}  >
+             */}
             <OrdersDashboard />
-            </Row>
+            {/* </Col>
+            
+            </Row> */}
         </div>
     )
 

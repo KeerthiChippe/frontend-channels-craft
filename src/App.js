@@ -34,9 +34,12 @@ import Success from "./Payment/Success";
 import Cart from "./components/orders/Cart";
 import OrderPayment from "./components/orders/OrderPayment";
 import AdminDashboard from "./Dashboard/Dashboard";
-import OperatorDashboard from "./components/operator/OperatorDashboard";
+// import OperatorDashboard from "./components/operator/OperatorDashboard";
+import OperatorDashboard from "./operator_dashboard/OperatorDashboard";
+import ActivateOrders from "./operator_dashboard/ActivateOrders";
 import PrivateRoute from "./Home/navbar/PrivateRoute";
 import ExpiredOrders from "./components/profile/ExpiredOrders";
+import BuyAgain from "./components/orders/BuyAgain";
 
 function App(props) {
   const dispatch = useDispatch()
@@ -193,6 +196,7 @@ function App(props) {
           <Route path='/operatorcontainer' element={<OperatorContainer addOperator={addOperator} />} />
           <Route path='/packages' element={<AddPackage addPackage={addPackage} />} />
           <Route path='/packcha' element={<PackagesContainer />} />
+          <Route path='/activateOrders' element={<ActivateOrders />} />
           <Route path='/channels' element = {<AddChannel addChannel={addChannel} />} />
           <Route path='/deletedPackages' element={<DeletedPackage />} />
           <Route path = '/customercontainer' element={<CustomerContainer addCustomer={addCustomer}/>} />
@@ -218,6 +222,7 @@ function App(props) {
             </PrivateRoute>
           } />
           <Route path='/orderpay' element={<OrderPayment />} />
+          <Route path='/buyagain' element = {<BuyAgain />} />
           <Route path='/yourOrders' element={<ExpiredOrders />} />
         </Routes>
        

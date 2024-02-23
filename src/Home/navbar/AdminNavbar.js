@@ -36,7 +36,7 @@ export default function AdminNavbar() {
                                 <Link className="nav-link active" aria-current="page" to="/">Home</Link>
                             </li> */}
                             <li className="nav-item">
-                                <Link className="nav-link active" aria-current="page" to="/register">Create Account</Link>
+                                <Link className="nav-link active" aria-current="page" to="/register">Account</Link>
                             </li>
                             {isEmpty(localStorage.getItem('token')) && (
                                 <li className="nav-item">
@@ -48,13 +48,13 @@ export default function AdminNavbar() {
                                 <Link className="nav-link" to="/operatorcontainer">Operator</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/packages">Packages</Link>
+                                <Link className="nav-link" to="/packages">Create Package</Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link" to="/deletedPackages">Deleted Packages</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/channels">Channels</Link>
+                                <Link className="nav-link" to="/channels">Create Channel</Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link" to="/packcha">Packages & Channels</Link>

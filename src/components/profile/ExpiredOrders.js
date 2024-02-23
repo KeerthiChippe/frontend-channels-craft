@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from '../../config/axios';; // Assuming you're using axios for making HTTP requests
+import axios from '../../config/axios';
+import { Card, CardBody, CardTitle, CardText } from 'reactstrap';
+import { format } from 'date-fns';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const ExpiredOrders = () => {
     const [expiredOrders, setExpiredOrders] = useState([]);
@@ -7,52 +10,60 @@ const ExpiredOrders = () => {
     useEffect(() => {
         const fetchExpiredOrders = async () => {
             try {
-                // Make a GET request to fetch the expired orders
                 const response = await axios.get('/api/payment/expiredOrders', {
                     headers: {
                         "Authorization": localStorage.getItem("token")
                     }
                 });
-                // Update the state with the fetched expired orders
                 setExpiredOrders(response.data);
-                console.log(response.data, "exp")
             } catch (error) {
                 console.error('Error fetching expired orders:', error);
             }
         };
 
-        fetchExpiredOrders(); // Call the function to fetch expired orders when the component mounts
+        fetchExpiredOrders();
     }, []);
 
     return (
         <div>
             <h2>Expired Orders</h2>
 
-            <ul>
-                {expiredOrders.map(order => (
-                    <li key={order._id}>
+            {expiredOrders.map(order => (
+                <Card key={order._id} className="mb-3" style={{ maxWidth: '300px' }}>
+                    <CardBody>
+                        <CardTitle tag="h5">Date of order: {format(new Date(order.paymentDate), 'yyyy-MM-dd')}</CardTitle>
+                        <CardText>Amount: {order.amount}</CardText>
+                        <h5>Packages:</h5>
                         <ul>
+                            
                             {order.orderId?.packages.map((pkg, index) => (
                                 <li key={index}>
-                                    <p>Package Name: {pkg.packageId.packageName}</p>
-
+                                    <p>{pkg.packageId.packageName}</p>
                                 </li>
                             ))}
                         </ul>
-                       
-                        <p>Amount: {order.amount}</p>
-                        {/* <ul>
-                            {order.orderId?.channels.map((chan, i)=> {
-                                <li key={i}>
-                                    <p>Channel Name: {chan.channelId.channelName}</p>
-                                </li>
-                            })}
-                        </ul> */}
-
-                    </li>
-                ))}
-            </ul>
-
+                        {/* Uncomment the following block if you want to display channels */}
+                        {order.orderId?.channels.length > 0 && (
+                            <>
+                            <h5>Channels:</h5>
+                            <ul>
+                                
+                                {order.orderId?.channels.map((chan, i)=> (
+                                    <li key={i}>
+                                        <p>{chan.channelId.channelName}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                            </>
+                        )}
+                        
+                     
+                        {/* <Link to={{ pathname: '/buyagain',  state: { ...orderData, totalPrice: calculatedTotalPrice } }}>
+                            <button>Buy Again</button>
+                        </Link> */}
+                    </CardBody>
+                </Card>
+            ))}
         </div>
     );
 };
