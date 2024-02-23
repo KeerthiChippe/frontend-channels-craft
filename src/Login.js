@@ -29,11 +29,12 @@ export default function Login(props) {
         },
         validationSchema: loginValidationSchema,
         validateOnChange: false,
-        onSubmit: async (values) => {
+        onSubmit: async (values ,{resetForm}) => {
             try {
                 const formData = { mobile: values.mobile, password: values.password }
                 console.log(formData)
                 const response = await axios.post('/api/users/login', formData)
+                resetForm()
                 const userData = response.data
                 localStorage.setItem('token', userData.token)
                 userDispatch({
@@ -43,9 +44,11 @@ export default function Login(props) {
                 
                 loginToast()
                 navigate('/')
+               
             } catch (error) {
                 if (error.response && error.response.data) {
                     const serverErrors = error.response.data.errors || []
+                    setServerErrors(serverErrors)
                     alert(serverErrors)
                     console.log(error)
                   } else if (error.request) {

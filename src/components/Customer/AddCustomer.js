@@ -8,7 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Select from "react-select"
 import Swal from "sweetalert2"
 
-const AddCustomer = () => {
+
+const AddCustomer = ({ addCustomer }) => {
     const dispatch = useDispatch()
 
     const user = useSelector((state) => {
@@ -225,6 +226,7 @@ const AddCustomer = () => {
             }
         } catch (error) {
             console.error("Error fetching city and state:", error);
+
         }
     };
 

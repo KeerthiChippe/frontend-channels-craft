@@ -39,7 +39,7 @@ export const StartGetCustomer = () => {
                     Authorization: localStorage.getItem('token')
                 }
             })
-            console.log(response.data,"123")
+            // console.log(response.data,"123")
             dispatch(setCustomer(response.data))
         } catch (err) {
             console.log(err)
