@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { startCreateOrder } from "../../actions/order-action";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, ListGroup, Button } from 'react-bootstrap';
+import { Row, Col, ListGroup, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './cart.css'
 
@@ -12,7 +12,8 @@ const Cart = () => {
 
     const cart = useSelector((state) => {
         return state;
-    });
+    })
+
     // console.log(cart.order.packages, "cart packages")
     // console.log(cart.order.channels, 'cart channels')
     // console.log(cart.order.packages.length + cart.order.channels.length, 'cart total')
@@ -66,7 +67,9 @@ const Cart = () => {
 
                     <Row >
                         <Col>
-                            <h3>Packages</h3>
+                        {cart.order?.packages?.length > 0 && (
+                            <>
+                                <h3>Packages</h3>
                             <ListGroup>
                                 {cart.order.packages.map((item, index) => (
                                     <ListGroup.Item key={index}>
@@ -78,25 +81,32 @@ const Cart = () => {
                                         </ul>
                                     </ListGroup.Item>
                                 ))}
+                            </ListGroup>
+                            </>
+                        )}
                             
-                            </ListGroup>
 
-                            <h3>Channels</h3>
-                            <ListGroup>
-                                {cart.order.channels.map((item, index) => (
-                                    <ListGroup.Item key={index}>
-                                        {item.channelName} - {item.channelPrice}
-                                    </ListGroup.Item>
-                                ))}
-                            </ListGroup>
+                            {cart.order?.channels.length>0 && (
+                                <>
+                                 <h3>Channels</h3>
+                                 <ListGroup>
+                                     {cart.order.channels.map((item, index) => (
+                                         <ListGroup.Item key={index}>
+                                             {item.channelName} - {item.channelPrice}
+                                         </ListGroup.Item>
+                                     ))}
+                                 </ListGroup>
+                                 </>
+                            )}
+                           
                         </Col>
                     </Row>
 
                     <Row >
                         <Col>
-                            <h3>    Total Price for Packages: {calculateTotalPriceForPackages()}</h3>
-                            <h3>    Total Price for Channels: {calculateTotalPriceForChannels()}</h3>
-                            <h3>    Total Price for Both: {calculateTotalPriceForBoth()}</h3>
+                            <h3>Total Price for Packages: {calculateTotalPriceForPackages()}</h3>
+                            <h3>Total Price for Channels: {calculateTotalPriceForChannels()}</h3>
+                            <h3>Total Price for Both: {calculateTotalPriceForBoth()}</h3>
                         </Col>
                     </Row>
 

@@ -6,7 +6,7 @@ import { OperatorContext } from "./operatorContext"
 import { startGetUser, startUpdateUser } from "../../actions/user-action"
 import { startEditCustomer, startGetSingleCustomer } from "../../actions/customer-action"
 import { StartGetCustomer } from "../../actions/customer-action"
-import { Modal, Form, Button,Card } from "react-bootstrap"
+import { Modal, Form, Button, Card } from "react-bootstrap"
 import { startGetOrder } from "../../actions/order-action"
 import axios from "../../config/axios"
 import { Row, Col } from "reactstrap"
@@ -17,17 +17,19 @@ import 'react-toastify/dist/ReactToastify.css';
 import { jwtDecode } from "jwt-decode"
 import { ClipLoader } from "react-spinners"
 import { useParams } from "react-router-dom"
+import Swal from 'sweetalert2'
 
 const CustomerProfile = () => {
   const dispatch = useDispatch();
-  const {id} = useParams()
+  const { id } = useParams()
 
   const [isLoading, setIsLoading] = useState(true)
   const { userState, userDispatch } = useContext(OperatorContext);
-  
+
   const order = useSelector((state) => {
     return state.order
   })
+  console.log(order, 'order')
 
   useEffect(() => {
     dispatch(StartGetCustomer())
@@ -65,9 +67,9 @@ const CustomerProfile = () => {
   const userId = userState.userDetails._id;
   const customerId = userState.customer._id;
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  }
+  // const handleChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // }
 
   useEffect(() => {
     if (localStorage.getItem('token').length > 0) {
@@ -84,7 +86,18 @@ const CustomerProfile = () => {
 
   useEffect(() => {
     setIsLoading(false); // Once data is fetched, set isLoading to false
-  }, [userState]); 
+  }, [userState])
+
+  const [isMobileOrPasswordUpdated, setIsMobileOrPasswordUpdated] = useState(false);
+
+const handleChange = (e) => {
+  setFormData({ ...formData, [e.target.name]: e.target.value });
+  
+  // Check if mobile or password field is being updated
+  if (e.target.name === 'mobile' || e.target.name === 'oldPassword' || e.target.name === 'newPassword') {
+    setIsMobileOrPasswordUpdated(true);
+  }
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -101,15 +114,24 @@ const CustomerProfile = () => {
         oldPassword: '',
         newPassword: ''
       });
-      toast.success('Updated successfully!', {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "colored"
-      })
+      if (isMobileOrPasswordUpdated) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Updated successfully!',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
+      setIsMobileOrPasswordUpdated(false)
+      // toast.success('Updated successfully!', {
+      //   position: "top-center",
+      //   autoClose: 3000,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   theme: "colored"
+      // })
     } catch (e) {
       console.log(e);
       toast.error('Failed to update password')
@@ -172,15 +194,15 @@ const CustomerProfile = () => {
   const calculateFormattedDates = () => {
     if (order.paid) {
       const formattedDates = order.paid.reduce((acc, ele) => {
-        
+
         ele.packages?.forEach((pack) => {
           const originalDate = new Date(ele.orderDate);
           const futureDate = addDays(originalDate, 30);
           const formattedDate = format(futureDate, 'yyyy-MM-dd');
-        
+
           acc.push({ type: 'package', name: pack.packageId?.packageName, expiryDate: formattedDate });
         });
-        
+
         ele.channels?.forEach((chan) => {
           const originalDate = new Date(ele.orderDate)
           const futureDate = addDays(originalDate, 30)
@@ -195,182 +217,182 @@ const CustomerProfile = () => {
   };
 
   const formattedDates = calculateFormattedDates();
-  
+
   return (
     <div className=" d-flex justify-content-center align-items-center">
       {!isLoading ? (
-      <Row>
-      <Col>
-       
-          <img
-            className="rounded-circle mb-3 profile"
-            src={!_.isEmpty(formData.img) ? `http://localhost:3034/Images/${formData.img}` : process.env.PUBLIC_URL + '/service-pic.jpg'}
-            alt='image'
-            width="150px"
-            height="150px"
-            onClick={handleImageClick}
-          />
+        <Row>
+          <Col>
 
-          <Modal show={showModal} onHide={() => setShowModal(false)}>
-            <Modal.Header closeButton>
-              <Modal.Title>Upload Image</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form onSubmit={handleUpload}>
-                <Form.Group controlId="formFile">
-                  <Form.Label>Choose Image</Form.Label>
-                  <Form.Control type="file" onChange={handleImageChange} />
-                </Form.Group><br />
-                <Button variant="primary" type="submit">
-                  Upload
-                </Button>
-              </Form>
-            </Modal.Body>
-            {/* <Modal.Body>
+            <img
+              className="rounded-circle mb-3 profile"
+              src={!_.isEmpty(formData.img) ? `http://localhost:3034/Images/${formData.img}` : process.env.PUBLIC_URL + '/service-pic.jpg'}
+              alt='image'
+              width="150px"
+              height="150px"
+              onClick={handleImageClick}
+            />
+
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+              <Modal.Header closeButton>
+                <Modal.Title>Upload Image</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form onSubmit={handleUpload}>
+                  <Form.Group controlId="formFile">
+                    <Form.Label>Choose Image</Form.Label>
+                    <Form.Control type="file" onChange={handleImageChange} />
+                  </Form.Group><br />
+                  <Button variant="primary" type="submit">
+                    Upload
+                  </Button>
+                </Form>
+              </Modal.Body>
+              {/* <Modal.Body>
               <form onSubmit={handleUpload}>
                 <input type="file" onChange={handleImageChange} />
                 <input type="submit" value="Upload" />
               </form>
             </Modal.Body> */}
-          </Modal>
+            </Modal>
 
-          {userState.userDetails.role === 'customer' && (
-            <div>
-              <Form onSubmit={handleSubmit} className="small-cute-form">
-                <Form.Group controlId="formCustomerName">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
+            {userState.userDetails.role === 'customer' && (
+              <div>
+                <Form onSubmit={handleSubmit} className="small-cute-form">
+                  <Form.Group controlId="formCustomerName">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      value={formData.customerName}
+                      onChange={handleChange}
+                      name="customerName"
+                      disabled
+                    />
+                  </Form.Group>
+                  <br />
+
+                  <label>Mobile</label>
+                  <input
                     type="text"
-                    value={formData.customerName}
+                    name="mobile"
+                    value={formData.mobile}
                     onChange={handleChange}
-                    name="customerName"
+                  />
+                  <br />
+
+                  <label>Box Number</label><br />
+                  <input
+                    type="string"
+                    name="boxNumber"
+                    value={formData.boxNumber}
+                    onChange={handleChange}
                     disabled
                   />
-                </Form.Group>
-                <br />
+                  <br />
+                  <br />
+                  <label>Address</label>
+                  <br />
+                  <label>Door Number</label>
+                  <input
+                    type="text"
+                    value={formData.address.doorNumber}
+                    name="doorNumber"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        address: { ...formData.address, doorNumber: e.target.value }
+                      })
+                    }
+                    disabled
+                  />
+                  <br />
 
-                <label>Mobile</label>
-                <input
-                  type="text"
-                  name="mobile"
-                  value={formData.mobile}
-                  onChange={handleChange}
-                />
-                <br />
+                  <label>Street</label>
+                  <input
+                    type="text"
+                    value={formData.address.street}
+                    name="street"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        address: { ...formData.address, street: e.target.value }
+                      })
+                    }
+                    disabled
+                  />
+                  <br />
 
-                <label>Box Number</label><br/>
-                <input
-                  type="string"
-                  name="boxNumber"
-                  value={formData.boxNumber}
-                  onChange={handleChange}
-                  disabled
-                />
-                <br />
-                <br/>
-                <label>Address</label>
-                <br />
-                <label>Door Number</label>
-                <input
-                  type="text"
-                  value={formData.address.doorNumber}
-                  name="doorNumber"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      address: { ...formData.address, doorNumber: e.target.value }
-                    })
-                  }
-                  disabled
-                />
-                <br />
+                  <label>City</label>
+                  <input
+                    type="text"
+                    value={formData.address.city}
+                    name="city"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        address: { ...formData.address, city: e.target.value }
+                      })
+                    }
+                    disabled
+                  />
+                  <br />
 
-                <label>Street</label>
-                <input
-                  type="text"
-                  value={formData.address.street}
-                  name="street"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      address: { ...formData.address, street: e.target.value }
-                    })
-                  }
-                  disabled
-                />
-                <br />
+                  <label>State</label>
+                  <input
+                    type="text"
+                    value={formData.address.state}
+                    name="state"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        address: { ...formData.address, state: e.target.value }
+                      })
+                    }
+                    disabled
+                  />
+                  <br />
 
-                <label>City</label>
-                <input
-                  type="text"
-                  value={formData.address.city}
-                  name="city"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      address: { ...formData.address, city: e.target.value }
-                    })
-                  }
-                  disabled
-                />
-                <br />
+                  <label>Pincode</label>
+                  <input
+                    type="text"
+                    value={formData.address.pincode}
+                    name="pincode"
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        address: { ...formData.address, pincode: e.target.value }
+                      })
+                    }
+                    disabled
+                  />
+                  <br />
 
-                <label>State</label>
-                <input
-                  type="text"
-                  value={formData.address.state}
-                  name="state"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      address: { ...formData.address, state: e.target.value }
-                    })
-                  }
-                  disabled
-                />
-                <br />
+                  <label>Old Password</label>
+                  <input
+                    type="password"
+                    name="oldPassword"
+                    value={formData.oldPassword}
+                    onChange={handleChange}
+                  />
+                  <br />
 
-                <label>Pincode</label>
-                <input
-                  type="text"
-                  value={formData.address.pincode}
-                  name="pincode"
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      address: { ...formData.address, pincode: e.target.value }
-                    })
-                  }
-                  disabled
-                />
-                <br />
+                  <label>New Password</label>
+                  <input
+                    type="password"
+                    name="newPassword"
+                    value={formData.newPassword}
+                    onChange={handleChange}
+                  />
+                  <br />
 
-                <label>Old Password</label>
-                <input
-                  type="password"
-                  name="oldPassword"
-                  value={formData.oldPassword}
-                  onChange={handleChange}
-                />
-                <br />
+                  <Button variant="primary" type="submit" className="mt-3">
+                    Submit
+                  </Button>
+                </Form>
 
-                <label>New Password</label>
-                <input
-                  type="password"
-                  name="newPassword"
-                  value={formData.newPassword}
-                  onChange={handleChange}
-                />
-                <br />
+                <Calendar formattedDates={formattedDates} />
 
-                <Button variant="primary" type="submit" className="mt-3">
-                Submit
-            </Button>
-              </Form>
-                
-              <Calendar formattedDates={formattedDates} />
-
-              {/* <h4>Current packages</h4>
+                {/* <h4>Current packages</h4>
               {order.paid && order.paid.length > 0 ? (
                 <div>
                   
@@ -420,100 +442,87 @@ const CustomerProfile = () => {
               ) : (
                 <p>No channels available</p>
               )} */}
-            
 
-            {order.paid && order.paid.length > 0 ? ( 
-  <div className="current">
-    <Row>
-      <Col>
-        <h4>Current packages</h4>
-        {/* {order.paid && order.paid.length > 0 ? ( */}
-        <Row>
-          {order.paid?.map(ele => ele.packages.map((pack) => {
-            const originalDate = new Date(ele.orderDate);
-            const futureDate = addDays(originalDate, 30);
-            const formattedDate = format(futureDate, 'yyyy-MM-dd');
-            if (new Date(formattedDate) > new Date()) {
-            return (
-              <Col key={pack._id} sm={6}>
-                <Card className="mb-3">
-                  <Card.Body>
-                    <Card.Title>{pack.packageId?.packageName}</Card.Title>
-                    <Card.Text>
-                      Expiry Date: {formattedDate}
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            );
-            }
-          }))}
-        </Row>
-         {/* ): ( */}
-          {/* <p>No package available</p> */}
-        {/* )} */}
-      </Col>
-     
-      <Col>
-        <h4>Current channels</h4>
-        {/* {order.paid && order.paid.length > 0 ? ( */}
-          <Row>
-          {order.paid?.map(ele => ele.channels?.map((chan) => {
-            console.log(chan.channelId.channelName, 'pay chan')
-            const originalDate = new Date(ele.orderDate);
-            const futureDate = addDays(originalDate, 30);
-            const formattedDate = format(futureDate, 'yyyy-MM-dd');
-            if (new Date(formattedDate) > new Date()) {
-            return (
-              <Col key={chan._id} sm={6}>
-                <Card className="mb-3">
-                  <Card.Body>
-                    <Card.Title>{chan.channelId?.channelName}</Card.Title>
-                    <Card.Text>
-                      Expiry Date: {formattedDate}
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            );
-            }
-            // else {
-            //   return (
-            //     <Col key={chan._id} sm={12}>
-            //       <p>You are not subscribed to any channels.....</p>
-            //     </Col>
-            //   )
-            // }
-          }))}
-        </Row>
-        {/* ) : ( */}
-          {/* <p>No channel available</p> */}
-        {/* )} */}
-        
-      </Col>
-    </Row>
-  </div>
- ) : ( 
-   <p>No packages or channels available</p>
- )} 
 
-            </div>
-            
-          )} 
-          
-        </Col>
-      </Row>
-       ) : (
+                {order.paid && order.paid.length > 0 ? (
+                  <div className="current">
+                    <Row>
+                      <Col>
+                        <h4>Current packages</h4>
+                        {/* {order.paid && order.paid.length > 0 ? ( */}
+                        <Row>
+                          {order.paid?.map(ele => ele.packages.map((pack) => {
+                            const originalDate = new Date(ele.orderDate)
+                            const futureDate = addDays(originalDate, 30)
+                            const formattedDate = format(futureDate, 'yyyy-MM-dd')
+                            if (new Date(formattedDate) > new Date()) {
+                              return (
+                                <Col key={pack._id} sm={6}>
+                                  <Card className="mb-3">
+                                    <Card.Body>
+                                      <Card.Title>{pack.packageId?.packageName}</Card.Title>
+                                      <Card.Text>
+                                        Expiry Date: {formattedDate}
+                                      </Card.Text>
+                                    </Card.Body>
+                                  </Card>
+                                </Col>
+                              );
+                            }
+                          }))}
+                        </Row>
+                      </Col>
+
+                      <Col>
+                        <h4>Current channels</h4>
+                        {/* {order.paid && order.paid.length > 0 ? ( */}
+                     
+                        <Row>
+                          {order.paid?.map(ele => ele.channels?.map((chan) => {
+                            console.log(chan.channelId.channelName, 'pay chan')
+                            const originalDate = new Date(ele.orderDate)
+                            const futureDate = addDays(originalDate, 30)
+                            const formattedDate = format(futureDate, 'yyyy-MM-dd')
+                            if (new Date(formattedDate) > new Date()) {
+                              return (
+                                <Col key={chan._id} sm={6}>
+                                  <Card className="mb-3">
+                                    <Card.Body>
+                                      <Card.Title>{chan.channelId?.channelName}</Card.Title>
+                                      <Card.Text>
+                                        Expiry Date: {formattedDate}
+                                      </Card.Text>
+                                    </Card.Body>
+                                  </Card>
+                                </Col>
+                              )
+                            }
+                          }))}
+                        </Row>
+                      </Col>
+                    </Row>
+                  </div>
+                ) : (
+                  <p>No packages or channels available</p>
+                )}
+
+              </div>
+
+            )}
+
+          </Col>
+        </Row>
+      ) : (
         <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
-    <ClipLoader
-        color={"#7aa9ab"}
-        isLoading={isLoading}
-        size={30}
-    />
-</div>
+          <ClipLoader
+            color={"#7aa9ab"}
+            isLoading={isLoading}
+            size={30}
+          />
+        </div>
 
-       )} 
-      
+      )}
+
     </div>
   );
 };

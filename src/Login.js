@@ -28,7 +28,7 @@ export default function Login(props) {
             password: ''
         },
         validationSchema: loginValidationSchema,
-        validateOnChange: false,
+        validateOnChange: true,
         onSubmit: async (values ,{resetForm}) => {
             try {
                 const formData = { mobile: values.mobile, password: values.password }
@@ -48,7 +48,7 @@ export default function Login(props) {
             } catch (error) {
                 if (error.response && error.response.data) {
                     const serverErrors = error.response.data.errors || []
-                    setServerErrors(serverErrors)
+                    // setServerErrors(serverErrors)
                     alert(serverErrors)
                     console.log(error)
                   } else if (error.request) {
@@ -73,11 +73,19 @@ export default function Login(props) {
                             //className='form-control' 
                             value={formik.values.mobile}
                             name="mobile"
-                            onChange={formik.handleChange} />
+                            onChange={formik.handleChange} 
+                            onBlur={formik.handleBlur}
+                            onFocus={() => formik.setFieldError('mobile', '')}
+                            />
+                         
                         
+                        {/* <div className='invalid-feedback'> */}
+                        {/* {formik.errors.mobile} */}
+                        {formik.touched.mobile && formik.errors.mobile && (
                         <div className='invalid-feedback'>
-                        {formik.errors.mobile}
+                            {formik.errors.mobile}
                         </div>
+                    )}
 
 
                         <br />
@@ -89,11 +97,18 @@ export default function Login(props) {
                            // className='form-control'
                             value={formik.values.password}
                             name="password"
-                            onChange={formik.handleChange} />
-                        
+                            onChange={formik.handleChange} 
+                            onBlur={formik.handleBlur}
+                            onFocus={() => formik.setFieldError('password', '')}
+                            />
+                         {formik.touched.password && formik.errors.password && (
                         <div className='invalid-feedback'>
-                        {formik.errors.password}
+                            {formik.errors.password}
                         </div>
+                    )}
+                        {/* <div className='invalid-feedback'>
+                        {formik.errors.password}
+                        </div> */}
                     </div>
                    
                     <button type="submit" className='btn btn-success block mt-2' value={'login'} >

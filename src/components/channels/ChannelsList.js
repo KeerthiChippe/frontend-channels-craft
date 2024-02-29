@@ -7,6 +7,8 @@ import { OperatorContext } from "../profile/operatorContext"
 import { jwtDecode } from "jwt-decode"
 import { ClipLoader } from "react-spinners"
 import { Row, Col, Table, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { ToastContainer, toast } from 'react-toastify';
+import { addDays, format } from "date-fns"
 
 const ChannelsList = () => {
   const [editId, setEditId] = useState(null)
@@ -25,7 +27,20 @@ const ChannelsList = () => {
   const dispatch = useDispatch()
   const channels = useSelector((state) => state.channel.data)
 
-  // const {userState} = useContext(OperatorContext)
+  const orders = useSelector((state)=>{
+    return state.order
+  })
+  const orderDates = orders.paid.map((order) => {
+    // Convert orderDate string to Date object
+    const orderDate = new Date(order.orderDate)
+    // Add 30 days to orderDate to get expiryDate
+    const expiryDate = addDays(orderDate, 30)
+    // Format expiryDate if needed
+    const formattedExpiryDate = format(expiryDate, 'yyyy-MM-dd')// Adjust the format as per your requirement
+    return formattedExpiryDate
+  })
+
+  const {userState} = useContext(OperatorContext)
   // const role = userState.userDetails ? userState.userDetails.role : null;
 
   useEffect(()=>{
@@ -56,7 +71,7 @@ const ChannelsList = () => {
     const confirm = window.confirm("Are you sure to delete?")
     if (confirm) {
       dispatch(startRemoveChannel(id))
-      dispatch(startGetChannel())
+      dispatch(startGetChannel()) 
     }
   }
 
@@ -75,14 +90,37 @@ const ChannelsList = () => {
 
   const handleAdd = (id) => {
     const selectedChannel = channels.find((ele) => ele._id === id)
-    const newChannels = {
-      channelId: selectedChannel._id,
-      channelPrice: selectedChannel.channelPrice,
-      channelName: selectedChannel.channelName
-    };
-    setSelectedItems((previousItems) => [...previousItems, newChannels])
-    dispatch(selectedChannelOne(newChannels))
-  };
+    const { currentChannels } = userState.customer
+    const isChannelAlreadySubscribed = currentChannels.some(channel => channel.channelId === id)
+    if (isChannelAlreadySubscribed ) {
+      // Show toast message indicating already subscribed
+      toast.warning('You are already subscribed to this channel', {
+        position: "top-center",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      })
+    
+    }else{
+      const newChannels = {
+        channelId: selectedChannel._id,
+        channelPrice: selectedChannel.channelPrice,
+        channelName: selectedChannel.channelName
+      };
+      setSelectedItems((previousItems) => [...previousItems, newChannels])
+      dispatch(selectedChannelOne(newChannels))
+      toast.success('Added to cart successfully',{
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true})
+    }
+    }
+    
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -132,6 +170,7 @@ const indexOfLastItem = currentPage * itemsPerPage;
 
   return (
     <div>
+    <ToastContainer />
       {isLoading ? (
         <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
         <ClipLoader
