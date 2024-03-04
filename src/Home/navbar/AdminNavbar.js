@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { isEmpty } from "lodash";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { OperatorContext } from "../../components/profile/operatorContext";
@@ -9,15 +9,12 @@ import logo from '../../images/main.png'
 export default function AdminNavbar() {
     const { userDispatch } = useContext(OperatorContext)
 
-    const navigate = useNavigate()
-
     const handleLogout = () => {
         localStorage.clear('')
         userDispatch({
             type: "SIGN_IN_TOGGLE",
             payload: false
         })
-        //  window.location.reload()
     }
 
     return (
@@ -62,7 +59,6 @@ export default function AdminNavbar() {
                             {/* <li className="nav-item">
                                 <Link className="nav-link" to="/orderslist">Orders</Link>
                             </li> */}
-
 
 
                         </div>

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from '../../config/axios';
-import { Card, CardBody, CardTitle, CardText } from 'reactstrap';
-import { format } from 'date-fns';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import React, { useState, useEffect } from 'react'
+import axios from '../../config/axios'
+import { Card, CardBody, CardTitle, CardText } from 'reactstrap'
+import { format } from 'date-fns'
 
 const ExpiredOrders = () => {
     const [expiredOrders, setExpiredOrders] = useState([]);
@@ -15,9 +14,9 @@ const ExpiredOrders = () => {
                         "Authorization": localStorage.getItem("token")
                     }
                 });
-                setExpiredOrders(response.data);
+                setExpiredOrders(response.data)
             } catch (error) {
-                console.error('Error fetching expired orders:', error);
+                console.error('Error fetching expired orders:', error)
             }
         };
 
@@ -35,7 +34,7 @@ const ExpiredOrders = () => {
                         <CardText>Amount: {order.amount}</CardText>
                         <h5>Packages:</h5>
                         <ul>
-                            
+
                             {order.orderId?.packages.map((pkg, index) => (
                                 <li key={index}>
                                     <p>{pkg.packageId.packageName}</p>
@@ -45,19 +44,19 @@ const ExpiredOrders = () => {
                         {/* Uncomment the following block if you want to display channels */}
                         {order.orderId?.channels.length > 0 && (
                             <>
-                            <h5>Channels:</h5>
-                            <ul>
-                                
-                                {order.orderId?.channels.map((chan, i)=> (
-                                    <li key={i}>
-                                        <p>{chan.channelId.channelName}</p>
-                                    </li>
-                                ))}
-                            </ul>
+                                <h5>Channels:</h5>
+                                <ul>
+
+                                    {order.orderId?.channels.map((chan, i) => (
+                                        <li key={i}>
+                                            <p>{chan.channelId.channelName}</p>
+                                        </li>
+                                    ))}
+                                </ul>
                             </>
                         )}
-                        
-                     
+
+
                         {/* <Link to={{ pathname: '/buyagain',  state: { ...orderData, totalPrice: calculatedTotalPrice } }}>
                             <button>Buy Again</button>
                         </Link> */}
@@ -65,7 +64,7 @@ const ExpiredOrders = () => {
                 </Card>
             ))}
         </div>
-    );
-};
+    )
+}
 
-export default ExpiredOrders;
+export default ExpiredOrders

@@ -47,15 +47,14 @@ const ListPackages = () => {
   })
   const orderDates = orders.paid.map((order) => {
     // Convert orderDate string to Date object
-    const orderDate = new Date(order.orderDate);
+    const orderDate = new Date(order.orderDate)
     // Add 30 days to orderDate to get expiryDate
-    const expiryDate = addDays(orderDate, 30);
+    const expiryDate = addDays(orderDate, 30)
     // Format expiryDate if needed
     const formattedExpiryDate = format(expiryDate, 'yyyy-MM-dd'); // Adjust the format as per your requirement
-    return formattedExpiryDate;
-  });
-  
-  console.log(orderDates, 'expiryDates');
+    return formattedExpiryDate
+  })
+  console.log(orderDates, 'expiryDates')
 
   useEffect(() => {
     setIsLoading(true)
@@ -106,167 +105,225 @@ const ListPackages = () => {
 
   const { userState, userDispatch } = useContext(OperatorContext)
 
-  // const handleAdd = (id) => {
-  //   const selectedPackage = packages.find((ele) => ele._id === id)
-  //   const { currentPackages } = userState.customer // Assuming customerProfile contains the currentPackages and currentChannels
-  // const isPackageAlreadySubscribed = currentPackages?.some(pkg => pkg.packageId === id)
-  // const currentDate = new Date()
-  //   if (isPackageAlreadySubscribed ) {
-  //     toast.warning('You are already subscribed to this package', {
-  //       position: "top-center",
-  //       autoClose: 3000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true
-  //     })
-  //   }else if(currentDate > orderDates){
-  //     toast.success('Added to cart successfully',{
-  //       position: "top-center",
-  //       autoClose: 2000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true})
-  //   }else{
+//   const handleAdd = (id) => {
+//     const selectedPackage = packages.find((ele) => ele._id === id);
+//     const { currentPackages } = userState.customer;
+//   const currentDate = new Date()
+//     // Check if the selected package is already subscribed
+//     const isPackageAlreadySubscribed = currentPackages?.some(pkg => pkg.packageId === id);
   
-  //     const newPackages = {
-  //       packageId: selectedPackage._id,
-  //       packagePrice: selectedPackage.packagePrice,
-  //       packageName: selectedPackage.packageName,
-  //       selectedChannels: selectedPackage.selectedChannels
-  //     }
-  //     dispatch(selectedPackageOne(newPackages))
-  //     toast.success('Added to cart successfully',{
-  //       position: "top-center",
-  //       autoClose: 2000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true})
-  //     // setSelectedItems((previousItems) => [...previousItems, newPackages]);
-  //   }
+//     if (currentDate > orderDates) {
+//         // If any order is expired, show a success message indicating that the package can be added
+//         toast.success('You can add the package to the cart as it is expired.', {
+//             position: "top-center",
+//             autoClose: 3000,
+//             hideProgressBar: false,
+//             closeOnClick: true,
+//             pauseOnHover: true,
+//             draggable: true
+//         });
+//     } else if (isPackageAlreadySubscribed) {
+//         // If the package is already subscribed, show a warning message
+//         toast.warning('You are already subscribed to this package.', {
+//             position: "top-center",
+//             autoClose: 3000,
+//             hideProgressBar: false,
+//             closeOnClick: true,
+//             pauseOnHover: true,
+//             draggable: true
+//         });
+//     } else {
+//         // If the package is not expired and not already subscribed, proceed to add it to the cart
+//         const newPackage = {
+//             packageId: selectedPackage._id,
+//             packagePrice: selectedPackage.packagePrice,
+//             packageName: selectedPackage.packageName,
+//             selectedChannels: selectedPackage.selectedChannels
+//         };
     
-  //   }
-   
-  // const handleAdd = (id) => {
-  //   const selectedPackage = packages.find((ele) => ele._id === id);
-  //   const { currentPackages } = userState.customer;
-  //   const currentDate = new Date()
-  
-  //   const isPackageAlreadySubscribed = currentPackages?.some(pkg => pkg.packageId === id);
-  //   let isExpired = false;
-  //   orders.paid.forEach(order => {
-  //     const orderDate = new Date(order.orderDate);
-  //     const expiryDate = addDays(orderDate, 30); // Assuming expiry after 30 days
-  //     console.log(expiryDate, 'eeeeeeeeeeeeeeee')
-  //     console.log(currentDate, 'cccccccccccccccc')
-  //     if (currentDate > expiryDate) {
-  //       isExpired = true;
-  //     }
-  //   });
-  //   if (isPackageAlreadySubscribed || !isExpired) {
-  //     toast.warning('You are already subscribed to this package', {
-  //       position: "top-center",
-  //       autoClose: 3000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true
-  //     });
-  //   } else if (isExpired || !isPackageAlreadySubscribed) {
-  //       // // Loop through each order to check if any is expired
-  //     // orders.paid.forEach(order => {
-  //     //   const orderDate = new Date(order.orderDate);
-  //     //   const expiryDate = addDays(orderDate, 30); // Assuming expiry after 30 days
-  //     //   console.log(expiryDate, 'eeeeeeeeeeeeeeee')
-  //     //   console.log(currentDate, 'cccccccccccccccc')
-  //     //   if (currentDate > expiryDate) {
-  //     //     isExpired = true;
-  //     //   }
-  //     // });
-  //       const newPackage = {
-  //         packageId: selectedPackage._id,
-  //         packagePrice: selectedPackage.packagePrice,
-  //         packageName: selectedPackage.packageName,
-  //         selectedChannels: selectedPackage.selectedChannels
-  //       };
-  
-  //       dispatch(selectedPackageOne(newPackage));
-  
-  //       toast.success('Added to cart successfully', {
-  //         position: "top-center",
-  //         autoClose: 2000,
-  //         hideProgressBar: false,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true
-  //       });
-      
-  //     // else if (!isExpired){
-  //     //   toast.warning('You are already subscribed to this package', {
-  //     //     position: "top-center",
-  //     //     autoClose: 3000,
-  //     //     hideProgressBar: false,
-  //     //     closeOnClick: true,
-  //     //     pauseOnHover: true,
-  //     //     draggable: true
-  //     //   });
-  //     // }
-  //   }
-  // };
-  const handleAdd = (id) => {
-    const selectedPackage = packages.find((ele) => ele._id === id);
-    const { currentPackages } = userState.customer;
-  
-    // Check if the selected package is already subscribed
-    const isPackageAlreadySubscribed = currentPackages?.some(pkg => pkg.packageId === id);
-  
-    // If the package is already subscribed, show a warning message
-    if (isPackageAlreadySubscribed ) {
-      toast.warning('You are already subscribed to this package', {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true
+//         dispatch(selectedPackageOne(newPackage));
+    
+//         toast.success('Added to cart successfully', {
+//             position: "top-center",
+//             autoClose: 2000,
+//             hideProgressBar: false,
+//             closeOnClick: true,
+//             pauseOnHover: true,
+//             draggable: true
+//         });
+//     }
+// }
+
+// const handleAdd = (id) => {
+//   const selectedPackage = packages.find((ele) => ele._id === id);
+//   const { currentPackages } = userState.customer;
+//   const currentDate = new Date();
+
+//   // Check if the selected package is already subscribed
+//   const isPackageAlreadySubscribed = currentPackages?.some(pkg => pkg.packageId === id);
+
+//   // Check if the selected package is expired
+//   const isPackageExpired = new Date(selectedPackage.expiryDate) < currentDate;
+
+//   if (isPackageExpired) {
+//       // If the package is expired, show a success message indicating that the package can be added
+//       toast.success('You can add the package to the cart as it is expired.', {
+//           position: "top-center",
+//           autoClose: 3000,
+//           hideProgressBar: false,
+//           closeOnClick: true,
+//           pauseOnHover: true,
+//           draggable: true
+//       });
+//   } else if (isPackageAlreadySubscribed) {
+//       // If the package is already subscribed, show a warning message
+//       toast.warning('You are already subscribed to this package.', {
+//           position: "top-center",
+//           autoClose: 3000,
+//           hideProgressBar: false,
+//           closeOnClick: true,
+//           pauseOnHover: true,
+//           draggable: true
+//       });
+//   } else {
+//       // If the package is not expired and not already subscribed, proceed to add it to the cart
+//       const newPackage = {
+//           packageId: selectedPackage._id,
+//           packagePrice: selectedPackage.packagePrice,
+//           packageName: selectedPackage.packageName,
+//           selectedChannels: selectedPackage.selectedChannels
+//       };
+
+//       dispatch(selectedPackageOne(newPackage));
+
+//       toast.success('Added to cart successfully', {
+//           position: "top-center",
+//           autoClose: 2000,
+//           hideProgressBar: false,
+//           closeOnClick: true,
+//           pauseOnHover: true,
+//           draggable: true
+//       });
+//   }
+// }
+
+// const handleAdd = (id, expiryDate) => {
+//   const selectedPackage = packages.find((ele) => ele._id === id);
+//   const { currentPackages } = userState.customer;
+//   const currentDate = new Date();
+
+//   // Check if the selected package is already subscribed
+//   const isPackageAlreadySubscribed = currentPackages?.some(pkg => pkg.packageId === id)
+//   console.log(isPackageAlreadySubscribed, 'isPackageAlreadySubscribed')
+
+//   // Check if the selected package is expired
+//   console.log(orderDates, 'exp')
+//   const isPackageExpired = new Date(expiryDate) < currentDate
+//   console.log(isPackageExpired, 'isPackageExpired')
+
+//   if (isPackageExpired) {
+//       // If the package is expired, show a success message indicating that the package can be added
+//       toast.success('You can add the package to the cart as it is expired.', {
+//           position: "top-center",
+//           autoClose: 3000,
+//           hideProgressBar: false,
+//           closeOnClick: true,
+//           pauseOnHover: true,
+//           draggable: true
+//       });
+//   } else if (isPackageAlreadySubscribed) {
+//       // If the package is already subscribed, show a warning message
+//       toast.warning('You are already subscribed to this package.', {
+//           position: "top-center",
+//           autoClose: 3000,
+//           hideProgressBar: false,
+//           closeOnClick: true,
+//           pauseOnHover: true,
+//           draggable: true
+//       });
+//   } else {
+//       // If the package is not expired and not already subscribed, proceed to add it to the cart
+//       const newPackage = {
+//           packageId: selectedPackage._id,
+//           packagePrice: selectedPackage.packagePrice,
+//           packageName: selectedPackage.packageName,
+//           selectedChannels: selectedPackage.selectedChannels
+//       };
+
+//       dispatch(selectedPackageOne(newPackage));
+
+//       toast.success('Added to cart successfully', {
+//           position: "top-center",
+//           autoClose: 2000,
+//           hideProgressBar: false,
+//           closeOnClick: true,
+//           pauseOnHover: true,
+//           draggable: true
+//       });
+//   }
+// }
+
+
+const handleAdd = (id) => {
+  const selectedPackage = packages.find((ele) => ele._id === id);
+  const { currentPackages } = userState.customer;
+  const currentDate = new Date();
+
+  // Find the corresponding order for the selected package
+  const orderIndex = orders.paid.findIndex(order => order.packages.some(pkg => pkg.packageId === id));
+  const expiryDate = orderIndex !== -1 ? orderDates[orderIndex] : null;
+  console.log(expiryDate, 'exp')
+
+  // Check if the selected package is already subscribed
+  const isPackageAlreadySubscribed = currentPackages?.some(pkg => pkg.packageId === id);
+  console.log(isPackageAlreadySubscribed, 'isPackageAlreadySubscribed')
+
+  // Check if the selected package is expired
+  const isPackageExpired = expiryDate ? new Date(expiryDate) < currentDate : false;
+  console.log(isPackageExpired, 'isPackageExpired')
+
+  if (isPackageExpired) {
+      // If the package is expired, show a success message indicating that the package can be added
+      toast.success('You can add the package to the cart as it is expired.', {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true
       });
-      return;
-    }
-  
-    // Check if any orders are expired
-    const currentDate = new Date();
-    const isExpired = orders.paid.some(orderDate => {
-      const expiryDate = new Date(orderDate);
-      return currentDate > expiryDate;
-    });
-  
-    // If the package is expired, or not already subscribed, proceed to add it to the cart
-    if (isExpired || !isPackageAlreadySubscribed) {
+  } else if (isPackageAlreadySubscribed) {
+      // If the package is already subscribed, show a warning message
+      toast.warning('You are already subscribed to this package.', {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true
+      });
+  } else {
+      // If the package is not expired and not already subscribed, proceed to add it to the cart
       const newPackage = {
-        packageId: selectedPackage._id,
-        packagePrice: selectedPackage.packagePrice,
-        packageName: selectedPackage.packageName,
-        selectedChannels: selectedPackage.selectedChannels
+          packageId: selectedPackage._id,
+          packagePrice: selectedPackage.packagePrice,
+          packageName: selectedPackage.packageName,
+          selectedChannels: selectedPackage.selectedChannels
       };
-  
+
       dispatch(selectedPackageOne(newPackage));
-  
+
       toast.success('Added to cart successfully', {
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true
       });
-    }
-  };
-  
-  
-  
-  
+  }
+}
+ 
   
 
   // const handleSubmit = (e) => {

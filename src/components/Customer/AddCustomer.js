@@ -9,7 +9,7 @@ import Select from "react-select"
 import Swal from "sweetalert2"
 
 
-const AddCustomer = ({ addCustomer }) => {
+const AddCustomer = () => {
     const dispatch = useDispatch()
 
     const user = useSelector((state) => {
@@ -22,7 +22,7 @@ const AddCustomer = ({ addCustomer }) => {
     })
 
     const serverErrors = useSelector((state) => state.customer.serverErrors)
-    // console.log(serverErrors)
+
     const operator = useSelector((state) => {
         return state.operator.data
     })
@@ -38,7 +38,6 @@ const AddCustomer = ({ addCustomer }) => {
     const [formErrors, setFormErrors] = useState([])
     const [userId, setUserId] = useState('')
     const [operatorId, setOperatorId] = useState('')
-    // const [selectedOperator, setSelectedOperator] = useState('')
     const [selectedUser, setSelectedUser] = useState('')
     const [address, setAddress] = useState({
         doorNumber: '',
@@ -86,16 +85,11 @@ const AddCustomer = ({ addCustomer }) => {
         }
     }
 
-
-    // const handleChange = (e) => {
-    //     setAddress({ ...address, [e.target.name]: e.target.value })
-    // }
-
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setAddress(prevAddress => ({ ...prevAddress, [name]: value }));
+        const { name, value } = e.target
+        setAddress(prevAddress => ({ ...prevAddress, [name]: value }))
         // Clear error for the changed field
-        setFormErrors(prevErrors => ({ ...prevErrors, [name]: '' }));
+        setFormErrors(prevErrors => ({ ...prevErrors, [name]: '' }))
         dispatch({ type: 'CLEAR_SERVER_ERRORS' })
     };
     const resetForm = () => {
@@ -131,109 +125,71 @@ const AddCustomer = ({ addCustomer }) => {
                 operatorId
 
             }
-            try{
+            try {
                 await dispatch(startAddCustomer(formData, resetForm))
                 Swal.fire({
                     icon: 'success',
                     title: 'Customer Added Successfully',
                     showConfirmButton: false,
                     timer: 3000
-                });
-            }catch(error){
-                console.error('Error adding operator:', error);
+                })
+            } catch (error) {
+                console.error('Error adding operator:', error)
                 // Display error message using SweetAlert2 if needed
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Something went wrong!',
-                });
+                })
             }
-            
-
         } else {
             setFormErrors(errors)
         }
     }
-    // const handleUser = (e) => {
-    //     let user = e.target.value
-    //     setSelectedUser(user)
-    //     setUserId(user)
-    //     setFormErrors(prevErrors => ({
-    //         ...prevErrors,
-    //         customerName: '',
-    //         mobile: ''
-    //     }));
-    // }
 
     const handleUserSelect = (selectedOption) => {
-        setSelectedUser(selectedOption);
-        setUserId(selectedOption.value);
-        setCustomerName(selectedOption.label);
-        setMobile(selectedOption.mobile);
+        setSelectedUser(selectedOption)
+        setUserId(selectedOption.value)
+        setCustomerName(selectedOption.label)
+        setMobile(selectedOption.mobile)
         setFormErrors((prevErrors) => ({
             ...prevErrors,
             customerName: "",
             mobile: "",
-        }));
+        }))
         dispatch({ type: 'CLEAR_SERVER_ERRORS' })
-    };
+    }
 
-    //   const options = user
-    //     .filter((user) => !operator.find((op) => op.userId === user._id)) // Filter out users who are already operators
-    //     .map((user) => ({
-    //       value: user._id,
-    //       label: user.username,
-    //       mobile: user.mobile,
-    //     }));
     const userOptions = user
         .filter((user) => !customers.find((customer) => customer.userId === user._id))
         .map((user) => ({
             value: user._id,
             label: user.username,
             mobile: user.mobile,
-        }));
-
-    // const handleOperator = (e) => {
-    //     let operator = e.target.value
-    //     setSelectedOperator(operator)
-    //     setOperatorId(operator)
-    // }
-
-
-    // useEffect(() => {
-    //     if (selectedUser) {
-    //         const selectedUserDetails = user.find((u) => u._id === selectedUser);
-    //         if (selectedUserDetails) {
-    //             setUserId(selectedUserDetails._id);
-    //             setCustomerName(selectedUserDetails.username || '');
-    //             setMobile(selectedUserDetails.mobile || '');
-    //         }
-    //     }
-    // }, [selectedUser, user])
+        }))
 
     const fetchCityStateFromPincode = async () => {
         try {
-            const response = await fetch(`https://api.postalpincode.in/pincode/${address.pincode}`);
-            const data = await response.json();
+            const response = await fetch(`https://api.postalpincode.in/pincode/${address.pincode}`)
+            const data = await response.json()
 
             if (Array.isArray(data) && data.length > 0 && data[0]?.PostOffice?.length > 0) {
-                const postOffice = data[0].PostOffice[0];
+                const postOffice = data[0].PostOffice[0]
                 setAddress({
                     ...address,
                     city: postOffice.District,
                     state: postOffice.State
-                });
+                })
             }
         } catch (error) {
-            console.error("Error fetching city and state:", error);
-
+            console.error("Error fetching city and state:", error)
         }
     };
 
 
     useEffect(() => {
         if (address.pincode) {
-            fetchCityStateFromPincode();
+            fetchCityStateFromPincode()
         }
     }, [address.pincode])
 
@@ -244,12 +200,6 @@ const AddCustomer = ({ addCustomer }) => {
 
             <form onSubmit={handleSubmit} class="row g-3"  >
                 <h3 style={{ marginLeft: "120px" }}>Add Customer</h3>
-                {/* <label>Select User</label><br />
-                        <select class="form-select" aria-label="Default select example" value={selectedUser} onChange={handleUser}>
-                            <option value="" >Select a User</option>
-                            {user.map(user => <option key={user.id} value={user._id}>{user.username}</option>)}
-                        </select><br />
-                        <br /> */}
                 <div style={{ width: 300 }}>
                     <label>Select User</label>
                     <Select
@@ -272,7 +222,7 @@ const AddCustomer = ({ addCustomer }) => {
                         placeholder="Name"
                         id="customerName"
                         onChange={(e) => {
-                            setCustomerName(e.target.value);
+                            setCustomerName(e.target.value)
                         }}
                         disabled
                     />
@@ -302,7 +252,7 @@ const AddCustomer = ({ addCustomer }) => {
                         id="boxNumber"
                         onChange={(e) => {
                             setBoxNumber(e.target.value);
-                            setFormErrors({ ...formErrors, boxNumber: '' });
+                            setFormErrors({ ...formErrors, boxNumber: '' })
                         }}
                     />
                     <span className="error"> {formErrors.boxNumber && formErrors.boxNumber}</span>

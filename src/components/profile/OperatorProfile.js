@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react"
 import { OperatorContext } from "./operatorContext"
-import { useDispatch ,useSelector} from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { startUpdateUser } from "../../actions/user-action"
 import { startEditOperator, startGetOperator } from "../../actions/operator-action"
 import _ from "lodash"
@@ -63,11 +63,11 @@ export default function OperatorProfile() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-           await dispatch(startUpdateUser(userId, {
+            await dispatch(startUpdateUser(userId, {
                 "oldPassword": formData.oldPassword,
                 "newPassword": formData.newPassword
             }))
-           await dispatch(startEditOperator(operatorId, {
+            await dispatch(startEditOperator(operatorId, {
                 "mobile": formData.mobile
             }))
             setFormData({
@@ -126,185 +126,88 @@ export default function OperatorProfile() {
 
 
     return (
-//         <div>
-            
-//             <img
-//                 className="rounded-circle mb-3 "
-//                 src={!_.isEmpty(formData.img) ? `http://localhost:3034/Images/${formData.img}` : process.env.PUBLIC_URL + '/service-pic.jpg'}
-//                 alt='image'
-//                 width="150px"
-//                 height="150px"
-//                 onClick={handleImageClick}
-//             />
 
-//             <Modal show={showModal} onHide={() => setShowModal(false)}>
-//                 <Modal.Header closeButton>
-//                     <Modal.Title>Upload Image</Modal.Title>
-//                 </Modal.Header>
-//                 <Modal.Body>
-//                     <Form onSubmit={handleUpload}>
-//                         <Form.Group controlId="formFile">
-//                             <Form.Label>Choose Image</Form.Label>
-//                             <Form.Control type="file" onChange={handleImageChange} />
-//                         </Form.Group><br />
-//                         <Button variant="primary" type="submit">
-//                             Upload
-//                         </Button>
-//                     </Form>
-//                 </Modal.Body>
-//             </Modal>
-            
-//             {/* {userState.userDetails.role === 'operator' && (
-//                 <div>
-//                     <form onSubmit={handleSubmit}>
-//                         <label>name</label>
-//                         <input type="text" value={formData.operatorName} name='operatorName' onChange={handleChange} disabled />
-//                         <br />
+        <div>
+            {!isLoading ? (
+                <div className="container mt-5">
+                    <div className="row justify-content-center">
+                        <div className="col-md-6">
+                            <div className="card border rounded shadow-lg p-3">
+                                <div className="text-center mb-3">
+                                    <img
+                                        className="rounded-circle mb-3"
+                                        src={!_.isEmpty(formData.img) ? `http://localhost:3034/Images/${formData.img}` : process.env.PUBLIC_URL + '/service-pic.jpg'}
+                                        alt='image'
+                                        width="150px"
+                                        height="150px"
+                                        onClick={handleImageClick}
+                                    />
 
-//                         <label>mobile</label>
-//                         <input type="text" name='mobile' value={formData.mobile} onChange={handleChange} />
-//                         <br />
+                                    <Modal show={showModal} onHide={() => setShowModal(false)}>
+                                        <Modal.Header closeButton>
+                                            <Modal.Title>Upload Image</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                                            <Form onSubmit={handleUpload}>
+                                                <Form.Group controlId="formFile">
+                                                    <Form.Label>Choose Image</Form.Label>
+                                                    <Form.Control type="file" onChange={handleImageChange} />
+                                                </Form.Group><br />
+                                                <Button variant="primary" type="submit">
+                                                    Upload
+                                                </Button>
+                                            </Form>
+                                        </Modal.Body>
+                                    </Modal>
 
-//                         <label>city</label>
-//                         <input type='text' name='city' value={formData.city} onChange={handleChange} disabled />
-//                         <br />
+                                    <form onSubmit={handleSubmit}>
+                                        <div className="mb-3">
+                                            <label htmlFor="operatorName" className="form-label fw-bold">Name</label>
+                                            <input type="text" className="form-control" id="operatorName" value={formData.operatorName} name='operatorName' onChange={handleChange} disabled />
+                                        </div>
+                                        <div className="mb-3">
+                                            <label htmlFor="mobile" className="form-label fw-bold">Mobile</label>
+                                            <input type="text" className="form-control" id="mobile" name='mobile' value={formData.mobile} onChange={handleChange} />
+                                        </div>
 
-//                         <label>state</label>
-//                         <input type='text' name='state' value={formData.state} onChange={handleChange} disabled />
-//                         <br />
+                                        <div className="mb-3">
+                                            <label htmlFor="city" className="form-label fw-bold">City</label>
+                                            <input type='text' className="form-control" id="city" name='city' value={formData.city} onChange={handleChange} disabled />
+                                        </div>
 
-//                         <label>old password</label>
-//                         <input type='password' name='oldPassword' value={formData.oldPassword} onChange={handleChange} />
-//                         <br />
+                                        <div className="mb-3">
+                                            <label htmlFor="state" className="form-label fw-bold">State</label>
+                                            <input type='text' className="form-control" id="state" name='state' value={formData.state} onChange={handleChange} disabled />
+                                        </div>
 
-//                         <label>new password</label>
-//                         <input type='password' name='newPassword' value={formData.newPassword} onChange={handleChange} />
-//                         <br />
+                                        <div className="mb-3">
+                                            <label htmlFor="oldPassword" className="form-label fw-bold">Old Password</label>
+                                            <input type='password' className="form-control" id="oldPassword" name='oldPassword' value={formData.oldPassword} onChange={handleChange} />
+                                        </div>
 
-//                         <input type='submit' />
-//                     </form>
-//                 </div>
-//             )} */}
+                                        <div className="mb-3">
+                                            <label htmlFor="newPassword" className="form-label fw-bold">New Password</label>
+                                            <input type='password' className="form-control" id="newPassword" name='newPassword' value={formData.newPassword} onChange={handleChange} />
+                                        </div>
 
-
-// {userState.userDetails.role === 'operator' && (
-//                 <form onSubmit={handleSubmit}  className="mt-5">
-//                     <div className="mb-3">
-//                         <label htmlFor="operatorName" className="form-label">Name</label>
-//                         <input type="text" className="form-control" id="operatorName" value={formData.operatorName} name='operatorName' onChange={handleChange} disabled />
-//                     </div>
-//                     <div className="mb-3">
-//                         <label htmlFor="mobile" className="form-label">Mobile</label>
-//                         <input type="text" className="form-control" id="mobile" name='mobile' value={formData.mobile} onChange={handleChange} />
-//                     </div>
-
-//                     <div className="mb-3">
-//                         <label htmlFor="city" className="form-label">City</label>
-//                         <input type='text' className="form-control" id="city" name='city' value={formData.city} onChange={handleChange} disabled />
-//                     </div>
-
-//                     <div className="mb-3">
-//                         <label htmlFor="state" className="form-label">State</label>
-//                         <input type='text' className="form-control" id="state" name='state' value={formData.state} onChange={handleChange} disabled />
-//                     </div>
-
-//                     <div className="mb-3">
-//                         <label htmlFor="oldPassword" className="form-label">Old Password</label>
-//                         <input type='password' className="form-control" id="oldPassword" name='oldPassword' value={formData.oldPassword} onChange={handleChange} />
-//                     </div>
-
-//                     <div className="mb-3">
-//                         <label htmlFor="newPassword" className="form-label">New Password</label>
-//                         <input type='password' className="form-control" id="newPassword" name='newPassword' value={formData.newPassword} onChange={handleChange} />
-//                     </div>
-
-//                     <button type="submit" className="btn btn-primary">Submit</button>
-//                 </form>
-//             )}
-
-//         </div>
-
-<div>
-    {!isLoading ? (
-        <div className="container mt-5">
-        <div className="row justify-content-center">
-            <div className="col-md-6">
-                <div className="card border rounded shadow-lg p-3">
-                <div className="text-center mb-3">
-                    <img
-                        className="rounded-circle mb-3"
-                        src={!_.isEmpty(formData.img) ? `http://localhost:3034/Images/${formData.img}` : process.env.PUBLIC_URL + '/service-pic.jpg'}
-                        alt='image'
-                        width="150px"
-                        height="150px"
-                        onClick={handleImageClick}
-                    />
-        
-                    <Modal show={showModal} onHide={() => setShowModal(false)}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Upload Image</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <Form onSubmit={handleUpload}>
-                                <Form.Group controlId="formFile">
-                                    <Form.Label>Choose Image</Form.Label>
-                                    <Form.Control type="file" onChange={handleImageChange} />
-                                </Form.Group><br />
-                                <Button variant="primary" type="submit">
-                                    Upload
-                                </Button>
-                            </Form>
-                        </Modal.Body>
-                    </Modal>
-        
-                    <form onSubmit={handleSubmit}>
-                        <div className="mb-3">
-                            <label htmlFor="operatorName" className="form-label fw-bold">Name</label>
-                            <input type="text" className="form-control" id="operatorName" value={formData.operatorName} name='operatorName' onChange={handleChange} disabled />
+                                        <button type="submit" className="btn btn-primary">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <div className="mb-3">
-                            <label htmlFor="mobile" className="form-label fw-bold">Mobile</label>
-                            <input type="text" className="form-control" id="mobile" name='mobile' value={formData.mobile} onChange={handleChange} />
-                        </div>
-        
-                        <div className="mb-3">
-                            <label htmlFor="city" className="form-label fw-bold">City</label>
-                            <input type='text' className="form-control" id="city" name='city' value={formData.city} onChange={handleChange} disabled />
-                        </div>
-        
-                        <div className="mb-3">
-                            <label htmlFor="state" className="form-label fw-bold">State</label>
-                            <input type='text' className="form-control" id="state" name='state' value={formData.state} onChange={handleChange} disabled />
-                        </div>
-        
-                        <div className="mb-3">
-                            <label htmlFor="oldPassword" className="form-label fw-bold">Old Password</label>
-                            <input type='password' className="form-control" id="oldPassword" name='oldPassword' value={formData.oldPassword} onChange={handleChange} />
-                        </div>
-        
-                        <div className="mb-3">
-                            <label htmlFor="newPassword" className="form-label fw-bold">New Password</label>
-                            <input type='password' className="form-control" id="newPassword" name='newPassword' value={formData.newPassword} onChange={handleChange} />
-                        </div>
-        
-                        <button type="submit" className="btn btn-primary">Submit</button>
-                    </form>
+                    </div>
                 </div>
-            </div>
-            </div>
-        </div>
-        </div>
-    ) : (
-        <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
-    <ClipLoader
-        color={"#7aa9ab"}
-        isLoading={isLoading}
-        size={30}
-    />
-</div>
-    )}
+            ) : (
+                <div style={{ height: "59vh" }} className="d-flex justify-content-center align-items-center">
+                    <ClipLoader
+                        color={"#7aa9ab"}
+                        isLoading={isLoading}
+                        size={30}
+                    />
+                </div>
+            )}
 
-</div>
+        </div>
     )
 
 }

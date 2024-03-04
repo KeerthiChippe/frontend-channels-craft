@@ -1,6 +1,5 @@
 import AddCustomer from './AddCustomer'
 import CustomerList from './listCustomers'
-import { useSelector } from 'react-redux'
 import { Row ,Col} from 'reactstrap'
 import './customer.css'
 

@@ -36,15 +36,14 @@ const CreateOrder = ()=>{
     }
 
     const handleOrder = ()=>{
-      const selectedCustomer = customers.find(customer => customer._id === selectCustomer);
-      const selectedPackage = packages.find(pkg => pkg._id === selectPackage);
-      const selectedChannel = channels.find(channel => channel._id === selectChannel);
+      const selectedCustomer = customers.find(customer => customer._id === selectCustomer)
+      const selectedPackage = packages.find(pkg => pkg._id === selectPackage)
+      const selectedChannel = channels.find(channel => channel._id === selectChannel)
         const formData = {
             packages: [selectedPackage],
             channels: [selectedChannel],
             customers: selectedCustomer
         }
-        console.log(formData, "llllll")
         dispatch(startCreateOrder(formData))
     }
 
@@ -88,10 +87,6 @@ const CreateOrder = ()=>{
                 ))}
               </select><br/>
               <br/>
-              {/* <label>Order Date</label><br />
-              <input type='date' value={orderDate} onChange={(e)=>{
-                setOrderDate(e.target.value)
-              }} /><br /> */}
               <br/>
                    <button className="dropdown" onClick={handleOrder}>order</button>
             </form>

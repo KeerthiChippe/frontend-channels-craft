@@ -7,11 +7,11 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './cart.css'
 
 const Cart = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const cart = useSelector((state) => {
-        return state;
+        return state
     })
 
     // console.log(cart.order.packages, "cart packages")
@@ -44,16 +44,13 @@ const Cart = () => {
         dispatch(startCreateOrder(formData));
     };
 
-    useEffect(()=>{
-        if(cart.order.cart.length > 0){
+    useEffect(() => {
+        if (cart.order.cart.length > 0) {
             // const price = calculateTotalPriceForPackages()
-            navigate('/orderpay', {state: cart.order.cart})
+            navigate('/orderpay', { state: cart.order.cart })
             // console.log(cart.order.cart, "cart")
         }
     }, [cart.order.cart])
-
-
-
 
     return (
         <div className="cart" style={{ marginLeft: "3px", height: "50%" }} >
@@ -67,38 +64,38 @@ const Cart = () => {
 
                     <Row >
                         <Col>
-                        {cart.order?.packages?.length > 0 && (
-                            <>
-                                <h3>Packages</h3>
-                            <ListGroup>
-                                {cart.order.packages.map((item, index) => (
-                                    <ListGroup.Item key={index}>
-                                        <b>{item.packageName}</b> - {item.packagePrice}
-                                        <ul>
-                                            {item.selectedChannels.map((channel, i)=>{
-                                                return <li key={i}>{channel.channelName}</li>
-                                            })}
-                                        </ul>
-                                    </ListGroup.Item>
-                                ))}
-                            </ListGroup>
-                            </>
-                        )}
-                            
-
-                            {cart.order?.channels.length>0 && (
+                            {cart.order?.packages?.length > 0 && (
                                 <>
-                                 <h3>Channels</h3>
-                                 <ListGroup>
-                                     {cart.order.channels.map((item, index) => (
-                                         <ListGroup.Item key={index}>
-                                             {item.channelName} - {item.channelPrice}
-                                         </ListGroup.Item>
-                                     ))}
-                                 </ListGroup>
-                                 </>
+                                    <h3>Packages</h3>
+                                    <ListGroup>
+                                        {cart.order.packages.map((item, index) => (
+                                            <ListGroup.Item key={index}>
+                                                <b>{item.packageName}</b> - {item.packagePrice}
+                                                <ul>
+                                                    {item.selectedChannels.map((channel, i) => {
+                                                        return <li key={i}>{channel.channelName}</li>
+                                                    })}
+                                                </ul>
+                                            </ListGroup.Item>
+                                        ))}
+                                    </ListGroup>
+                                </>
                             )}
-                           
+
+
+                            {cart.order?.channels.length > 0 && (
+                                <>
+                                    <h3>Channels</h3>
+                                    <ListGroup>
+                                        {cart.order.channels.map((item, index) => (
+                                            <ListGroup.Item key={index}>
+                                                {item.channelName} - {item.channelPrice}
+                                            </ListGroup.Item>
+                                        ))}
+                                    </ListGroup>
+                                </>
+                            )}
+
                         </Col>
                     </Row>
 
@@ -127,7 +124,7 @@ const Cart = () => {
 
 
         </div>
-    );
-};
+    )
+}
 
-export default Cart;
+export default Cart

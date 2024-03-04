@@ -1,4 +1,3 @@
-// 
 import { useEffect, useState } from "react";
 import { Row, Col, Table, Pagination, PaginationItem, PaginationLink, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { useDispatch, useSelector } from "react-redux";
@@ -7,35 +6,35 @@ import { Form, FormGroup, Input, Label } from "reactstrap";
 import axios from "../../config/axios";
 
 const OperatorList = () => {
-    const [search, setSearch] = useState('');
-    const [sort, setSort] = useState('asc');
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
-    const [modal, setModal] = useState(false);
-    const [selectedOperator, setSelectedOperator] = useState(null);
+    const [search, setSearch] = useState('')
+    const [sort, setSort] = useState('asc')
+    const [currentPage, setCurrentPage] = useState(1)
+    const [itemsPerPage, setItemsPerPage] = useState(10)
+    const [modal, setModal] = useState(false)
+    const [selectedOperator, setSelectedOperator] = useState(null)
     const [operatorDetails, setOperatorDetails] = useState(null)
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
 
-    const operator = useSelector((state) => state.operator.data);
+    const operator = useSelector((state) => state.operator.data)
 
     useEffect(() => {
-        dispatch(startGetOperator());
-    }, [dispatch]);
+        dispatch(startGetOperator())
+    }, [dispatch])
 
     const toggleModal = () => {
-        setModal(!modal);
+        setModal(!modal)
     };
 
     const handleDelete = (id) => {
-        const confirm = window.confirm('Are you sure??');
+        const confirm = window.confirm('Are you sure??')
         if (confirm) {
-            dispatch(StartRemoveOperator(id));
+            dispatch(StartRemoveOperator(id))
         }
     };
 
     const handleSearch = (e) => {
-        setSearch(e.target.value);
-        setCurrentPage(1);
+        setSearch(e.target.value)
+        setCurrentPage(1)
     };
 
     const filteredOperators = operator.filter((operator) =>
@@ -43,36 +42,30 @@ const OperatorList = () => {
     );
 
     const handleSort = (e) => {
-        setSort(e.target.value);
+        setSort(e.target.value)
     };
 
     const sortedOperators = [...filteredOperators].sort((a, b) => {
         if (sort === 'asc') {
-            return a.operatorName.localeCompare(b.operatorName);
+            return a.operatorName.localeCompare(b.operatorName)
         } else {
-            return b.operatorName.localeCompare(a.operatorName);
+            return b.operatorName.localeCompare(a.operatorName)
         }
-    });
+    })
 
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentOperators = sortedOperators.slice(indexOfFirstItem, indexOfLastItem);
+    const indexOfLastItem = currentPage * itemsPerPage
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage
+    const currentOperators = sortedOperators.slice(indexOfFirstItem, indexOfLastItem)
 
-    const totalPages = Math.ceil(sortedOperators.length / itemsPerPage);
+    const totalPages = Math.ceil(sortedOperators.length / itemsPerPage)
 
     const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
-
-    // const handleOperatorClick = (operator) => {
-    //     setSelectedOperator(operator);
-    //     toggleModal();
-    // };
+        setCurrentPage(pageNumber)
+    }
 
 const handleOperatorClick = async (operator) => {
-    setSelectedOperator(operator);
-    toggleModal();
-    // console.log(localStorage.getItem('token'))
+    setSelectedOperator(operator)
+    toggleModal()
 
     try {
         const response = await axios.get(`/api/${operator._id}/customers`, {
@@ -80,13 +73,10 @@ const handleOperatorClick = async (operator) => {
                 Authorization: localStorage.getItem('token')
             }
            
-        });
-
-        // console.log(response.data, "operator customer")
-        // console.log(operatorDetails)
-        setOperatorDetails(response.data);
+        })
+        setOperatorDetails(response.data)
     } catch (error) {
-        console.error('Error fetching customer details:', error);
+        console.error('Error fetching customer details:', error)
     }
 };
 
@@ -163,7 +153,7 @@ const handleOperatorClick = async (operator) => {
                 </ModalBody>
             </Modal>
         </div>
-    );
-};
+    )
+}
 
-export default OperatorList;
+export default OperatorList

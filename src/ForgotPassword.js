@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from './config/axios'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './login.css'
-import email from 'validator/lib/isEmail'
+
 
 const loginValidationSchema = yup.object({
     email: yup.string().email('invalid email format').required("email is required")
@@ -12,7 +12,6 @@ const loginValidationSchema = yup.object({
 
 export default function ForgotPassword() {
     const navigate = useNavigate()
-    // const { handleLogin, loginToast } = props
     const formik = useFormik({
         initialValues: {
            email: ''

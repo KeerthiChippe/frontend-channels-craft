@@ -28,8 +28,8 @@ const Footer = () => {
           <h5>Section</h5>
           <ul className="nav flex-column">
             <li className="nav-item mb-2"><Link to="/" className="nav-link p-0 text-body-secondary">Home</Link></li>
-            <li className="nav-item mb-2"><Link to="/features" className="nav-link p-0 text-body-secondary">Packages</Link></li>
-            <li className="nav-item mb-2"><Link to="/pricing" className="nav-link p-0 text-body-secondary">Channels</Link></li>
+            <li className="nav-item mb-2"><Link to="/packcha" className="nav-link p-0 text-body-secondary">Packages</Link></li>
+            <li className="nav-item mb-2"><Link to="/packcha" className="nav-link p-0 text-body-secondary">Channels</Link></li>
         </ul>
         </div>
         <div className="col mb-3">

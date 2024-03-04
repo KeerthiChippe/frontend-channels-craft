@@ -46,7 +46,9 @@ const HomeCards = () => {
         {trendingPackages.slice(0, 3).map((ele, index) => (
           <div className="card" key={index} style={{ width: '18rem', height: '20rem' }}>
             <img src={`http://localhost:3034/Images/${ele.image}`} className="card-img-top" alt={ele.packageName} style={{ width: '100%', height: '80%' }}/>
-            <h4>{ele.packageName}</h4>
+            <div className="card-body d-flex flex-column justify-content-center">
+              <h4 className="card-title">{ele.packageName}</h4>
+            </div>
           </div>
         ))}
       </div>
@@ -56,7 +58,9 @@ const HomeCards = () => {
         {trendingPackages.slice(3).map((ele, index) => (
           <div className="card" key={index} style={{ width: '18rem', height: '20rem' }}>
             <img src={`http://localhost:3034/Images/${ele.image}`} className="card-img-top" alt={ele.packageName} style={{ width: '100%', height: '80%' }}/>
-            <h4>{ele.packageName}</h4>
+            <div className="card-body d-flex flex-column justify-content-center">
+              <h4 className="card-title">{ele.packageName}</h4>
+            </div>
           </div>
         ))}
       </div>

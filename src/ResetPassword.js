@@ -1,13 +1,12 @@
 import { useState } from "react"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import axios from "./config/axios"
-import {ToastContainer, toast} from 'react-toastify'
 
 export default function ResetPassword({resetPassword}){
     const [password, setPassword] = useState('')
     const navigate = useNavigate()
     const {id, token} = useParams()
-    console.log(id. token)
+    // console.log(id. token)
 
     
     const handleSubmit = async (e)=>{

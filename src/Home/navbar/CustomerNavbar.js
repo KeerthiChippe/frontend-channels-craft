@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -10,14 +10,9 @@ import logo from '../../images/main.png'
 export default function CustomerNavbar() {
     const { userDispatch } = useContext(OperatorContext)
     const cart = useSelector((state) => {
-        return state;
-    });
-    // console.log(cart.order.packages, "cart packages")
-    // console.log(cart.order.channels, 'cart channels')
-    // console.log(cart.order.packages.length + cart.order.channels.length, 'cart total')
+        return state
+    })
     const cartTotal = cart.order.packages.length + cart.order.channels.length
-
-    const navigate = useNavigate()
 
     const handleLogout = () => {
         localStorage.clear('')
@@ -25,9 +20,8 @@ export default function CustomerNavbar() {
             type: "SIGN_IN_TOGGLE",
             payload: false
         })
-        // window.location.reload()
     }
-    
+
     // rgba(57, 123, 177, 0.2)
     // "rgba(11, 48, 194, 0.2)" 
     // style={{ backgroundColor: "rgba(11, 48, 194, 0.2)" }}
@@ -38,7 +32,7 @@ export default function CustomerNavbar() {
                 <div className="container-fluid">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <Link className="navbar-brand" to="/">
-                            <img src={logo} alt="Channel Craft Logo"className="rounded-circle" style={{ width: '60px', height: '60px' }} />
+                            <img src={logo} alt="Channel Craft Logo" className="rounded-circle" style={{ width: '60px', height: '60px' }} />
                         </Link>
                         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"></span>
@@ -57,33 +51,33 @@ export default function CustomerNavbar() {
                                 <Link className="nav-link" to="/packcha">Packages & Channels</Link>
                             </li>
 
-                            
- </div>
+
+                        </div>
                     </ul>
                     <div className="d-flex">
-                            <ul className="navbar-nav">
+                        <ul className="navbar-nav">
                             <li className="nav-item">
-                    <Link className="nav-link" to="/cart"><i className="bi bi-cart-fill fs-5"></i>({cartTotal})</Link>
-                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/customerProfile">
-                                        <i className="bi bi-person-circle fs-5"></i>
-                                    </Link>
-                                </li>
-                                {!isEmpty(localStorage.getItem('token')) && (
-                                    <>
-                                    
-                                <li className="nav-item">
-                                <Link className="nav-link" to="/yourOrders">Your orders</Link>
+                                <Link className="nav-link" to="/cart"><i className="bi bi-cart-fill fs-5"></i>({cartTotal})</Link>
                             </li>
                             <li className="nav-item">
-                                    <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
-                                </li>
-                           </>
-                                )}
-                                
-                            </ul>
-                        </div>
+                                <Link className="nav-link" to="/customerProfile">
+                                    <i className="bi bi-person-circle fs-5"></i>
+                                </Link>
+                            </li>
+                            {!isEmpty(localStorage.getItem('token')) && (
+                                <>
+
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/yourOrders">Your orders</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
+                                    </li>
+                                </>
+                            )}
+
+                        </ul>
+                    </div>
 
                 </div>
             </nav>

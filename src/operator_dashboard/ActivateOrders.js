@@ -1,16 +1,15 @@
-import { useState, useEffect } from 'react';
-import axios from '../config/axios';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react'
+import axios from '../config/axios'
+import { useSelector } from 'react-redux'
 
 
 const ActivateOrders = () => {
-    const dispatch = useDispatch()
     const [paymentDetails, setPaymentDetails] = useState(null)
-    const [activateSubscription, setActivateSubscription] = useState(false)
 
     const operator = useSelector((state)=>{
         return state.operator
     })
+
     useEffect(()=>{
         const fetchPaymentDetails = async ()=>{
             try{
@@ -19,8 +18,6 @@ const ActivateOrders = () => {
                         Authorization: localStorage.getItem('token')
                     }
                 })
-                console.log(response.data, "payment details")
-                console.log("shdjhdk")
                 setPaymentDetails(response.data)
                 
             }catch(e){
@@ -39,10 +36,10 @@ const ActivateOrders = () => {
             })
             setPaymentDetails(paymentDetails.map(payment => {
                 if (payment._id === paymentId) {
-                    return { ...payment, activate: true };
+                    return { ...payment, activate: true }
                 }
-                return payment;
-            }));
+                return payment
+            }))
         }catch(e){
             console.log(e)
         }
@@ -77,4 +74,4 @@ const ActivateOrders = () => {
     )
 };
 
-export default ActivateOrders;
+export default ActivateOrders

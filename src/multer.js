@@ -1,28 +1,26 @@
-import React from "react";
-import axios from "./config/axios";
+import axios from "./config/axios"
 import { useState } from "react"
 import _ from "lodash"
-import AddPackage from "./components/packages/AddPackage";
 
-const Image = ()=>{
-    const [data, setData ] = useState({})
-    const [image,setImage] = useState(null)
+const Image = () => {
+    const [data, setData] = useState({})
+    const [image, setImage] = useState(null)
 
-        console.log(image, "image")
+    // console.log(image, "image")
     const upload = (e) => {
         e.preventDefault()
 
-        const formData= new FormData()
+        const formData = new FormData()
         formData.append('file', image)
-    
-        if(image){
+
+        if (image) {
             axios.post('/api/upload', formData)
-            .then(res => {
-                console.log(res.data, "img result")
-                setData(res.data)
-            })
-            .catch(err => console.log(err))  
-        } 
+                .then(res => {
+                    console.log(res.data, "img result")
+                    setData(res.data)
+                })
+                .catch(err => console.log(err))
+        }
     }
     // console.log(data)
     // useEffect(()=>{    
@@ -33,22 +31,22 @@ const Image = ()=>{
     //     })
     //     .catch(err => console.log(err))
     // },[])
-       
-    return(
+
+    return (
         <div>
             <form onSubmit={upload}>
-                <input type='file' onChange={(e) =>{
+                <input type='file' onChange={(e) => {
                     setImage(e.target.files[0])
-                }}/>
+                }} />
 
                 <input type="submit" value="Upload" />
             </form>
-            
-            {!_.isEmpty(data) && 
-            <img 
-            src={`http://localhost:3034/Images/${data.image}`} alt ='image'
-            />} 
-    
+
+            {!_.isEmpty(data) &&
+                <img
+                    src={`http://localhost:3034/Images/${data.image}`} alt='image'
+                />}
+
         </div>
     )
 }

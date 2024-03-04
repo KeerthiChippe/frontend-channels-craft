@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import axios from '../config/axios';
-import { Bar } from 'react-chartjs-2';
-import { Card, CardBody, CardTitle, CardSubtitle, ListGroup, ListGroupItem } from 'reactstrap';
-import { FadeLoader } from 'react-spinners';
+import { useState, useEffect } from 'react'
+import axios from '../config/axios'
+import { Bar } from 'react-chartjs-2'
+import { Card, CardBody, CardTitle, CardSubtitle, ListGroup, ListGroupItem } from 'reactstrap'
+import { FadeLoader } from 'react-spinners'
 
 const OperatorDashboard = () => {
     const [totalCustomers, setTotalCustomers] = useState([])
     const [recentOrders, setRecentOrders] = useState([])
-    const [subscriberData, setSubscriberData] = useState({});
-    const [totalIncome, setTotalIncome] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [subscriberData, setSubscriberData] = useState({})
+    const [totalIncome, setTotalIncome] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -42,17 +42,17 @@ const OperatorDashboard = () => {
 
                 // Extract month and year from paymentDate
                 const monthCounts = subscribers.reduce((acc, subscriber) => {
-                    const paymentMonth = new Date(subscriber.paymentDate).getMonth();
-                    const paymentYear = new Date(subscriber.paymentDate).getFullYear();
-                    const monthYear = `${paymentMonth + 1}-${paymentYear}`;
+                    const paymentMonth = new Date(subscriber.paymentDate).getMonth()
+                    const paymentYear = new Date(subscriber.paymentDate).getFullYear()
+                    const monthYear = `${paymentMonth + 1}-${paymentYear}`
 
-                    acc[monthYear] = (acc[monthYear] || 0) + 1;
-                    return acc;
-                }, {});
+                    acc[monthYear] = (acc[monthYear] || 0) + 1
+                    return acc
+                }, {})
 
                 // Prepare data for the bar graph
-                const labels = Object.keys(monthCounts);
-                const data = Object.values(monthCounts);
+                const labels = Object.keys(monthCounts)
+                const data = Object.values(monthCounts)
 
                 setSubscriberData({
                     labels: labels,
@@ -74,15 +74,15 @@ const OperatorDashboard = () => {
                     }
                 });
                 // console.log(incomeResponse.data, 'total income')
-                setTotalIncome(incomeResponse.data.totalIncome);
+                setTotalIncome(incomeResponse.data.totalIncome)
                 setLoading(false)
             } catch (error) {
-                console.error('Error fetching subscriber data:', error);
+                console.error('Error fetching subscriber data:', error)
             }
-        };
+        }
 
-        fetchData();
-    }, []);
+        fetchData()
+    }, [])
 
     return (
         <div style={{ width: '80%', margin: '0 auto', display: 'flex', flexDirection: 'column' }}>
@@ -178,15 +178,11 @@ const OperatorDashboard = () => {
                             <p>No orders yet</p>
                         )}
                     </div>
-
                 </>
             )}
         </div>
-
-    );
-
-};
-
-export default OperatorDashboard;
+    )
+}
+export default OperatorDashboard
 
 

@@ -1,17 +1,12 @@
-import { BrowserRouter, Route, Routes} from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
-import { useEffect, useReducer, useState } from "react";
+import { BrowserRouter, Route, Routes} from "react-router-dom"
+import { useEffect, useReducer } from "react";
 import {ToastContainer, toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from "./config/axios";
-
 import Home from "./Home/Home";
 import Login from "./Login";
-//import Packages from "./components/Packages";
 import AddChannel from "./components/channels/AddChannels";
-//import AddOperator from "./components/operator/AddOperator";
-//import Image from "./multer";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
 import AddPackage from "./components/packages/AddPackage";
@@ -25,7 +20,7 @@ import { OperatorContext } from "./components/profile/operatorContext";
 import CreateOrder from "./components/orders/CreateOrder";
 import CustomerProfile from "./components/profile/CustomerProfile";
 import Navbar from "./Home/navbar/Navbar";
-import OrdersList from "./OrdersList.";
+// import OrdersList from "./OrdersList.";
 import CustomerContainer from "./components/Customer/customerContainer";
 import { useDispatch } from "react-redux";
 import { startGetUser } from "./actions/user-action";
@@ -34,14 +29,13 @@ import Success from "./Payment/Success";
 import Cart from "./components/orders/Cart";
 import OrderPayment from "./components/orders/OrderPayment";
 import AdminDashboard from "./Dashboard/Dashboard";
-// import OperatorDashboard from "./components/operator/OperatorDashboard";
 import OperatorDashboard from "./operator_dashboard/OperatorDashboard";
 import ActivateOrders from "./operator_dashboard/ActivateOrders";
 import PrivateRoute from "./Home/navbar/PrivateRoute";
 import ExpiredOrders from "./components/profile/ExpiredOrders";
 import BuyAgain from "./components/orders/BuyAgain";
 
-function App(props) {
+function App() {
   const dispatch = useDispatch()
   const [userState, userDispatch] = useReducer(userReducer, {
     userDetails: {},
@@ -232,7 +226,7 @@ function App(props) {
     </BrowserRouter>
     </OperatorContext.Provider>
   </div>
-  );
+  )
 }
 
-export default App;
+export default App

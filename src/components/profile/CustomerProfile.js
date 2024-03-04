@@ -4,7 +4,7 @@ import { addDays, format } from 'date-fns'
 import { useState, useEffect, useContext } from "react"
 import { OperatorContext } from "./operatorContext"
 import { startGetUser, startUpdateUser } from "../../actions/user-action"
-import { startEditCustomer, startGetSingleCustomer } from "../../actions/customer-action"
+import { startEditCustomer } from "../../actions/customer-action"
 import { StartGetCustomer } from "../../actions/customer-action"
 import { Modal, Form, Button, Card } from "react-bootstrap"
 import { startGetOrder } from "../../actions/order-action"
@@ -12,9 +12,8 @@ import axios from "../../config/axios"
 import { Row, Col } from "reactstrap"
 import './customerProfile.css'
 import Calendar from "./Calendar";
-import { ToastContainer, toast } from "react-toastify"
+import { toast } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
-import { jwtDecode } from "jwt-decode"
 import { ClipLoader } from "react-spinners"
 import { useParams } from "react-router-dom"
 import Swal from 'sweetalert2'
@@ -63,13 +62,9 @@ const CustomerProfile = () => {
   const [img, setImg] = useState({})
   const [role, setRole] = useState("")
 
-  const [showModal, setShowModal] = useState(false);
-  const userId = userState.userDetails._id;
-  const customerId = userState.customer._id;
-
-  // const handleChange = (e) => {
-  //   setFormData({ ...formData, [e.target.name]: e.target.value });
-  // }
+  const [showModal, setShowModal] = useState(false)
+  const userId = userState.userDetails._id
+  const customerId = userState.customer._id
 
   useEffect(() => {
     if (localStorage.getItem('token').length > 0) {
@@ -90,14 +85,14 @@ const CustomerProfile = () => {
 
   const [isMobileOrPasswordUpdated, setIsMobileOrPasswordUpdated] = useState(false);
 
-const handleChange = (e) => {
-  setFormData({ ...formData, [e.target.name]: e.target.value });
-  
-  // Check if mobile or password field is being updated
-  if (e.target.name === 'mobile' || e.target.name === 'oldPassword' || e.target.name === 'newPassword') {
-    setIsMobileOrPasswordUpdated(true);
-  }
-};
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    // Check if mobile or password field is being updated
+    if (e.target.name === 'mobile' || e.target.name === 'oldPassword' || e.target.name === 'newPassword') {
+      setIsMobileOrPasswordUpdated(true);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -123,24 +118,15 @@ const handleChange = (e) => {
         });
       }
       setIsMobileOrPasswordUpdated(false)
-      // toast.success('Updated successfully!', {
-      //   position: "top-center",
-      //   autoClose: 3000,
-      //   hideProgressBar: false,
-      //   closeOnClick: true,
-      //   pauseOnHover: true,
-      //   draggable: true,
-      //   theme: "colored"
-      // })
     } catch (e) {
-      console.log(e);
+      console.log(e)
       toast.error('Failed to update password')
     }
   };
 
   useEffect(() => {
-    const { userDetails, customer } = userState;
-    const customerAddress = customer.address || {};
+    const { userDetails, customer } = userState
+    const customerAddress = customer.address || {}
 
     setFormData({
       customerName: userDetails.username || '',
@@ -196,27 +182,27 @@ const handleChange = (e) => {
       const formattedDates = order.paid.reduce((acc, ele) => {
 
         ele.packages?.forEach((pack) => {
-          const originalDate = new Date(ele.orderDate);
-          const futureDate = addDays(originalDate, 30);
-          const formattedDate = format(futureDate, 'yyyy-MM-dd');
+          const originalDate = new Date(ele.orderDate)
+          const futureDate = addDays(originalDate, 30)
+          const formattedDate = format(futureDate, 'yyyy-MM-dd')
 
-          acc.push({ type: 'package', name: pack.packageId?.packageName, expiryDate: formattedDate });
-        });
+          acc.push({ type: 'package', name: pack.packageId?.packageName, expiryDate: formattedDate })
+        })
 
         ele.channels?.forEach((chan) => {
           const originalDate = new Date(ele.orderDate)
           const futureDate = addDays(originalDate, 30)
           const formattedDate = format(futureDate, 'yyyy-MM-dd')
-          acc.push({ type: 'channel', name: chan.channelId?.channelName, expiryDate: formattedDate });
-        });
-        return acc;
-      }, []);
-      return formattedDates;
+          acc.push({ type: 'channel', name: chan.channelId?.channelName, expiryDate: formattedDate })
+        })
+        return acc
+      }, [])
+      return formattedDates
     }
-    return [];
-  };
+    return []
+  }
 
-  const formattedDates = calculateFormattedDates();
+  const formattedDates = calculateFormattedDates()
 
   return (
     <div className=" d-flex justify-content-center align-items-center">
@@ -248,12 +234,6 @@ const handleChange = (e) => {
                   </Button>
                 </Form>
               </Modal.Body>
-              {/* <Modal.Body>
-              <form onSubmit={handleUpload}>
-                <input type="file" onChange={handleImageChange} />
-                <input type="submit" value="Upload" />
-              </form>
-            </Modal.Body> */}
             </Modal>
 
             {userState.userDetails.role === 'customer' && (
@@ -476,7 +456,7 @@ const handleChange = (e) => {
                       <Col>
                         <h4>Current channels</h4>
                         {/* {order.paid && order.paid.length > 0 ? ( */}
-                     
+
                         <Row>
                           {order.paid?.map(ele => ele.channels?.map((chan) => {
                             console.log(chan.channelId.channelName, 'pay chan')
@@ -524,10 +504,10 @@ const handleChange = (e) => {
       )}
 
     </div>
-  );
-};
+  )
+}
 
-export default CustomerProfile;
+export default CustomerProfile
 
 
 

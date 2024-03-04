@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import './Register.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Row, Col } from "reactstrap"
-import {jwtDecode} from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 
 export default function Register({ registerToast }) {
   const navigate = useNavigate();
@@ -15,13 +15,12 @@ export default function Register({ registerToast }) {
   const [mobile, setMobile] = useState("")
   const [password, setPassword] = useState("");
   const [role, setRole] = useState('')
-  const [selectedRole, setSelectedRole] = useState('')
   const [formErrors, setFormErrors] = useState({});
   const [serverErrors, setServerErrors] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const token = localStorage.getItem('token')
-    if(token){
+    if (token) {
       const decodedToken = jwtDecode(token)
       setRole(decodedToken.role)
     }
@@ -44,9 +43,9 @@ export default function Register({ registerToast }) {
 
     if (mobile.trim().length === 0) {
       errors.mobile = "mobile Number is required"
-    }else if(isNaN(mobile.trim())){
+    } else if (isNaN(mobile.trim())) {
       errors.mobile = "should contain only numbers"
-    } 
+    }
     else if (mobile.trim().length !== 10) {
       errors.mobile = "invalid mobile Number"
     }
@@ -70,23 +69,23 @@ export default function Register({ registerToast }) {
       try {
         const formData = { username, email, password, mobile, role };
         // console.log(formData);
-        if(role === 'admin'){
-          formData.role='operator'
-        }else if(role === 'operator'){
+        if (role === 'admin') {
+          formData.role = 'operator'
+        } else if (role === 'operator') {
           formData.role = 'customer'
         }
         const response = await axios.post("/api/users/register", formData, {
           headers: {
-          Authorization: localStorage.getItem('token')
-        }
-      });
+            Authorization: localStorage.getItem('token')
+          }
+        });
         setUsername('');
-      setEmail('');
-      setMobile('');
-      setPassword('');
+        setEmail('');
+        setMobile('');
+        setPassword('');
         navigate("/");
         registerToast()
-        
+
       } catch (error) {
         if (error.response && error.response.data) {
           const serverErrors = error.response.data.errors || []
@@ -156,10 +155,10 @@ export default function Register({ registerToast }) {
                 setMobile(e.target.value)
                 clearFieldError('mobile')
               }}
-            /><br/>
+            /><br />
             {formErrors.mobile && <span className="error">{formErrors.mobile}</span>}
           </div>
-          <br/>
+          <br />
           <div>
             <label style={{ fontWeight: 'bold' }} htmlFor="password">Password</label><br />
             <input
@@ -186,7 +185,7 @@ export default function Register({ registerToast }) {
               ))}
             </ul>
           )} */}
-           {serverErrors.length > 0 && (
+          {serverErrors.length > 0 && (
             <ul className="error">
               {serverErrors.map((error, index) => (
                 <li key={index}>{error.msg}</li>

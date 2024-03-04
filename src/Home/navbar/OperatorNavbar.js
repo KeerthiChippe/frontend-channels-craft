@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { OperatorContext } from "../../components/profile/operatorContext";
@@ -9,15 +9,12 @@ import logo from '../../images/main.png'
 export default function OperatorNavbar() {
     const { userDispatch } = useContext(OperatorContext)
 
-    const navigate = useNavigate()
-
     const handleLogout = () => {
         localStorage.clear('')
         userDispatch({
             type: "SIGN_IN_TOGGLE",
             payload: false
         })
-        // window.location.reload()
     }
 
     return (
@@ -54,25 +51,9 @@ export default function OperatorNavbar() {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/activateOrders">Activate orders</Link>
                             </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/order">order</Link>
-                            </li>
                             {/* <li className="nav-item">
-                                <Link className="nav-link" to="/operatorDashboard">Dashboard</Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/profile">
-                                    <i className="bi bi-person-circle"></i>
-                                </Link>
-                            </li>
-                            {!isEmpty(localStorage.getItem('token')) && (
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/" onClick={handleLogout}>Logout</Link>
-                                </li>
-                            )} */}
-
-                            
-
+                                <Link className="nav-link" to="/order">order</Link>
+                            </li> */}
                         </div>
                     </ul>
 
