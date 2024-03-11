@@ -7,12 +7,12 @@ import { jwtDecode } from "jwt-decode"
 import axios from "../../config/axios"
 
 const UserList = () => {
-    const dispatch = useDispatch();
-    const [search, setSearch] = useState('');
-    const [sortOrder, setSortOrder] = useState('asc');
-    const [role, setRole] = useState('');
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(10);
+    const dispatch = useDispatch()
+    const [search, setSearch] = useState('')
+    const [sortOrder, setSortOrder] = useState('asc')
+    const [role, setRole] = useState('')
+    const [currentPage, setCurrentPage] = useState(1)
+    const [itemsPerPage] = useState(10)
     const [selectedUser, setSelectedUser] = useState(null)
     const [modal, setModal] = useState(false)
     const [operatorDetails, setOperatorDetails] = useState(null)
@@ -287,7 +287,7 @@ const UserList = () => {
                 </>
             )}
         </div>
-    );
-};
+    )
+}
 export default UserList
 

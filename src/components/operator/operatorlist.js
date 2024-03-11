@@ -147,7 +147,7 @@ const handleOperatorClick = async (operator) => {
                             <p>city : {selectedOperator.city}</p> 
                             <p>state : {selectedOperator.state}</p>
                             <p>No.of Customers : {operatorDetails?.length}</p>
-                           
+                    
                         </div>
                     )}
                 </ModalBody>

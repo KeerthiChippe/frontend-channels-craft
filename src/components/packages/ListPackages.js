@@ -5,11 +5,10 @@ import { startRemovePackage, startAddPackage, startEditPackage, startGetPackage 
 import { deletePackageOne, selectedPackageOne, startGetOrder } from "../../actions/order-action";
 import { OperatorContext } from "../profile/operatorContext";
 import { jwtDecode } from "jwt-decode";
-import { FadeLoader, ClipLoader } from "react-spinners";
-import { Form, FormGroup, Input, Label } from "reactstrap";
-import { Row, Col, Table, Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import {  ClipLoader } from "react-spinners";
+import {  Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify'
-import { addDays, format } from 'date-fns';
+
 
 const ListPackages = () => {
   const [editId, setEditId] = useState(null);
@@ -21,12 +20,12 @@ const ListPackages = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [formData, setFormData] = useState({
     packagePrice: "",
-  });
+  })
 
-  const [search, setSearch] = useState('');
-  const [sort, setSort] = useState('asc'); // Default sort order
-  const [currentPage, setCurrentPage] = useState(1); // Current page state
-  const [itemsPerPage, setItemsPerPage] = useState(10); // Items per page state
+  const [search, setSearch] = useState('')
+  const [sort, setSort] = useState('asc') // Default sort order
+  const [currentPage, setCurrentPage] = useState(1)// Current page state
+  const [itemsPerPage, setItemsPerPage] = useState(10) // Items per page state
 
  
   useEffect(()=>{
@@ -39,49 +38,40 @@ const ListPackages = () => {
   const dispatch = useDispatch();
 
   const packages = useSelector((state) => {
-    return state.package.data.filter((ele) => ele.isDeleted === false);
-  });
+    return state.package.data.filter((ele) => ele.isDeleted === false)
+  })
 
   const orders = useSelector((state)=>{
     return state.order
   })
-  const orderDates = orders.paid.map((order) => {
-    // Convert orderDate string to Date object
-    const orderDate = new Date(order.orderDate)
-    // Add 30 days to orderDate to get expiryDate
-    const expiryDate = addDays(orderDate, 30)
-    // Format expiryDate if needed
-    const formattedExpiryDate = format(expiryDate, 'yyyy-MM-dd'); // Adjust the format as per your requirement
-    return formattedExpiryDate
-  })
-  console.log(orderDates, 'expiryDates')
+  // console.log(orders, orders)
 
   useEffect(() => {
     setIsLoading(true)
     dispatch(startGetPackage())
     .then(() => {
-      setIsLoading(false);
+      setIsLoading(false)
     })
     .catch((error) => {
-      console.error('Error fetching packages:', error);
-      setIsLoading(false); // Ensure loading spinner is turned off even if there's an error
-    });
-  }, [dispatch]);
+      console.error('Error fetching packages:', error)
+      setIsLoading(false)
+    })
+  }, [dispatch])
 
   const toggleModal = () => {
-    setModal(!modal);
-  };
+    setModal(!modal)
+  }
 
   const toggleViewModal = () => {
-    setViewModal(!viewModal);
-  };
+    setViewModal(!viewModal)
+  }
 
   const handleDelete = (id) => {
-    const confirm = window.confirm("Are you sure?");
+    const confirm = window.confirm("Are you sure?")
     if (confirm) {
-      dispatch(startRemovePackage(id));
+      dispatch(startRemovePackage(id))
     }
-  };
+  }
 
   const handleEdit = (id) => {
     setEditId(id);
@@ -104,254 +94,58 @@ const ListPackages = () => {
   }
 
   const { userState, userDispatch } = useContext(OperatorContext)
-
-//   const handleAdd = (id) => {
-//     const selectedPackage = packages.find((ele) => ele._id === id);
-//     const { currentPackages } = userState.customer;
-//   const currentDate = new Date()
-//     // Check if the selected package is already subscribed
-//     const isPackageAlreadySubscribed = currentPackages?.some(pkg => pkg.packageId === id);
   
-//     if (currentDate > orderDates) {
-//         // If any order is expired, show a success message indicating that the package can be added
-//         toast.success('You can add the package to the cart as it is expired.', {
-//             position: "top-center",
-//             autoClose: 3000,
-//             hideProgressBar: false,
-//             closeOnClick: true,
-//             pauseOnHover: true,
-//             draggable: true
-//         });
-//     } else if (isPackageAlreadySubscribed) {
-//         // If the package is already subscribed, show a warning message
-//         toast.warning('You are already subscribed to this package.', {
-//             position: "top-center",
-//             autoClose: 3000,
-//             hideProgressBar: false,
-//             closeOnClick: true,
-//             pauseOnHover: true,
-//             draggable: true
-//         });
-//     } else {
-//         // If the package is not expired and not already subscribed, proceed to add it to the cart
-//         const newPackage = {
-//             packageId: selectedPackage._id,
-//             packagePrice: selectedPackage.packagePrice,
-//             packageName: selectedPackage.packageName,
-//             selectedChannels: selectedPackage.selectedChannels
-//         };
-    
-//         dispatch(selectedPackageOne(newPackage));
-    
-//         toast.success('Added to cart successfully', {
-//             position: "top-center",
-//             autoClose: 2000,
-//             hideProgressBar: false,
-//             closeOnClick: true,
-//             pauseOnHover: true,
-//             draggable: true
-//         });
-//     }
-// }
-
-// const handleAdd = (id) => {
-//   const selectedPackage = packages.find((ele) => ele._id === id);
-//   const { currentPackages } = userState.customer;
-//   const currentDate = new Date();
-
-//   // Check if the selected package is already subscribed
-//   const isPackageAlreadySubscribed = currentPackages?.some(pkg => pkg.packageId === id);
-
-//   // Check if the selected package is expired
-//   const isPackageExpired = new Date(selectedPackage.expiryDate) < currentDate;
-
-//   if (isPackageExpired) {
-//       // If the package is expired, show a success message indicating that the package can be added
-//       toast.success('You can add the package to the cart as it is expired.', {
-//           position: "top-center",
-//           autoClose: 3000,
-//           hideProgressBar: false,
-//           closeOnClick: true,
-//           pauseOnHover: true,
-//           draggable: true
-//       });
-//   } else if (isPackageAlreadySubscribed) {
-//       // If the package is already subscribed, show a warning message
-//       toast.warning('You are already subscribed to this package.', {
-//           position: "top-center",
-//           autoClose: 3000,
-//           hideProgressBar: false,
-//           closeOnClick: true,
-//           pauseOnHover: true,
-//           draggable: true
-//       });
-//   } else {
-//       // If the package is not expired and not already subscribed, proceed to add it to the cart
-//       const newPackage = {
-//           packageId: selectedPackage._id,
-//           packagePrice: selectedPackage.packagePrice,
-//           packageName: selectedPackage.packageName,
-//           selectedChannels: selectedPackage.selectedChannels
-//       };
-
-//       dispatch(selectedPackageOne(newPackage));
-
-//       toast.success('Added to cart successfully', {
-//           position: "top-center",
-//           autoClose: 2000,
-//           hideProgressBar: false,
-//           closeOnClick: true,
-//           pauseOnHover: true,
-//           draggable: true
-//       });
-//   }
-// }
-
-// const handleAdd = (id, expiryDate) => {
-//   const selectedPackage = packages.find((ele) => ele._id === id);
-//   const { currentPackages } = userState.customer;
-//   const currentDate = new Date();
-
-//   // Check if the selected package is already subscribed
-//   const isPackageAlreadySubscribed = currentPackages?.some(pkg => pkg.packageId === id)
-//   console.log(isPackageAlreadySubscribed, 'isPackageAlreadySubscribed')
-
-//   // Check if the selected package is expired
-//   console.log(orderDates, 'exp')
-//   const isPackageExpired = new Date(expiryDate) < currentDate
-//   console.log(isPackageExpired, 'isPackageExpired')
-
-//   if (isPackageExpired) {
-//       // If the package is expired, show a success message indicating that the package can be added
-//       toast.success('You can add the package to the cart as it is expired.', {
-//           position: "top-center",
-//           autoClose: 3000,
-//           hideProgressBar: false,
-//           closeOnClick: true,
-//           pauseOnHover: true,
-//           draggable: true
-//       });
-//   } else if (isPackageAlreadySubscribed) {
-//       // If the package is already subscribed, show a warning message
-//       toast.warning('You are already subscribed to this package.', {
-//           position: "top-center",
-//           autoClose: 3000,
-//           hideProgressBar: false,
-//           closeOnClick: true,
-//           pauseOnHover: true,
-//           draggable: true
-//       });
-//   } else {
-//       // If the package is not expired and not already subscribed, proceed to add it to the cart
-//       const newPackage = {
-//           packageId: selectedPackage._id,
-//           packagePrice: selectedPackage.packagePrice,
-//           packageName: selectedPackage.packageName,
-//           selectedChannels: selectedPackage.selectedChannels
-//       };
-
-//       dispatch(selectedPackageOne(newPackage));
-
-//       toast.success('Added to cart successfully', {
-//           position: "top-center",
-//           autoClose: 2000,
-//           hideProgressBar: false,
-//           closeOnClick: true,
-//           pauseOnHover: true,
-//           draggable: true
-//       });
-//   }
-// }
-
-
 const handleAdd = (id) => {
-  const selectedPackage = packages.find((ele) => ele._id === id);
-  const { currentPackages } = userState.customer;
-  const currentDate = new Date();
-
-  // Find the corresponding order for the selected package
-  const orderIndex = orders.paid.findIndex(order => order.packages.some(pkg => pkg.packageId === id));
-  const expiryDate = orderIndex !== -1 ? orderDates[orderIndex] : null;
-  console.log(expiryDate, 'exp')
+  const selectedPackage = packages.find((ele) => ele._id === id)
+  const { currentPackages } = userState.customer
 
   // Check if the selected package is already subscribed
-  const isPackageAlreadySubscribed = currentPackages?.some(pkg => pkg.packageId === id);
-  console.log(isPackageAlreadySubscribed, 'isPackageAlreadySubscribed')
+  const isSubscribed = currentPackages.some(pkg => pkg.packageId === id)
 
-  // Check if the selected package is expired
-  const isPackageExpired = expiryDate ? new Date(expiryDate) < currentDate : false;
-  console.log(isPackageExpired, 'isPackageExpired')
+  if (!isSubscribed) {
+    const newPackage = {
+      packageId: selectedPackage._id,
+      packagePrice: selectedPackage.packagePrice,
+      packageName: selectedPackage.packageName,
+      selectedChannels: selectedPackage.selectedChannels
+    };
 
-  if (isPackageExpired) {
-      // If the package is expired, show a success message indicating that the package can be added
-      toast.success('You can add the package to the cart as it is expired.', {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true
-      });
-  } else if (isPackageAlreadySubscribed) {
-      // If the package is already subscribed, show a warning message
-      toast.warning('You are already subscribed to this package.', {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true
-      });
+    dispatch(selectedPackageOne(newPackage))
+
+    toast.success('Added to cart successfully', {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true
+    });
   } else {
-      // If the package is not expired and not already subscribed, proceed to add it to the cart
-      const newPackage = {
-          packageId: selectedPackage._id,
-          packagePrice: selectedPackage.packagePrice,
-          packageName: selectedPackage.packageName,
-          selectedChannels: selectedPackage.selectedChannels
-      };
-
-      dispatch(selectedPackageOne(newPackage));
-
-      toast.success('Added to cart successfully', {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true
-      });
+    toast.warning('Package already subscribed', {
+      position: "top-center",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true
+    });
   }
 }
- 
-  
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (editId) {
-  //     dispatch(startEditPackage(editId, formData));
-  //     toggleModal();
-  //   } else {
-  //     dispatch(startAddPackage(formData));
-  //   }
-  //   setFormData({
-  //     packagePrice: "",
-  //   });
-  //   dispatch(startGetPackage());
-  // };
+ 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     if (editId) {
       dispatch(startEditPackage(editId, formData))
         .then(() => {
-          dispatch(startGetPackage()); // Fetch updated list of packages
-          toggleModal(); // Close the modal after successful edit
+          dispatch(startGetPackage()) // Fetch updated list of packages
+          toggleModal() // Close the modal after successful edit
         })
         .catch((error) => {
-          console.log("Error editing package:", error);
-        });
+          console.log("Error editing package:", error)
+        })
     } else {
-      dispatch(startAddPackage(formData));
+      dispatch(startAddPackage(formData))
     }
     setFormData({
       packagePrice: "",
@@ -360,49 +154,48 @@ const handleAdd = (id) => {
   
 
   const handleRemove = (id) => {
-    const removeItem = selectedItems.find((ele) => ele._id === id);
-    dispatch(deletePackageOne(removeItem));
-  };
+    const removeItem = selectedItems.find((ele) => ele._id === id)
+    dispatch(deletePackageOne(removeItem))
+  }
 
   const handleView = (id)=>{
-    const selectedPkg = packages.find((pkg) => pkg._id === id);
-    setSelectedPackage(selectedPkg); // Step 2: Set selected package details
-    setViewModal(true); // Open view modal
-    // toggleModal(false); // Close edit modal if it's open
-
+    const selectedPkg = packages.find((pkg) => pkg._id === id)
+    setSelectedPackage(selectedPkg)
+    setViewModal(true)
+    // toggleModal(false)
   }
 
   const handleSearch = (e) => {
-    setSearch(e.target.value);
-    setCurrentPage(1); // Reset current page when search changes
-};
+    setSearch(e.target.value)
+    setCurrentPage(1)
+}
 
 const filteredPackages = packages.filter((ele) =>
         ele.packageName.toLowerCase().includes(search.toLowerCase())
-    );
+    )
 
     const handleSort = (e) => {
-      setSort(e.target.value);
-  };
+      setSort(e.target.value)
+  }
 
   const sortedPackages = [...filteredPackages].sort((a, b) => {
     if (sort === 'asc') {
-        return a.packageName.localeCompare(b.packageName);
+        return a.packageName.localeCompare(b.packageName)
     } else {
-        return b.packageName.localeCompare(a.packageName);
+        return b.packageName.localeCompare(a.packageName)
     }
 });
 
-const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentPackages = sortedPackages.slice(indexOfFirstItem, indexOfLastItem);
+const indexOfLastItem = currentPage * itemsPerPage
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage
+    const currentPackages = sortedPackages.slice(indexOfFirstItem, indexOfLastItem)
 
-    const totalPages = Math.ceil(sortedPackages.length / itemsPerPage);
+    const totalPages = Math.ceil(sortedPackages.length / itemsPerPage)
 
     // Function to handle page change
     const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
+        setCurrentPage(pageNumber)
+    }
   
   return (
     
